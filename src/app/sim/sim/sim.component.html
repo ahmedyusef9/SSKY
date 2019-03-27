@@ -21,28 +21,28 @@
     <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
     <div class="example-rate-limit-reached" *ngIf="isRateLimitReached"></div>
   </div>
-  <mat-table #table [(dataSource)]="dataSource" dir="RTL" matSort matSortActive="id" matSortDisableClear matSortDirection="asc">
+  <table mat-table #table [(dataSource)]="dataSource" dir="RTL" matSort matSortActive="id" matSortDisableClear matSortDirection="asc">
     <ng-container matColumnDef="sim">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>{{'sim'|translate}} </mat-header-cell>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'sim'|translate}} </th>
         <mat-cell *matCellDef="let row"> {{row.sim}} </mat-cell>
     </ng-container>
     <ng-container matColumnDef="agent_id">
-        <mat-header-cell *matHeaderCellDef mat-sort-header  [ngClass]="{'dn':!authService.canUpdate()}">{{'agent'|translate}} </mat-header-cell>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header  [ngClass]="{'dn':!authService.canUpdate()}">{{'agent'|translate}} </th>
         <mat-cell *matCellDef="let row"  [ngClass]="{'dn':!authService.canUpdate()}">
                 <ng-container *ngIf="row.agent_name=='-'">-</ng-container>  
                 <button *ngIf="row.agent_name!='-'" mat-button color="primary" [routerLink]="['/סוכן', row.agent_id]">{{row.agent_name}}</button>
         </mat-cell>
     </ng-container>
     <ng-container matColumnDef="company_id">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>{{'company'|translate}} </mat-header-cell>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'company'|translate}} </th>
         <mat-cell *matCellDef="let row"> {{getTheCompany(row)}} </mat-cell>
     </ng-container>
     <ng-container matColumnDef="used">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>{{'used'|translate}} </mat-header-cell>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'used'|translate}} </th>
         <mat-cell *matCellDef="let row"> {{row.used|yn|translate}} </mat-cell>
     </ng-container>
     <ng-container matColumnDef="id">
-        <mat-header-cell *matHeaderCellDef mat-sort-header disableClear="true" >#</mat-header-cell>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear="true" >#</th>
         <mat-cell *matCellDef="let row" >
             <mat-icon (click)="edit(row)" color="primary" style="cursor:pointer;" *ngIf="authService.canUpdate()">mode_edit</mat-icon>
             <mat-icon (click)="delete(row.id)" color="warn" style="cursor:pointer;" *ngIf="authService.canUpdate() && row.used=='0'">delete</mat-icon>
@@ -50,7 +50,7 @@
     </ng-container>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
+  </table mat-table>s
   <mat-paginator [pageSize]="30"[length]="resultsLength"  showFirstLastButtons></mat-paginator>       
 </div>
 

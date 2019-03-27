@@ -9,7 +9,7 @@ import { AuthenticationService } from './login/authentication.service';
 import { MatSnackBar } from '@angular/material';
 import { SettingsService } from './settings/settings.service';
 import { MsgComponent } from './msg/msg.component';
-
+import * as AppConst from './app.const'; 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -93,6 +93,14 @@ export class AppComponent implements OnInit {
     this.timeoutTrans();
     this.timeoutTrans2();
   }
+  getPath(name,params=[]){ 
+    let path= '/'+AppConst.Routes[name].path;
+    params.forEach(el=>{
+      path +='/'+el;
+    });
+    return path;
+  }
+  getIcon(name){return AppConst.Routes[name].icon;}
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     if(event.target.innerWidth<=768){

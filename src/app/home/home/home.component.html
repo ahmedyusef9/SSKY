@@ -128,8 +128,8 @@
     <!-- <ng-container > -->
        <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12">  -->
         <!-- <ng-tamplate> -->
-        <mat-card  routerLink="/טעינה-חדשה" routerLinkActive="active">
-          <mat-icon color="primary">add_shopping_cart</mat-icon>
+        <mat-card  routerLink="{{getPath('new_order')}}" routerLinkActive="active">
+          <mat-icon color="primary">{{getIcon('new_order')}}</mat-icon>
           <mat-card-content>
             <span color="primary">{{'new_order' | translate}}</span>
           </mat-card-content>
@@ -138,96 +138,96 @@
     <!-- </ng-container> -->
 
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
-      <mat-card *ngIf="authService.isAdmin()" routerLink="/הגדרות" routerLinkActive="active">
-        <mat-icon color="primary">settings</mat-icon>
+      <mat-card *ngIf="authService.isAdmin()" routerLink="{{getPath('settings')}}" routerLinkActive="active">
+        <mat-icon color="primary">{{getIcon('settings')}}</mat-icon>
         <mat-card-content>
           <span color="primary">{{'settings' | translate}}</span>
         </mat-card-content>
       </mat-card>
      <!-- </div>  -->
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
-        <mat-card *ngIf="authService.isAdmin()" routerLink="/הרשאות" routerLinkActive="active">
-          <mat-icon color="primary">lock</mat-icon>
+        <mat-card *ngIf="authService.isAdmin()" routerLink="{{getPath('permissions')}}" routerLinkActive="active">
+          <mat-icon color="primary">{{getIcon('permissions')}}</mat-icon>
           <mat-card-content>
             <span color="primary">{{'permissions' | translate}}</span>
           </mat-card-content>
         </mat-card>
        <!-- </div>  -->
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
-        <mat-card *ngIf="authService.canUpdate()" routerLink="/משתמשים" routerLinkActive="active">
-          <mat-icon color="primary">supervisor_account</mat-icon>
+        <mat-card *ngIf="authService.canUpdate()" routerLink="{{getPath('users')}}" routerLinkActive="active">
+          <mat-icon color="primary">{{getIcon('users')}}</mat-icon>
           <mat-card-content>
             <span color="primary">{{'users' | translate}}</span>
           </mat-card-content>
         </mat-card>
      <!-- </div>  -->
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
-        <mat-card *ngIf="authService.canUpdate()" routerLink="/חברות" routerLinkActive="active">
-          <mat-icon color="primary">domain</mat-icon>
+        <mat-card *ngIf="authService.canUpdate()" routerLink="{{getPath('companies')}}" routerLinkActive="active">
+          <mat-icon color="primary">{{getIcon('companies')}}</mat-icon>
           <mat-card-content>
             <span color="primary">{{'companies' | translate}}</span>
           </mat-card-content>
         </mat-card>
      <!-- </div>  -->
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
-        <mat-card *ngIf="authService.canUpdate()" routerLink="/מספרי-סים" routerLinkActive="active">
-          <mat-icon color="primary">sim_card</mat-icon>
+        <mat-card *ngIf="authService.canUpdate()" routerLink="{{getPath('sims')}}" routerLinkActive="active">
+          <mat-icon color="primary">{{getIcon('sims')}}</mat-icon>
           <mat-card-content>
             <span color="primary">{{'sims' | translate}}</span>
           </mat-card-content>
         </mat-card>
      <!-- </div>  -->
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12"  >  -->
-        <mat-card *ngIf="authService.canUpdate()" routerLink="/לקוחות" routerLinkActive="active">
-          <mat-icon color="primary">assignment_ind</mat-icon>
+        <mat-card *ngIf="authService.canUpdate()" routerLink="{{getPath('consumers')}}" routerLinkActive="active">
+          <mat-icon color="primary">{{getIcon('consumers')}}</mat-icon>
           <mat-card-content>
             <span color="primary">{{'consumers' | translate}}</span>
           </mat-card-content>
         </mat-card>
      <!-- </div>  -->
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
-        <mat-card *ngIf="authService.canUpdate()" routerLink="/חבילות" routerLinkActive="active">
-          <mat-icon color="primary">work</mat-icon>
+        <mat-card *ngIf="authService.canUpdate()" routerLink="{{getPath('products')}}" routerLinkActive="active">
+          <mat-icon color="primary">{{getIcon('products')}}</mat-icon>
           <mat-card-content>
             <span color="primary">{{'products' | translate}}</span>
           </mat-card-content>
         </mat-card>
      <!-- </div>  -->
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
-        <mat-card *ngIf="authService.isAgent()" routerLink="/מחירון" routerLinkActive="active">
-          <mat-icon color="primary">attach_money</mat-icon>
+        <mat-card *ngIf="authService.isAgent()" routerLink="{{getPath('price_list')}}" routerLinkActive="active">
+          <mat-icon color="primary">{{getIcon('price_list')}}</mat-icon>
           <mat-card-content>
             <span color="primary">{{'price_list' | translate}}</span>
           </mat-card-content>
         </mat-card>
      <!-- </div>  -->
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
-        <mat-card  *ngIf="authService.canUpdate()" routerLink="/הנחות" routerLinkActive="active">
-          <mat-icon color="primary">money_off</mat-icon>
+        <mat-card  *ngIf="authService.canUpdate()" routerLink="{{getPath('discounts')}}" routerLinkActive="active">
+          <mat-icon color="primary">{{getIcon('discounts')}}</mat-icon>
           <mat-card-content>
             <span color="primary">{{'discounts' | translate}}</span>
           </mat-card-content>
         </mat-card>
      <!-- </div>  -->
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
-      <mat-card *ngIf="authService.canUpdate()" routerLink="/חסימת-חבילות" routerLinkActive="active">
-        <mat-icon color="primary">block</mat-icon>
+      <mat-card *ngIf="authService.canUpdate()" routerLink="{{getPath('block_packages')}}" routerLinkActive="active">
+        <mat-icon color="primary">{{getIcon('block_packages')}}</mat-icon>
         <mat-card-content>
           <span color="primary">{{'block_packages' | translate}}</span>
         </mat-card-content>
       </mat-card>
    <!-- </div>  -->
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
-        <mat-card *ngIf="authService.canUpdate()" routerLink="/מספרי-טלפון" routerLinkActive="active">
-          <mat-icon color="primary">phone</mat-icon>
+        <mat-card *ngIf="authService.canUpdate()" routerLink="{{getPath('phones')}}" routerLinkActive="active">
+          <mat-icon color="primary">{{getIcon('phones')}}</mat-icon>
           <mat-card-content>
             <span color="primary">{{'phones' | translate}}</span>
           </mat-card-content>
         </mat-card>  
      <!-- </div>  -->
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12">  -->
-        <mat-card routerLink="/מינויים" routerLinkActive="active">
-          <mat-icon color="primary">picture_in_picture_alt</mat-icon>
+        <mat-card routerLink="{{getPath('members')}}" routerLinkActive="active">
+          <mat-icon color="primary">{{getIcon('members')}}</mat-icon>
           <mat-card-content>
             <span color="primary" *ngIf="authService.canUpdate()">{{'members' | translate}}</span>
             <span color="primary" *ngIf="authService.isAgent()">{{'my_members' | translate}}</span>
@@ -235,16 +235,16 @@
         </mat-card>
      <!-- </div>  -->
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12">  -->
-        <mat-card routerLink="/תשלומים" routerLinkActive="active">
-          <mat-icon color="primary">payment</mat-icon>
+        <mat-card routerLink="{{getPath('payments')}}" routerLinkActive="active">
+          <mat-icon color="primary">{{getIcon('payments')}}</mat-icon>
           <mat-card-content>
             <span color="primary">{{'payments' | translate}}</span>
           </mat-card-content>
         </mat-card>
      <!-- </div>  -->
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12">  -->
-        <mat-card routerLink="/הזמנות" routerLinkActive="active">
-          <mat-icon color="primary">library_books</mat-icon>
+        <mat-card routerLink="{{getPath('orders')}}" routerLinkActive="active">
+          <mat-icon color="primary">{{getIcon('orders')}}</mat-icon>
           <mat-card-content>
             <span color="primary" *ngIf="authService.canUpdate()">{{'orders' | translate}}</span>
             <span color="primary" *ngIf="authService.isAgent()">{{'last_charges' | translate}}</span>
@@ -252,80 +252,80 @@
         </mat-card>
      <!-- </div>  -->
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
-        <mat-card *ngIf="authService.canUpdate()" routerLink="/ניוד-מספרים" routerLinkActive="active">
-          <mat-icon color="primary">sync</mat-icon>
+        <mat-card *ngIf="authService.canUpdate()" routerLink="{{getPath('mobility_numbers')}}" routerLinkActive="active">
+          <mat-icon color="primary">{{getIcon('mobility_numbers')}}</mat-icon>
           <mat-card-content>
             <span color="primary">{{'mobility_numbers' | translate}}</span>
           </mat-card-content>
         </mat-card>
      <!-- </div>  -->
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
-        <mat-card *ngIf="authService.canUpdate()" routerLink="/דוח-סוכנים" routerLinkActive="active">
-          <mat-icon color="primary">assessment</mat-icon>
+        <mat-card *ngIf="authService.canUpdate()" routerLink="{{getPath('agents_report')}}" routerLinkActive="active">
+          <mat-icon color="primary">{{getIcon('agents_report')}}</mat-icon>
           <mat-card-content>
             <span color="primary">{{'agents_report' | translate}}</span>
           </mat-card-content>
         </mat-card>
      <!-- </div>  -->
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
-      <mat-card *ngIf="authService.canUpdate()" routerLink="/השוואות" routerLinkActive="active">
-        <mat-icon color="primary">compare</mat-icon>
+      <mat-card *ngIf="authService.canUpdate()" routerLink="{{getPath('comparisons')}}" routerLinkActive="active">
+        <mat-icon color="primary">{{getIcon('comparisons')}}</mat-icon>
         <mat-card-content>
           <span color="primary">{{'comparisons' | translate}}</span>
         </mat-card-content>
       </mat-card>
      <!-- </div>  -->
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
-      <mat-card *ngIf="authService.canUpdate()" routerLink="/הזמנת-אקסל" routerLinkActive="active">
-        <mat-icon color="primary">work</mat-icon>
+      <mat-card *ngIf="authService.canUpdate()" routerLink="{{getPath('excel_order')}}" routerLinkActive="active">
+        <mat-icon color="primary">{{getIcon('excel_order')}}</mat-icon>
         <mat-card-content>
           <span color="primary">{{'excel_order' | translate}}</span> 
         </mat-card-content>
       </mat-card>
      <!-- </div>  -->
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
-      <mat-card *ngIf="authService.canUpdate()" routerLink="/טעינות-אקסל" routerLinkActive="active">
-        <mat-icon color="primary">work</mat-icon>
+      <mat-card *ngIf="authService.canUpdate()" routerLink="{{getPath('excel_charge')}}" routerLinkActive="active">
+        <mat-icon color="primary">{{getIcon('excel_charge')}}</mat-icon>
         <mat-card-content>
           <span color="primary">{{'excel_charge' | translate}}</span> 
         </mat-card-content>
       </mat-card>
      <!-- </div>  -->
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
-      <mat-card *ngIf="authService.canUpdate()" routerLink="/סטאטוס-הוט-מובייל" routerLinkActive="active">
-        <mat-icon color="primary">signal_cellular_alt</mat-icon>
+      <mat-card *ngIf="authService.canUpdate()" routerLink="{{getPath('status_hotmobile')}}" routerLinkActive="active">
+        <mat-icon color="primary">{{getIcon('status_hotmobile')}}</mat-icon>
         <mat-card-content>
           <span color="primary">{{'status_hotmobile' | translate}}</span> 
         </mat-card-content>
       </mat-card>
      <!-- </div>  -->
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
-      <mat-card *ngIf="authService.canUpdate()" routerLink="/סטאטוס-סלקום" routerLinkActive="active">
-        <mat-icon color="primary">signal_cellular_alt</mat-icon>
+      <mat-card *ngIf="authService.canUpdate()" routerLink="{{getPath('status_cellcom')}}" routerLinkActive="active">
+        <mat-icon color="primary">{{getIcon('status_cellcom')}}</mat-icon>
         <mat-card-content>
           <span color="primary">{{'status_cellcom' | translate}}</span> 
         </mat-card-content>
       </mat-card>
      <!-- </div>  -->
      <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12">  -->
-        <mat-card routerLink="/דוח-כללי-חדש" routerLinkActive="active">
-          <mat-icon color="primary">assignment</mat-icon>
+        <mat-card routerLink="{{getPath('general_report')}}" routerLinkActive="active">
+          <mat-icon color="primary">{{getIcon('general_report')}}</mat-icon>
           <mat-card-content>
             <span color="primary">{{'general_report' | translate}}</span>
           </mat-card-content>
         </mat-card>
        <!-- </div>  -->
        <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
-        <mat-card *ngIf="authService.canUpdate()" routerLink="/חשבונות-סוכנים" routerLinkActive="active">
-          <mat-icon color="primary">assignment</mat-icon>
+        <mat-card *ngIf="authService.canUpdate()" routerLink="{{getPath('agents_acounts')}}" routerLinkActive="active">
+          <mat-icon color="primary">{{getIcon('agents_acounts')}}</mat-icon>
           <mat-card-content>
             <span color="primary">{{'agents_acounts' | translate}}</span>
           </mat-card-content>
         </mat-card>
        <!-- </div> 
        <div >  -->
-        <mat-card *ngIf="authService.canUpdate()" routerLink="/חידוש-אוטומאטי" routerLinkActive="active">
-          <mat-icon color="primary">update</mat-icon>
+        <mat-card *ngIf="authService.canUpdate()" routerLink="{{getPath('automatic_update')}}" routerLinkActive="active">
+          <mat-icon color="primary">{{getIcon('automatic_update')}}</mat-icon>
           <mat-card-content>
             <span color="primary">{{'automatic_update' | translate}}</span>
           </mat-card-content>

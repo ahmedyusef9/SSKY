@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { TranslateService, LangChangeEvent } from 'ng2-translate';
 import { LocalStorageService } from 'src/app/local-storage.service';
 import { AuthenticationService } from 'src/app/login/authentication.service';
-
+import * as AppConst from './../../app.const'; 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -41,4 +41,12 @@ export class HomeComponent implements OnInit {
     }
     return '/מספר';
   }
+  getPath(name,params=[]){ 
+    let path= '/'+AppConst.Routes[name].path;
+    params.forEach(el=>{
+      path +='/'+el;
+    });
+    return path;
+  }
+  getIcon(name){return AppConst.Routes[name].icon;}
 }

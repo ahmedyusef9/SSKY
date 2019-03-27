@@ -140,7 +140,7 @@ export class SimComponent implements OnInit {
           this.isRateLimitReached = false;
           this.resultsLength = data.total_count;
           this.total_pages=data.total_pages;
-          this.current_total=data.items.length;
+          this.current_total=data.items.length; 
           return data.items;
         }),
       catchError(() => {
@@ -170,7 +170,7 @@ export class SimComponent implements OnInit {
     if(id==0 || !this.companies){
       return '';
     }
-    return this.companies.filter(
+    return this.companies.filter( 
       company => company.id === id)[0].name;
   }
   getCompanyNameAr(id:number){

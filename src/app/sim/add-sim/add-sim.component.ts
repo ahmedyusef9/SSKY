@@ -50,7 +50,7 @@ export class AddSimComponent implements OnInit {
     }
     searchAgent(event){
       if(event.key!='ArrowDown'){
-      let search:string=event.target.value;
+      let search:string=event.target.value; 
       if(search==''){
         this.filteredOptions=null;
       }

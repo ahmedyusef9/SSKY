@@ -21,7 +21,7 @@
     "@angular/http": "^7.2.10",
     "@angular/material": "^7.3.5",
     "@angular/material-moment-adapter": "^7.3.5",
-    "@angular/platform-browser": "~ng7.2.0",
+    "@angular/platform-browser": "~7.2.0",
     "@angular/platform-browser-dynamic": "~7.2.0",
     "@angular/router": "~7.2.0",
     "angular2-jwt": "^0.2.3",

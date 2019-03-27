@@ -16,30 +16,36 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { YnModule } from '../pipes/yn.module';
 import { RouterModule } from '@angular/router';
+import { ValidationService } from '../validation.service';
 
   //ValidErrModule
 @NgModule({
-  declarations: [AddSimComponent, EditSimComponent, SimComponent,DeleteDialog],
+  declarations: [
+    // AddSimComponent, EditSimComponent,
+     SimComponent,DeleteDialog],
   imports: [
      CommonModule,
     MaterialModule,
     TranslateModule,
     FormsModule, 
     ReactiveFormsModule,
-    // ValidErrModule,
     BrowserModule,
     BrowserAnimationsModule,YnModule,RouterModule
   ],
-  exports:[SimComponent,TranslateModule, AddSimComponent, EditSimComponent,DeleteDialog],
+  exports:[SimComponent,TranslateModule,
+    //  AddSimComponent, EditSimComponent,
+     DeleteDialog],
   providers:[
       {provide: SimService, useClass: SimService},
       {provide: UsersService, useClass: UsersService},
       {provide: CompanyService, useClass: CompanyService},
       {provide:Angular2TokenService ,useClass:Angular2TokenService },
-      
+      ValidationService,
       //{ provide: ExcelService, useClass: ExcelService },
       AuthenticationService
     ],
-  entryComponents: [AddSimComponent, EditSimComponent,DeleteDialog] 
+  entryComponents: [
+    // AddSimComponent, EditSimComponent,
+    DeleteDialog] 
 })
 export class SimModule { }

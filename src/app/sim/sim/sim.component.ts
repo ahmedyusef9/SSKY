@@ -213,11 +213,11 @@ export class SimComponent implements OnInit {
     });
   }
   openAddDialog(): void {
-    let dialogRef=this.dialog.open(AddSimComponent, {
-      width:'310px',
-      data:{sim:this}
-    });
-    dialogRef.afterClosed().subscribe();
+    // let dialogRef=this.dialog.open(AddSimComponent, {
+    //   width:'310px',
+    //   data:{sim:this}
+    // });
+    // dialogRef.afterClosed().subscribe();
   }
   edit(row:Sim){
     this.setSimForm(row);

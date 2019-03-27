@@ -1,0 +1,177 @@
+ <!-- <div class="row">
+  <div class="col-lg-12">
+      <mat-toolbar color="primary">{{'new_order'|translate}}</mat-toolbar>  
+  </div>
+  <ng-container *ngIf="!agent_id">
+    <div class="col-lg-12" style="margin-top:20px;">
+        <mat-select placeholder="{{'agent'|translate}}" [(ngModel)]="agent_id" tabindex="1" (change)="init()">
+            <mat-option *ngFor="let ag of agents" [value]="ag.id">{{ag.firstname}} {{ag.lastname}}</mat-option>
+          </mat-select>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="agent_id && products">
+  <div class="col-lg-12"  style="margin:10px 0 10px 0;">
+    <ng-container *ngIf="view_info && selectedProduct">
+        <h3>{{'before_order'|translate}}</h3>
+        <strong>{{'purchase_price'|translate}}:&nbsp;</strong>
+        {{selectedProduct.product_price| number : '1.2-2'}}-{{(0.01*selectedProduct.discount*selectedProduct.product_price)| number : '1.2-2'}}=
+        {{(selectedProduct.product_price-(0.01*selectedProduct.discount*selectedProduct.product_price))| number : '1.2-2'|currency:'ILS':'code' }}
+        <br/>
+        <strong>{{'selling_price'|translate}}:&nbsp;</strong>{{selectedProduct.product_price| number : '1.2-2'}}+{{(selectedProduct.profit)| number : '1.2-2' }}=
+        {{selectedProduct.product_price+(selectedProduct.profit)| number : '1.2-2'|currency:'ILS':'code'}}
+        <br/>
+        <strong>{{'obligation'|translate}}:</strong>{{obligation.obligation|currency:'ILS':'code'}}
+        <br/>
+        <span [ngClass]="{'green':obligation.credit>0,'red':obligation.credit<=0}">
+        <strong>{{'credit'|translate}}:</strong>{{obligation.credit|currency:'ILS':'code'}}</span>
+        <br/>
+        <strong>{{'all_payments'|translate}}:</strong>{{obligation.total_payments|currency:'ILS':'code'}}
+        <br/>
+        <strong>{{'all_orders'|translate}}:</strong>{{obligation.total_orders|currency:'ILS':'code'}}
+        <hr/>
+        <h3>{{'after_order'|translate}}</h3><br/>
+        <span [ngClass]="{'green':((obligation.credit)-(selectedProduct.product_price-(0.01*selectedProduct.discount*selectedProduct.product_price)))>0,'red':((obligation.credit)-(selectedProduct.product_price-(0.01*selectedProduct.discount*selectedProduct.product_price)))<=0}">
+        <strong>{{'credit'|translate}}:</strong>{{((obligation.credit)-(selectedProduct.product_price-(0.01*selectedProduct.discount*selectedProduct.product_price)))|currency:'ILS':'code'}}</span>
+        <br/>
+        <strong>{{'all_orders'|translate}}:</strong>{{(obligation.total_orders+(selectedProduct.product_price-(0.01*selectedProduct.discount*selectedProduct.product_price)))|currency:'ILS':'code'}}
+        <hr/>
+    </ng-container>
+  </div>
+  <div class="col-lg-12" style="margin-top:20px;">
+        <mat-chip-list *ngIf="agent_id && authService.canUpdate()">
+                <mat-chip><strong>{{'agent'|translate}}<mat-icon mdChipRemove (click)="resetAgent()">cancel</mat-icon></strong></mat-chip>
+                <mat-chip>
+                    <span >{{getAgentName(agent_id)}}</span>
+                </mat-chip> 
+            </mat-chip-list>
+        <mat-chip-list *ngIf="selectedProduct">
+            <mat-chip><strong>{{'company'|translate}}</strong></mat-chip>
+            <mat-chip>
+                <span >{{getProductCompany(selectedProduct)}}</span>
+            </mat-chip> 
+        </mat-chip-list>
+        <mat-chip-list *ngIf="selectedProduct">
+          <mat-chip><strong>{{'product'|translate}}</strong><mat-icon mdChipRemove (click)="resetProduct()">cancel</mat-icon></mat-chip>
+          <mat-chip>
+                <span [innerHTML]="getProductName(selectedProduct)"></span>
+          </mat-chip> 
+          <mat-chip>
+            <span style="color:blue;">
+                  (
+                    <span *ngIf="selectedProduct.product_days_or_months=='months'">{{selectedProduct.product_days_or_months_numbers}}&nbsp;{{'months'|translate}}</span> 
+                    <span *ngIf="selectedProduct.product_days_or_months=='days'">{{selectedProduct.product_days_or_months_numbers}}&nbsp;{{'days'|translate}}</span>
+                    )
+              </span>
+            </mat-chip> 
+            <mat-chip>
+              <span style="color:green;">
+                  {{(selectedProduct.product_price+(1*selectedProduct.profit))| currency:'ILS':'code' }}
+              </span>
+            </mat-chip>
+        </mat-chip-list>
+        <mat-chip-list *ngIf="selectedSim">
+            <mat-chip><strong>{{'sim'|translate}}</strong><mat-icon mdChipRemove (click)="resetSim()">cancel</mat-icon></mat-chip>
+            <mat-chip>{{selectedSim.sim}}</mat-chip>
+        </mat-chip-list>
+        <mat-chip-list *ngIf="selectedPhone">
+            <mat-chip><strong>{{'phone'|translate}}</strong><mat-icon mdChipRemove (click)="resetPhone()">cancel</mat-icon></mat-chip>
+            <mat-chip>{{selectedPhone.phone}}</mat-chip>
+            <mat-chip *ngIf="moved_number"><strong [ngClass]="{'green':isPhone(moved_to_phone),'red':!isPhone(moved_to_phone)}">{{'moved_to_phone'|translate}}</strong><mat-icon mdChipRemove (click)="resetMovedNumber()">cancel</mat-icon></mat-chip>
+            <mat-chip *ngIf="moved_number && moved_to_phone!=''" [ngClass]="{'green':isPhone(moved_to_phone),'red':!isPhone(moved_to_phone)}">{{moved_to_phone}}</mat-chip>
+          </mat-chip-list>
+        <div class="col-lg-12"  style="margin:20px 0;" *ngIf="choose_sim && !selectedSim">
+            <mat-form-field style="min-width:250px;">
+                <input type="text" mdInput [formControl]="sim" [mdAutocomplete]="auto" placeholder="{{'sim'|translate}}" style="min-width:250px;">
+              </mat-form-field>
+          <mat-autocomplete  style="min-width:250px;" #auto="matAutocomplete" (optionSelected)="setSim($event)">
+            <mat-option *ngFor="let sim of filteredOptions | async" [value]="sim.sim" style="min-width:250px;">  
+              {{ sim.sim }}
+            </mat-option>
+          </mat-autocomplete>
+        </div>
+        <div class="col-lg-12"  style="margin:20px 0;" *ngIf="choose_phone && !selectedPhone">
+            <mat-form-field style="min-width:250px;">
+                <input type="text" mdInput [formControl]="phone" [mdAutocomplete]="auto1" placeholder="{{'phone'|translate}}" style="min-width:250px;">
+              </mat-form-field>
+          <mat-autocomplete  style="min-width:250px;" #auto1="matAutocomplete" (optionSelected)="setPhone($event)">
+            <mat-option *ngFor="let phone of filteredPhoneOptions | async" [value]="phone.phone" style="min-width:250px;">  
+              {{ phone.phone }}
+            </mat-option>
+          
+          </mat-autocomplete>
+          
+        </div>
+        <div class="col-lg-12"  style="margin:20px 0;" *ngIf="selectedPhone">
+            <mat-checkbox [(ngModel)]="moved_number" (click)="moved_to_phone='';">{{'moved_number'|translate}}?</mat-checkbox>
+            <br/>
+            <ng-container *ngIf="moved_number">
+                <mat-form-field>
+                    <input mdInput placeholder="{{'moved_to_phone'|translate}}" [(ngModel)]="moved_to_phone" type="tel">
+                </mat-form-field>
+            </ng-container>
+            <br  *ngIf="moved_number && can_block_member"/>
+            <mat-checkbox [(ngModel)]="block_others" *ngIf="can_block_member">{{'block_others'|translate}}</mat-checkbox><br/>
+            <mat-form-field>
+                <textarea mdInput placeholder="{{'note'|translate}}" [(ngModel)]="note"></textarea>
+            </mat-form-field>
+        </div>
+        <div class="col-lg-12"  style="margin:20px 0;" *ngIf="selectedProduct">
+            <hr/>
+            <button mat-raised-button color="primary" (click)="addOrder()" [disabled]="!showSubmit() || isExceeded()">
+            {{'reservations'|translate}}
+          </button>
+            <button mat-raised-button (click)="resetProduct()">{{'other_product'|translate}}</button>
+            <button mat-raised-button (click)="viewInfo()">{{'agent_details'|translate}}</button>
+        </div>
+  </div>
+  <ng-container *ngIf="!obligation">
+    <div class="col-lg-12" style="margin: 15px 5px;">
+        <mat-chip-list style="display: table;width: auto;margin: auto;">
+          
+            <mat-chip style="margin-bottom:10px;" style="color:red;" [selected]="true">{{'credit'|translate}}&nbsp;:&nbsp;{{0|currency:'ILS':'code'}}</mat-chip>
+            </mat-chip-list>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!selectedProduct && _products">
+      <div class="col-lg-12" style="margin: 15px 5px;">
+          <h4>{{'select_product'|translate}}</h4> 
+      </div>
+      <ng-container  *ngFor="let p of products" >
+      <div class="col-lg-4 col-mat-6 col-sm-6 col-xs-12" style="margin:10px 0 10px 0;cursor:pointer;" (click)="setProduct(p)"  *ngIf="p.active=='1' && inProducts(p)">
+          <mat-card>
+              <mat-card-header>
+                  <mat-card-title>
+                      <h4>{{getProductCompany(p)}}</h4>
+                  </mat-card-title>
+                  <mat-card-subtitle>
+                      <p class="primary">({{p.product_days_or_months_numbers}}&nbsp;
+                          <span *ngIf="p.product_days_or_months=='months'">{{'months'|translate}}</span> 
+                          <span *ngIf="p.product_days_or_months=='days'">{{'days'|translate}}</span>
+                          )
+                      </p>
+                  </mat-card-subtitle>
+                  <mat-card-subtitle>
+                    <h2  class="accent">
+                        {{(p.product_price+(1*p.profit))| number : '1.2-2'|currency:'ILS':'code' }}
+                    </h2>
+                  </mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                <span>
+                    <strong>
+                            <span innerHTML="{{'prod_name_'+p.product_id|translate}}"></span>
+                    </strong>
+                </span>
+                <hr/>
+                <span>
+                    <span innerHTML="{{'prod_desc_'+p.product_id|translate}}"></span>
+                </span>
+            </mat-card-content>
+          </mat-card>
+      </div>
+    </ng-container>
+  </ng-container>
+</ng-container>
+</div>
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+<span style="color:red;" *ngIf="loading">{{'wait_msg'|translate}}</span>  -->

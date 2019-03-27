@@ -1,0 +1,369 @@
+ <div > 
+   <div > 
+        
+      <div  *ngIf="authService.isAgent()"  style="text-align:center;">
+        <app-obligation [loading]="loading" [id]="authService.getCurrentUserId()" ></app-obligation>
+      </div>
+      <div >
+        <app-member-search [loading]="loading"></app-member-search>
+      </div>
+      <mat-progress-bar mode="buffer" *ngIf="loading" ></mat-progress-bar>
+  </div>
+ 
+  <div class="row">
+  <div fxLayout="row wrap"  fxLayout.sm="column" fxFlex fxLayoutGap="5px" fxLayoutAlign="center" > 
+        <mat-card  *ngIf="isSearchActive && !phone" routerLink="/" routerLinkActive="active" color="warn" style="cursor: no-drop;">
+          <mat-icon color="warn">not_interested</mat-icon>
+          <mat-card-content>
+            <span style="color:#f44336;white-space:normal;">{{'phone_not_exist'|translate}}</span>
+          </mat-card-content>
+        </mat-card>
+     
+ 
+   <div *ngIf="isSearchActive && phones && phone">
+    <div  *ngFor="let p of phones">
+      <div  *ngIf="(p.member && authService.belongsToUser(p.member.agent_id)) || (p.member && p.member.free=='1')"> 
+            <mat-card  [routerLink]="[phoneLink(), p.id]" style="color: #337ab7;"  color="primary" >
+              <mat-icon style="color:red;" *ngIf="p.used=='0'">phone</mat-icon>
+              <mat-icon style="color:green;" *ngIf="p.used=='1'">phone</mat-icon>
+              <mat-card-content>
+                <ng-container *ngIf="authService.canUpdate()">
+                <span style="color:red;white-space:normal" *ngIf="p.used=='0'">{{p.phone}}
+                  <ng-container *ngIf="p.moved_to_phone!=0" style="white-space:nowrap;">
+                   
+                      <span *ngIf="p.accepted_moved_to_phone=='1'" style="color:green;"> &nbsp; >>&nbsp;{{p.moved_to_phone}}</span>
+                      <span *ngIf="p.accepted_moved_to_phone=='0'" style="color:red;"> &nbsp; >>&nbsp;{{p.moved_to_phone}}</span>
+                    
+                  </ng-container>
+                </span>
+               
+                <span style="color:green;white-space:normal" *ngIf="p.used=='1'">{{p.phone}}
+                  <ng-container *ngIf="p.moved_to_phone!=0" style="white-space:nowrap;">
+                    
+                      <span *ngIf="p.accepted_moved_to_phone=='1'" style="color:green;"> &nbsp; >>&nbsp;{{p.moved_to_phone}}</span>
+                      <span *ngIf="p.accepted_moved_to_phone=='0'" style="color:red;"> &nbsp; >>&nbsp;{{p.moved_to_phone}}</span>
+                    
+                  </ng-container>
+                </span>
+              </ng-container>
+              <ng-container *ngIf="authService.isAgent()">
+                  <ng-container *ngIf="p.moved_to_phone!=0">
+                      {{p.moved_to_phone}}
+                    
+                  </ng-container>
+                  <ng-container *ngIf="p.moved_to_phone==0">
+                      {{p.phone}}
+                    
+                  </ng-container>
+              </ng-container>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        <div class="col-lg-2 col-mat-4 col-xs-12" *ngIf="(p.member && !authService.belongsToUser(p.member.agent_id) && p.member.free=='0')">
+            <mat-card style="color: #337ab7;"  color="primary" disabled>
+              <mat-icon style="color:red;" >phone</mat-icon>
+              <mat-card-content>
+                <span style="color:red;white-space:normal">{{p.phone}}<br/>
+                  {{'orders_only_through_the_manager'|translate}}
+                </span>
+              </mat-card-content>
+            </mat-card>
+          
+      </div>
+      <div class="col-lg-2 col-mat-4 col-xs-12" *ngIf="p.agent_name!='-' && authService.canUpdate()">
+        <mat-card   [routerLink]="['/סוכן', p.agent_id]" routerLinkActive="active" style="color:#795548;"   color="primary">
+          <mat-icon style="color:#795548;">person</mat-icon>
+          <mat-card-content>
+            <span style="color:#795548;white-space:normal">{{p.agent_name}}</span>
+          </mat-card-content>
+        </mat-card>
+      </div>
+       <div class="col-lg-2 col-mat-4 col-xs-12" *ngIf="p.member && authService.canUpdate()">
+        <mat-card   [routerLink]="['/לקוח', p.member.consumer_id]" routerLinkActive="active" style="color:orange;"   color="primary">
+          <mat-icon style="color:orange;">assignment_ind</mat-icon>
+          <mat-card-content>
+            <span style="color:orange;white-space:normal">{{p.member.consumer_name}}</span>
+          </mat-card-content>
+        </mat-card>
+      </div> 
+    </div>
+</div>
+    <!-- <ng-container *ngIf="customers"> -->
+   
+        <div *ngFor="let c of customers">
+          <mat-card   [routerLink]="['/הזמנה-חדשה', c.phone_id]" routerLinkActive="active"   *ngIf="authService.isAgent()" >
+            <mat-icon color="primary">phone</mat-icon>
+            <mat-card-content *ngIf="c.moved_to_phone=='0'">
+              <span style="white-space:normal">{{c.phone}}</span>&nbsp; <span style="color:orange">({{c.note}})</span>
+            </mat-card-content>
+            <mat-card-content *ngIf="c.moved_to_phone=='1'">
+              <span style="white-space:normal">{{c.moved_to_phone}}</span>&nbsp; <span style="color:orange">({{c.note}})</span>
+            </mat-card-content>
+          </mat-card>
+          <mat-card   [routerLink]="['/מספר', c.phone_id]" routerLinkActive="active"   *ngIf="authService.canUpdate()" >
+            <mat-icon color="primary">phone</mat-icon>
+            <mat-card-content *ngIf="c.moved_to_phone=='0'">
+              <span style="white-space:normal">{{c.phone}}</span>&nbsp; <span style="color:orange">({{c.note}})</span>
+            </mat-card-content>
+            <mat-card-content *ngIf="c.moved_to_phone=='1'">
+              <span style="white-space:normal">{{c.moved_to_phone}}</span>&nbsp; <span style="color:orange">({{c.note}})</span>
+            </mat-card-content>
+          </mat-card>
+        </div>
+    <!-- </ng-container> -->
+    <!-- <ng-container *ngIf="agents && authService.canUpdate()"> -->
+    
+        <div  *ngFor="let agent of agents">
+          <mat-card   [routerLink]="['/סוכן', agent.id]" routerLinkActive="active" style="color:#795548;"   color="primary">
+            <mat-icon style="color:#795548;">person</mat-icon>
+            <mat-card-content>
+              <span style="color:#795548;white-space:normal">{{agent.username}}</span>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <!-- fxLayout.xs="column" -->
+  
+   <!-- <div class="row"> -->
+    <!-- </ng-container> -->
+    <!-- <ng-container > -->
+       <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12">  -->
+        <!-- <ng-tamplate> -->
+        <mat-card  routerLink="/טעינה-חדשה" routerLinkActive="active">
+          <mat-icon color="primary">add_shopping_cart</mat-icon>
+          <mat-card-content>
+            <span color="primary">{{'new_order' | translate}}</span>
+          </mat-card-content>
+        </mat-card>
+       <!-- </div>  -->
+    <!-- </ng-container> -->
+
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
+      <mat-card *ngIf="authService.isAdmin()" routerLink="/הגדרות" routerLinkActive="active">
+        <mat-icon color="primary">settings</mat-icon>
+        <mat-card-content>
+          <span color="primary">{{'settings' | translate}}</span>
+        </mat-card-content>
+      </mat-card>
+     <!-- </div>  -->
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
+        <mat-card *ngIf="authService.isAdmin()" routerLink="/הרשאות" routerLinkActive="active">
+          <mat-icon color="primary">lock</mat-icon>
+          <mat-card-content>
+            <span color="primary">{{'permissions' | translate}}</span>
+          </mat-card-content>
+        </mat-card>
+       <!-- </div>  -->
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
+        <mat-card *ngIf="authService.canUpdate()" routerLink="/משתמשים" routerLinkActive="active">
+          <mat-icon color="primary">supervisor_account</mat-icon>
+          <mat-card-content>
+            <span color="primary">{{'users' | translate}}</span>
+          </mat-card-content>
+        </mat-card>
+     <!-- </div>  -->
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
+        <mat-card *ngIf="authService.canUpdate()" routerLink="/חברות" routerLinkActive="active">
+          <mat-icon color="primary">domain</mat-icon>
+          <mat-card-content>
+            <span color="primary">{{'companies' | translate}}</span>
+          </mat-card-content>
+        </mat-card>
+     <!-- </div>  -->
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
+        <mat-card *ngIf="authService.canUpdate()" routerLink="/מספרי-סים" routerLinkActive="active">
+          <mat-icon color="primary">sim_card</mat-icon>
+          <mat-card-content>
+            <span color="primary">{{'sims' | translate}}</span>
+          </mat-card-content>
+        </mat-card>
+     <!-- </div>  -->
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12"  >  -->
+        <mat-card *ngIf="authService.canUpdate()" routerLink="/לקוחות" routerLinkActive="active">
+          <mat-icon color="primary">assignment_ind</mat-icon>
+          <mat-card-content>
+            <span color="primary">{{'consumers' | translate}}</span>
+          </mat-card-content>
+        </mat-card>
+     <!-- </div>  -->
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
+        <mat-card *ngIf="authService.canUpdate()" routerLink="/חבילות" routerLinkActive="active">
+          <mat-icon color="primary">work</mat-icon>
+          <mat-card-content>
+            <span color="primary">{{'products' | translate}}</span>
+          </mat-card-content>
+        </mat-card>
+     <!-- </div>  -->
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
+        <mat-card *ngIf="authService.isAgent()" routerLink="/מחירון" routerLinkActive="active">
+          <mat-icon color="primary">attach_money</mat-icon>
+          <mat-card-content>
+            <span color="primary">{{'price_list' | translate}}</span>
+          </mat-card-content>
+        </mat-card>
+     <!-- </div>  -->
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
+        <mat-card  *ngIf="authService.canUpdate()" routerLink="/הנחות" routerLinkActive="active">
+          <mat-icon color="primary">money_off</mat-icon>
+          <mat-card-content>
+            <span color="primary">{{'discounts' | translate}}</span>
+          </mat-card-content>
+        </mat-card>
+     <!-- </div>  -->
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
+      <mat-card *ngIf="authService.canUpdate()" routerLink="/חסימת-חבילות" routerLinkActive="active">
+        <mat-icon color="primary">block</mat-icon>
+        <mat-card-content>
+          <span color="primary">{{'block_packages' | translate}}</span>
+        </mat-card-content>
+      </mat-card>
+   <!-- </div>  -->
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
+        <mat-card *ngIf="authService.canUpdate()" routerLink="/מספרי-טלפון" routerLinkActive="active">
+          <mat-icon color="primary">phone</mat-icon>
+          <mat-card-content>
+            <span color="primary">{{'phones' | translate}}</span>
+          </mat-card-content>
+        </mat-card>  
+     <!-- </div>  -->
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12">  -->
+        <mat-card routerLink="/מינויים" routerLinkActive="active">
+          <mat-icon color="primary">picture_in_picture_alt</mat-icon>
+          <mat-card-content>
+            <span color="primary" *ngIf="authService.canUpdate()">{{'members' | translate}}</span>
+            <span color="primary" *ngIf="authService.isAgent()">{{'my_members' | translate}}</span>
+          </mat-card-content>
+        </mat-card>
+     <!-- </div>  -->
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12">  -->
+        <mat-card routerLink="/תשלומים" routerLinkActive="active">
+          <mat-icon color="primary">payment</mat-icon>
+          <mat-card-content>
+            <span color="primary">{{'payments' | translate}}</span>
+          </mat-card-content>
+        </mat-card>
+     <!-- </div>  -->
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12">  -->
+        <mat-card routerLink="/הזמנות" routerLinkActive="active">
+          <mat-icon color="primary">library_books</mat-icon>
+          <mat-card-content>
+            <span color="primary" *ngIf="authService.canUpdate()">{{'orders' | translate}}</span>
+            <span color="primary" *ngIf="authService.isAgent()">{{'last_charges' | translate}}</span>
+          </mat-card-content>
+        </mat-card>
+     <!-- </div>  -->
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
+        <mat-card *ngIf="authService.canUpdate()" routerLink="/ניוד-מספרים" routerLinkActive="active">
+          <mat-icon color="primary">sync</mat-icon>
+          <mat-card-content>
+            <span color="primary">{{'mobility_numbers' | translate}}</span>
+          </mat-card-content>
+        </mat-card>
+     <!-- </div>  -->
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
+        <mat-card *ngIf="authService.canUpdate()" routerLink="/דוח-סוכנים" routerLinkActive="active">
+          <mat-icon color="primary">assessment</mat-icon>
+          <mat-card-content>
+            <span color="primary">{{'agents_report' | translate}}</span>
+          </mat-card-content>
+        </mat-card>
+     <!-- </div>  -->
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
+      <mat-card *ngIf="authService.canUpdate()" routerLink="/השוואות" routerLinkActive="active">
+        <mat-icon color="primary">compare</mat-icon>
+        <mat-card-content>
+          <span color="primary">{{'comparisons' | translate}}</span>
+        </mat-card-content>
+      </mat-card>
+     <!-- </div>  -->
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
+      <mat-card *ngIf="authService.canUpdate()" routerLink="/הזמנת-אקסל" routerLinkActive="active">
+        <mat-icon color="primary">work</mat-icon>
+        <mat-card-content>
+          <span color="primary">{{'excel_order' | translate}}</span> 
+        </mat-card-content>
+      </mat-card>
+     <!-- </div>  -->
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
+      <mat-card *ngIf="authService.canUpdate()" routerLink="/טעינות-אקסל" routerLinkActive="active">
+        <mat-icon color="primary">work</mat-icon>
+        <mat-card-content>
+          <span color="primary">{{'excel_charge' | translate}}</span> 
+        </mat-card-content>
+      </mat-card>
+     <!-- </div>  -->
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
+      <mat-card *ngIf="authService.canUpdate()" routerLink="/סטאטוס-הוט-מובייל" routerLinkActive="active">
+        <mat-icon color="primary">signal_cellular_alt</mat-icon>
+        <mat-card-content>
+          <span color="primary">{{'status_hotmobile' | translate}}</span> 
+        </mat-card-content>
+      </mat-card>
+     <!-- </div>  -->
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
+      <mat-card *ngIf="authService.canUpdate()" routerLink="/סטאטוס-סלקום" routerLinkActive="active">
+        <mat-icon color="primary">signal_cellular_alt</mat-icon>
+        <mat-card-content>
+          <span color="primary">{{'status_cellcom' | translate}}</span> 
+        </mat-card-content>
+      </mat-card>
+     <!-- </div>  -->
+     <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12">  -->
+        <mat-card routerLink="/דוח-כללי-חדש" routerLinkActive="active">
+          <mat-icon color="primary">assignment</mat-icon>
+          <mat-card-content>
+            <span color="primary">{{'general_report' | translate}}</span>
+          </mat-card-content>
+        </mat-card>
+       <!-- </div>  -->
+       <!-- <div class="col-lg-2 col-mat-2 col-sm-4 col-xs-12" >  -->
+        <mat-card *ngIf="authService.canUpdate()" routerLink="/חשבונות-סוכנים" routerLinkActive="active">
+          <mat-icon color="primary">assignment</mat-icon>
+          <mat-card-content>
+            <span color="primary">{{'agents_acounts' | translate}}</span>
+          </mat-card-content>
+        </mat-card>
+       <!-- </div> 
+       <div >  -->
+        <mat-card *ngIf="authService.canUpdate()" routerLink="/חידוש-אוטומאטי" routerLinkActive="active">
+          <mat-icon color="primary">update</mat-icon>
+          <mat-card-content>
+            <span color="primary">{{'automatic_update' | translate}}</span>
+          </mat-card-content>
+        </mat-card>
+       <!-- </div>  -->
+      <!-- </ng-tamplate> -->
+    </div>
+</div>
+    </div>
+<div class="container-fluid-in home" *ngIf="authService.isAgent()">
+    <div class="row">
+            <div class="col-lg-12 col-mat-12 col-sm-12 col-xs-12">
+                <button mat-button color="primary" (click)="show_accounts=!show_accounts">{{'bank_accounts'|translate}}
+                  <mat-icon *ngIf="!show_accounts" color="primary">keyboard_arrow_down</mat-icon>
+                  <mat-icon *ngIf="show_accounts" color="primary">keyboard_arrow_up</mat-icon>
+                </button>
+                <ng-container *ngIf="show_accounts">
+                            <h3>בנק פועלים</h3>
+                           
+                                <span color="primary" style="text-align:right;">
+                                    <strong>{{'name_of_account_awner'|translate}}</strong>: ניו ויזיון סיסי אס בע״מ
+                                    <br/><strong>{{'account_number'|translate}}</strong>: 378746
+                                    <br/><strong>{{'branch'|translate}}</strong>:735
+                                  </span>
+                            <hr/>
+                            <h3>בנק לאומי</h3>
+                                    <span color="primary" style="text-align:right;">
+                                            <strong>{{'name_of_account_awner'|translate}}</strong>: ניו ויזיון סיסי אס בע״מ
+                                            <br/><strong>{{'account_number'|translate}}</strong>: 25280095
+                                            <br/><strong>{{'branch'|translate}}</strong>: 896
+                                          </span>
+                                          <hr/>
+                            <h3>בנק הדואר</h3>
+                                    <span color="primary" style="text-align:right;">
+                                            <strong>{{'name_of_account_awner'|translate}}</strong>: ניו ויזיון סיסי אס בע״מ
+                                          <br/><strong>{{'account_number'|translate}}</strong>: 8130273
+                                          </span>
+                                        </ng-container>
+          </div>
+      </div>
+  </div>

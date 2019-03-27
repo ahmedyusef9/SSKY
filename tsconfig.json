@@ -11,6 +11,11 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "es5",
+    "paths": {
+      "exceljs": [
+      "../node_modules/exceljs/dist/es5/exceljs.browser"
+    ]
+    },
     "typeRoots": [
       "node_modules/@types"
     ],

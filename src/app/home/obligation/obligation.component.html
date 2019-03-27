@@ -1,0 +1,18 @@
+<div >
+<mat-chip-list *ngIf="obligation" >
+  <mat-chip  >
+    <span style="color:green" *ngIf="obligation.credit>0">
+        {{'credit'|translate}}&nbsp;:&nbsp;{{(obligation.credit?obligation.credit:0)|currency:'ILS':'code'}}
+    </span>
+    <span *ngIf="obligation.credit==0">
+        {{'credit'|translate}}&nbsp;:&nbsp;{{(obligation.credit?obligation.credit:0)|currency:'ILS':'code'}}
+    </span>
+    <span style="color:red" *ngIf="obligation.credit<0">
+        {{'credit'|translate}}&nbsp;:&nbsp;{{(obligation.credit?obligation.credit:0)|currency:'ILS':'code'}}
+    </span>
+    <mat-icon style="color:green;" *ngIf="obligation.credit>0">arrow_drop_up</mat-icon>
+    <mat-icon style="color:red;" *ngIf="obligation.credit<0">arrow_drop_down</mat-icon>
+  </mat-chip>
+  <mat-chip >{{'obligation'|translate}}&nbsp;:&nbsp;{{(obligation.obligation?obligation.obligation:0)|currency:'ILS':'code'}}</mat-chip>
+</mat-chip-list>
+</div>

@@ -1,0 +1,11 @@
+<h1 mat-dialog-title dir="RTL" color="warn">{{'delete_sim'|translate}}</h1>
+<div mat-dialog-content  dir="RTL">
+  <p>{{'do_you_want_to_delete_sim'|translate}}</p>
+  <p>{{data.sim}}</p>
+  
+</div>
+<div mat-dialog-actions  dir="RTL">
+  <button mat-button [mat-dialog-close]="data" tabindex="2" color="warn" (click)="delete(data.id,todelete.value)">{{'yes'|translate}}</button>
+  <button mat-button (click)="onNoClick()" tabindex="-1">{{'no'|translate}}</button>
+</div>
+<input type="hidden" value="{{'deleted'|translate}}" #todelete/>

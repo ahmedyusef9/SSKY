@@ -17,11 +17,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { YnModule } from '../pipes/yn.module';
 import { RouterModule } from '@angular/router';
 import { ValidationService } from '../validation.service';
+import { ValidErrModule } from '../valid-err/valid-err.module';
 
   //ValidErrModule
 @NgModule({
   declarations: [
-    // AddSimComponent, EditSimComponent,
+    AddSimComponent, EditSimComponent,
      SimComponent,DeleteDialog],
   imports: [
      CommonModule,
@@ -30,10 +31,11 @@ import { ValidationService } from '../validation.service';
     FormsModule, 
     ReactiveFormsModule,
     BrowserModule,
+    ValidErrModule,
     BrowserAnimationsModule,YnModule,RouterModule
   ],
   exports:[SimComponent,TranslateModule,
-    //  AddSimComponent, EditSimComponent,
+     AddSimComponent, EditSimComponent,
      DeleteDialog],
   providers:[
       {provide: SimService, useClass: SimService},
@@ -45,7 +47,7 @@ import { ValidationService } from '../validation.service';
       AuthenticationService
     ],
   entryComponents: [
-    // AddSimComponent, EditSimComponent,
+    AddSimComponent, EditSimComponent,
     DeleteDialog] 
 })
 export class SimModule { }

@@ -1,5 +1,5 @@
 <div mat-dialog-content dir="RTL">
-    <p>{{'add_sim'|translate}}?</p>
+    <p>{{'add_sim'|translate}}  </p>
     <div class="sim-list">
         <ol *ngIf="data.sim.excelSims" class="mat-chip-list-stacked">
             <li *ngFor="let item of data.sim.excelSims">
@@ -10,17 +10,17 @@
     <form novalidate [formGroup]="data.sim.simForm" class="form-inline">
             <mat-form-field [ngClass]="{'dn':data.sim.excelSims}">
                 <input matInput tabindex="1" formControlName="sim" placeholder="{{'sim'|translate}}" />
-                <!-- <valid-err [control]="data.sim.simForm.controls['sim']"></valid-err> -->
+                <valid-err [control]="data.sim.simForm.controls['sim']"></valid-err>
             </mat-form-field>
             <mat-form-field>
                 <input matInput tabindex="1" formControlName="note" placeholder="{{'note'|translate}}" />
-                <!-- <valid-err [control]="data.sim.simForm.controls['note']"></valid-err> -->
+                <valid-err [control]="data.sim.simForm.controls['note']"></valid-err>
             </mat-form-field>
             <mat-form-field>
                 <input type="text" placeholder="{{'agent'|translate}}" aria-label="Number" matInput formControlName="agent_id" 
                 [matAutocomplete]="auto" tabindex="1"
                   (keyup)="searchAgent($event)" (focusout)="chooseAgent($event)">
-                  <!-- <valid-err [control]="data.sim.simForm.controls['agent_id']"></valid-err> -->
+                  <valid-err [control]="data.sim.simForm.controls['agent_id']"></valid-err>
                 <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (click)="test($event)" >
                   <mat-option [value]="{username:'free'|translate,id:0}">{{'free'|translate}}</mat-option>
                   <mat-option *ngFor="let option of filteredOptions|async" [value]="option" style="text-align:right;" >

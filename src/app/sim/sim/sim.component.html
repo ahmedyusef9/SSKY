@@ -10,17 +10,15 @@
   <button mat-menu-item  (click)="loadExcel()">כל התוצאות</button>
 </mat-menu>
 </mat-toolbar> 
-<div class="example-container mat-elevation-z8">
+
   <div class="example-header">
     <mat-form-field floatPlaceholder="never">
       <input matInput placeholder="{{'search'|translate}}" #filter>
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field> 
   </div>   
-  <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
-    <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
-    <div class="example-rate-limit-reached" *ngIf="isRateLimitReached"></div>
-  </div>
+
+  <div class="example-container mat-elevation-z8">
   <table mat-table #table [(dataSource)]="dataSource" dir="RTL" matSort matSortActive="id" matSortDisableClear matSortDirection="asc">
     <ng-container matColumnDef="sim">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'sim'|translate}} </th>
@@ -48,10 +46,16 @@
             <mat-icon (click)="delete(row.id)" color="warn" style="cursor:pointer;" *ngIf="authService.canUpdate() && row.used=='0'">delete</mat-icon>
         </td>
     </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <!-- <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr> -->
   </table>
-  <mat-paginator [pageSize]="30" [length]="resultsLength"  showFirstLastButtons></mat-paginator>       
-</div>
+
+  <mat-paginator class="mat-paginator-sticky" [pageSize]="30" [length]="resultsLength"  showFirstLastButtons></mat-paginator>
+  <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+    <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+    <div class="example-rate-limit-reached" *ngIf="isRateLimitReached"></div>
+  </div>
+</div>       
 
 

@@ -1,0 +1,93 @@
+
+
+<div  class="first">
+        <mat-toolbar color="primary">{{'members'|translate}}</mat-toolbar>
+       
+        <mat-toolbar>
+            <button mat-button (click)="loadExcel()">{{'excel'|translate}}&nbsp;<mat-icon color="primary">file_download</mat-icon></button>
+        </mat-toolbar>
+        <div class="example-container mat-elevation-z8">
+                <div class="example-header">
+                    <mat-form-field floatPlaceholder="never">
+                        <input mdInput placeholder="{{'search'|translate}}" #filter>
+                        <mat-icon mdSuffix>search</mat-icon>
+                    </mat-form-field>
+                </div>
+                <mat-table #table [dataSource]="ds" dir="RTL" mdSort>
+                    <ng-container matColumnDef="id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                        <mat-cell *matCellDef="let row" >
+                            {{row.id}} 
+                          </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="consumer_name">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{'consumer'|translate}} </mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.consumer_name}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="phone">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{'phone'|translate}}</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <ng-container *ngIf="authService.canUpdate();else e1e">
+                            <span *ngIf="row.moved_to_phone=='0' && row.accepted_moved_to_phone=='0'">
+                                <button mat-button [routerLink]="['/מספר', row.phone_id]" color="primary">{{row.phone}}</button>
+                            </span>
+                            <span *ngIf="row.moved_to_phone!='0' && row.accepted_moved_to_phone=='1'">
+                                <button mat-button [routerLink]="['/מספר', row.phone_id]" color="primary">{{row.phone}}</button>
+                                <strong style="color:green;">>>&nbsp;<span>{{row.moved_to_phone}}</span></strong>
+                            </span> 
+                            <span  *ngIf="row.moved_to_phone!='0' && row.accepted_moved_to_phone=='0'">
+                                <button mat-button [routerLink]="['/מספר', row.phone_id]" color="primary">{{row.phone}}</button>
+                                <strong>>>&nbsp;<span style="color:red;">{{row.moved_to_phone}}</span></strong>
+                            </span>
+                            </ng-container>
+                            <ng-template #e1e>
+                                <span *ngIf="row.moved_to_phone=='0'">
+                                    <button mat-button [routerLink]="['/מספר', row.phone_id]" color="primary">{{row.phone}}</button>
+                                </span>
+                                <span *ngIf="row.moved_to_phone!='0'">
+                                    <button mat-button [routerLink]="['/מספר', row.phone_id]" color="primary">{{row.moved_to_phone}}</button>
+                                </span>
+                            </ng-template>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="has_orders">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{'product'|translate}}</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <ng-container *ngIf="row.has_orders">
+                                <strong>{{row.company_name}}</strong>&nbsp;/&nbsp;
+                                <span *ngIf="lan=='he' || row.product_name_ar==''"> {{row.product_name}}</span>
+                                <span *ngIf="lan=='ar' && row.product_name_ar!=''"> {{row.product_name_ar}}</span>
+                            </ng-container>  
+                        </mat-cell>
+                    </ng-container>
+                     <ng-container matColumnDef="status" >
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{'status'|translate}}</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <ng-container *ngIf="row.has_orders">
+                                {{row.status|translate}} 
+                                <span *ngIf="row.status=='completed'">
+                                  &nbsp;{{'until'|translate}}<br/>{{(row.completed_date_sec | amFromUnix)| amDateFormat: 'DD.MM.YYYY'}}
+                                </span>
+                            </ng-container>
+                         </mat-cell>
+                    </ng-container> 
+                    <ng-container matColumnDef="order_id" >
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <ng-container *ngIf="row.has_orders">
+                                <mat-icon matTooltip="{{'order'|translate}}" color="primary" style="cursor:pointer;" [routerLink]="['/הזמנה', row.order_id]" routerLinkActive="active">info</mat-icon>    
+                            </ng-container>
+                            <ng-container *ngIf="!row.has_orders">
+                                <span style="color:red;font-weight:bolder;">
+                                    {{'has_no_orders'|translate}}
+                                </span>
+                              </ng-container>
+                         </mat-cell>
+                    </ng-container> 
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+                <mat-paginator #paginator [length]="db.data.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+                </mat-paginator>
+            </div>
+      </div>

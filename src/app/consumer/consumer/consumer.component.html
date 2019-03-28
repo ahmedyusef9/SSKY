@@ -1,0 +1,53 @@
+<mat-toolbar color="primary">{{'consumers_list'|translate}}</mat-toolbar>
+<mat-toolbar>
+    <button mat-button  routerLink="/לקוח-חדש" routerLinkActive="active" style="position: relative;
+    float: left;margin-bottom:5px;margin-right:10px;"><mat-icon color="primary">add_circle</mat-icon></button>
+    <button mat-button style="position: relative;
+    float: left;margin-bottom:5px;margin-right:10px;" (click)="loadExcel()">{{'excel'|translate}}&nbsp;<mat-icon color="primary">file_download</mat-icon></button>
+
+</mat-toolbar>
+<div class="example-container mat-elevation-z8">
+    <div class="example-header">
+        <mat-form-field floatPlaceholder="never">
+            <input matInput placeholder="{{'search'|translate}}" #filter>
+            <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+    </div>
+    <mat-table #table [dataSource]="dataSource" dir="RTL" mdSort>
+        
+        
+        <ng-container matColumnDef="firstname">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{'consumer_name'|translate}}</mat-header-cell>
+            <mat-cell *matCellDef="let row">  
+                <button [routerLink]="['/לקוח', row.id]" mat-raised-button color="primary">{{row.firstname}} {{row.lastname}}</button>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="parent_name">
+            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="{'dn':authService.isAgent()}">{{'agent_name'|translate}} </mat-header-cell>
+            <mat-cell *matCellDef="let row" [ngClass]="{'dn':authService.isAgent()}"> 
+                <button [routerLink]="['/סוכן', row.parent]" mat-raised-button color="primary">{{row.parent_name}}</button>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="phone">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{'phone'|translate}} </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.phone|translate}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="created_at">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{'consumer_created_at'|translate}} </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.created_at}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                
+                <mat-cell *matCellDef="let row" > 
+                    <mat-icon [routerLink]="['/עריכת-לקוח', row.id]" routerLinkActive="active" color="primary" style="cursor:pointer;">mode_edit</mat-icon>
+                    <mat-icon (click)="deleteM(row.id)" color="warn" style="cursor:pointer;" *ngIf="!row.has_orders">delete</mat-icon> 
+                </mat-cell>
+            </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [length]="consumersDatabase.data.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
+</div>
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>

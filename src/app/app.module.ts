@@ -32,6 +32,7 @@ import { ProductModule } from './product/product.module';
 import { CompanyModule } from './company/company.module';
 import { SimModule } from './sim/sim.module';
 import { AgentModule } from './agent/agent.module';
+import { ConsumerModule } from './consumer/consumer.module';
 
 export function createTranslateLoader(http: Http) {
   return new TranslateStaticLoader(http, 'https://www.skypanel.net/api/lan', '.php');
@@ -61,7 +62,8 @@ export function createTranslateLoader(http: Http) {
      ProductModule,
      CompanyModule,
      SimModule,
-     AgentModule
+     AgentModule,
+     ConsumerModule
   ],
   exports:[MaterialModule],
   providers: [

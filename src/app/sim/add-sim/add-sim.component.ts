@@ -17,7 +17,7 @@ import { MsgComponent } from 'src/app/msg/msg.component';
 })
 export class AddSimComponent implements OnInit {
   ngOnInit(): void {
-    throw new Error("Method not implemented.");
+    // throw new Error("Method not implemented.");
   }
   item:Sim;
   agents:User[];

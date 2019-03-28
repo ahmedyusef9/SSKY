@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { Http, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 import { Sim } from '../model/sim';
 import 'rxjs';

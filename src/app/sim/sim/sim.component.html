@@ -46,9 +46,10 @@
             <mat-icon (click)="delete(row.id)" color="warn" style="cursor:pointer;" *ngIf="authService.canUpdate() && row.used=='0'">delete</mat-icon>
         </td>
     </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    <!-- <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr> -->
+
   </table>
 
   <mat-paginator class="mat-paginator-sticky" [pageSize]="30" [length]="resultsLength"  showFirstLastButtons></mat-paginator>

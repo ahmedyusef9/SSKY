@@ -6,17 +6,13 @@ import { LoginComponent } from './login/login/login.component';
 import { NewChargeComponent } from './agent/new-charge/new-charge.component';
 import { SimComponent } from './sim/sim/sim.component';
 import { CanEditGuard } from './login/can-edit.guard';
-import { ConsumerComponent } from './consumer/consumer/consumer.component';
-
+import * as AppConst from './app.const'; 
 const routes: Routes = [
-  { path: '',component: HomeComponent , canActivate: [AuthGuard]},
-  { path: 'התחברות', component: LoginComponent },
-
-  { path: 'טעינה-חדשה',      component: NewChargeComponent , canActivate: [AuthGuard]},
-  { path: 'מספרי-סים', component: SimComponent , canActivate: [AuthGuard,CanEditGuard]},
-  { path: 'לקוחות',      component: ConsumerComponent , canActivate: [AuthGuard,CanEditGuard]},
-
-  { path: '**', redirectTo: '', canActivate: [AuthGuard]},
+  { path: AppConst.Routes.home.path,component: HomeComponent , canActivate: [AuthGuard]},
+  { path: AppConst.Routes.login.path, component: LoginComponent },
+  { path: AppConst.Routes.new_charge.path,      component: NewChargeComponent , canActivate: [AuthGuard]},
+  { path: AppConst.Routes.sims.path, component: SimComponent , canActivate: [AuthGuard,CanEditGuard]},
+  { path: AppConst.Routes.redirect_to.path, redirectTo: '', canActivate: [AuthGuard]},
 ];
 
 @NgModule({

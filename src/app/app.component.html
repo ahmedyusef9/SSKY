@@ -5,9 +5,9 @@
         <!-- <div> -->
             <button mat-button color="primary" (click)="sidenav.toggle()" *ngIf="isloged()" style="min-width:70px;padding:0 10px;"><mat-icon>more_vert</mat-icon></button>
             
-            <mat-icon class="example-icon" color="primary" style="float:left;cursor:pointer;" *ngIf="isloged()"  routerLink="/התחברות" routerLinkActive="active">power_settings_new</mat-icon>
+            <mat-icon class="example-icon" color="primary" style="float:left;cursor:pointer;" *ngIf="isloged()"  routerLink="{{getPath('login')}}" routerLinkActive="active">{{getIcon('login')}}</mat-icon>
             
-            <button mat-button color="primary" *ngIf="isloged() && !isHomePage" routerLink="/" routerLinkActive="active" style="min-width:70px;padding:0 10px;"><mat-icon>home</mat-icon></button>
+            <button mat-button color="primary" *ngIf="isloged() && !isHomePage" routerLink="{{getPath('home')}}" routerLinkActive="active" style="min-width:70px;padding:0 10px;"><mat-icon>{{getIcon('home')}}</mat-icon></button>
             <button mat-button color="primary" (click)="changeLan('ar')" *ngIf="lan!='ar'" >العربيه</button>
             <button mat-button color="primary" (click)="changeLan('he')" *ngIf="lan!='he'" >עברית</button>
             <button mat-button color="primary" (click)="changeLan('en')" *ngIf="lan!='en'" >English</button>
@@ -16,12 +16,12 @@
             <mat-icon color="primary" matTooltipPosition="before"
                 style="float:left;cursor:pointer;" 
                 *ngIf="isloged() && authService.isAdmin()"   matTooltip="{{'hallo'|translate}} {{'admin'|translate}} {{authService.getCurrentUser().name}}"
-                routerLink="/עריכת-משתמש/{{authService.getCurrentUser().id}}" routerLinkActive="active">account_circle
+                routerLink="{{getPath('edit_user',[authService.getCurrentUser().id])}}" routerLinkActive="active">{{getIcon('edit_user')}}
             </mat-icon>
             <mat-icon color="primary" matTooltipPosition="before"
                 style="float:left;cursor:pointer;" 
                 *ngIf="isloged() && authService.isWorker()"   matTooltip="{{'hallo'|translate}} {{'worker'|translate}} {{authService.getCurrentUser().name}}"
-                routerLink="/עריכת-משתמש/{{authService.getCurrentUser().id}}" routerLinkActive="active">account_circle
+                routerLink="{{getPath('edit_user',[authService.getCurrentUser().id])}}" routerLinkActive="active">{{getIcon('edit_user')}}
             </mat-icon>
             <mat-chip-list style="display: inline-block;" *ngIf="isloged() && authService.canUpdate()" dir="RTL">
                 <mat-chip class="notif notif1" matTooltip="{{'new_orders'|translate}}" [matMenuTriggerFor]="menu">{{count_new_orders}}</mat-chip>
@@ -30,7 +30,7 @@
             </mat-chip-list>
             <mat-menu #menu="matMenu" xPosition="after" yPosition="above"  [overlapTrigger]="false" [ngClass]="{'dn':count_new_orders==0}">
                 <!-- <div *ngIf="new_orders && new_orders.length>0"> -->
-                    <button style="direction:initial" mat-menu-item *ngFor="let n of new_orders" routerLink="/הזמנה/{{n.id}}" style="line-height: 1.3;">
+                    <button style="direction:initial" mat-menu-item *ngFor="let n of new_orders" routerLink="{{getPath('order',[n.id])}}" style="line-height: 1.3;">
                         <span  style="float:right;color:#8BC34A;">({{n.id}})&nbsp;</span> 
                         <span style="font-size:13px;">{{n.username}}</span><br/>
                         <span style="font-size:9px;color:#888;float:left;">({{n.created_at}})</span>
@@ -40,7 +40,7 @@
             </mat-menu>
             <mat-menu #menu2="matMenu" xPosition="after" yPosition="above"  [overlapTrigger]="false" [ngClass]="{'dn':count_cancel_orders==0}">
                 <!-- <ng-template *ngIf="cancel_orders && cancel_orders.length>0"> -->
-                    <button style="direction:initial" mat-menu-item *ngFor="let n of cancel_orders" routerLink="/הזמנה/{{n.id}}" style="line-height: 1.3;">
+                    <button style="direction:initial" mat-menu-item *ngFor="let n of cancel_orders" routerLink="{{getPath('order',[n.id])}}" style="line-height: 1.3;">
                         <span  style="float:right;color:rgb(232, 48, 135);">({{n.id}})&nbsp;</span> 
                         <span style="font-size:13px;">{{n.username}}</span><br/>
                         <span style="font-size:9px;color:#888;float:left;">({{n.cancel_from}})</span>
@@ -49,7 +49,7 @@
             </mat-menu>
             <mat-menu #menu3="matMenu" xPosition="after" yPosition="above"  [overlapTrigger]="false" [ngClass]="{'dn':count_trans_phones==0}">
                 <!-- <ng-template *ngIf="trans_phones && trans_phones.length>0"> -->
-                    <button  mat-menu-item *ngFor="let n of trans_phones" routerLink="/מספר/{{n.id}}" style="line-height: 1.3;">
+                    <button  mat-menu-item *ngFor="let n of trans_phones" routerLink="{{getPath('phone',[n.id])}}" style="line-height: 1.3;">
                         <span style="float:right;color:#00aced;">({{n.id}})&nbsp;</span> 
                         <span style="font-size:13px;">{{n.phone}}>>{{n.moved_to_phone}}</span><br/>
                         <span style="font-size:9px;color:#888;float:left;">({{n.created_at}})</span>
@@ -63,31 +63,31 @@
         <!-- #sidenav mode="side" opened="sno" class="example-sidenav"  dir="rtl" ngClass="{'dn':!isloged()}" -->
         <mat-sidenav #sidenav mode="side"  class="example-sidenav">
             <mat-list dir="RTL" (click)="!sno && sidenav.close()" *ngIf="isloged()">
-                <mat-list-item mat-button><button mat-button routerLink="/טעינה-חדשה" routerLinkActive="active">{{'new_order' | translate}}</button></mat-list-item> 
-                <mat-list-item *ngIf="authService.isAdmin()"> <button mat-button routerLink="/הגדרות" routerLinkActive="active">{{'settings' | translate}}</button></mat-list-item>
-                <mat-list-item *ngIf="authService.isAdmin()"> <button mat-button  routerLink="/הרשאות" routerLinkActive="active">{{'permissions' | translate}}</button></mat-list-item>
-                <mat-list-item *ngIf="authService.canUpdate()"> <button mat-button  routerLink="/משתמשים" routerLinkActive="active">{{'users' | translate}}</button></mat-list-item>
-                <mat-list-item *ngIf="authService.canUpdate()"> <button mat-button  routerLink="/חברות" routerLinkActive="active">{{'companies' | translate}}</button></mat-list-item>
-                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="/לקוחות" routerLinkActive="active">{{'consumers' | translate}}</button></mat-list-item>
-                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="/חבילות" routerLinkActive="active">{{'products' | translate}}</button></mat-list-item>
-                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="/הנחות" routerLinkActive="active">{{'discounts' | translate}}</button></mat-list-item>
-                <mat-list-item *ngIf="authService.isAgent()"><button mat-button  routerLink="/מחירון" routerLinkActive="active">{{'price_list' | translate}}</button></mat-list-item>
-                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="/מספרי-סים" routerLinkActive="active">{{'sims' | translate}}</button></mat-list-item>
-                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="/מספרי-טלפון" routerLinkActive="active">{{'phones' | translate}}</button></mat-list-item> 
-                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="/מינויים" routerLinkActive="active">{{'members' | translate}}</button></mat-list-item>
-                <mat-list-item *ngIf="authService.isAgent()"><button mat-button  routerLink="/מינויים" routerLinkActive="active">{{'my_members' | translate}}</button></mat-list-item>
-                <mat-list-item><button mat-button  routerLink="/תשלומים" routerLinkActive="active">{{'payments' | translate}}</button></mat-list-item>
-                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="/הזמנות" routerLinkActive="active">{{'orders' | translate}}</button></mat-list-item>
-                <mat-list-item *ngIf="authService.isAgent()"><button mat-button  routerLink="/הזמנות" routerLinkActive="active">{{'last_charges' | translate}}</button></mat-list-item>
-                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="/ניוד-מספרים" routerLinkActive="active">{{'mobility_numbers' | translate}}</button></mat-list-item>
-                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="/דוח-סוכנים" routerLinkActive="active">{{'agents_report' | translate}}</button></mat-list-item>
-                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="/השוואות" routerLinkActive="active">{{'comparisons' | translate}}</button></mat-list-item>
-                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="/הזמנת-אקסל" routerLinkActive="active">{{'excel_order' | translate}}</button></mat-list-item>
-                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="/טעינות-אקסל" routerLinkActive="active">{{'excel_charge' | translate}}</button></mat-list-item>
-                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="/סטאטוס-הוט-מובייל" routerLinkActive="active">{{'status_hotmobile' | translate}}</button></mat-list-item>
-                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="/סטאטוס-סלקום" routerLinkActive="active">{{'status_cellcom' | translate}}</button></mat-list-item>
-                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="/חשבונות-סוכנים" routerLinkActive="active">{{'agents_acounts' | translate}}</button></mat-list-item>
-                <mat-list-item><button mat-button  routerLink="/דוח-כללי-חדש" routerLinkActive="active">{{'general_report' | translate}}</button></mat-list-item>
+                <mat-list-item mat-button><button mat-button routerLink="{{getPath('new_order')}}" routerLinkActive="active">{{'new_order' | translate}}</button></mat-list-item> 
+                <mat-list-item *ngIf="authService.isAdmin()"> <button mat-button routerLink="{{getPath('settings')}}" routerLinkActive="active">{{'settings' | translate}}</button></mat-list-item>
+                <mat-list-item *ngIf="authService.isAdmin()"> <button mat-button  routerLink="{{getPath('permissions')}}" routerLinkActive="active">{{'permissions' | translate}}</button></mat-list-item>
+                <mat-list-item *ngIf="authService.canUpdate()"> <button mat-button  routerLink="{{getPath('users')}}" routerLinkActive="active">{{'users' | translate}}</button></mat-list-item>
+                <mat-list-item *ngIf="authService.canUpdate()"> <button mat-button  routerLink="{{getPath('companies')}}" routerLinkActive="active">{{'companies' | translate}}</button></mat-list-item>
+                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="{{getPath('consumers')}}" routerLinkActive="active">{{'consumers' | translate}}</button></mat-list-item>
+                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="{{getPath('products')}}" routerLinkActive="active">{{'products' | translate}}</button></mat-list-item>
+                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="{{getPath('discounts')}}" routerLinkActive="active">{{'discounts' | translate}}</button></mat-list-item>
+                <mat-list-item *ngIf="authService.isAgent()"><button mat-button  routerLink="{{getPath('price_list')}}" routerLinkActive="active">{{'price_list' | translate}}</button></mat-list-item>
+                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="{{getPath('sims')}}" routerLinkActive="active">{{'sims' | translate}}</button></mat-list-item>
+                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="{{getPath('phones')}}" routerLinkActive="active">{{'phones' | translate}}</button></mat-list-item> 
+                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="{{getPath('members')}}" routerLinkActive="active">{{'members' | translate}}</button></mat-list-item>
+                <mat-list-item *ngIf="authService.isAgent()"><button mat-button  routerLink="{{getPath('members')}}" routerLinkActive="active">{{'my_members' | translate}}</button></mat-list-item>
+                <mat-list-item><button mat-button  routerLink="{{getPath('payments')}}" routerLinkActive="active">{{'payments' | translate}}</button></mat-list-item>
+                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="{{getPath('orders')}}" routerLinkActive="active">{{'orders' | translate}}</button></mat-list-item>
+                <mat-list-item *ngIf="authService.isAgent()"><button mat-button  routerLink="{{getPath('orders')}}" routerLinkActive="active">{{'last_charges' | translate}}</button></mat-list-item>
+                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="{{getPath('mobility_numbers')}}" routerLinkActive="active">{{'mobility_numbers' | translate}}</button></mat-list-item>
+                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="{{getPath('agents_report')}}" routerLinkActive="active">{{'agents_report' | translate}}</button></mat-list-item>
+                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="{{getPath('comparisons')}}" routerLinkActive="active">{{'comparisons' | translate}}</button></mat-list-item>
+                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="{{getPath('excel_order')}}" routerLinkActive="active">{{'excel_order' | translate}}</button></mat-list-item>
+                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="{{getPath('excel_charge')}}" routerLinkActive="active">{{'excel_charge' | translate}}</button></mat-list-item>
+                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="{{getPath('status_hotmobile')}}" routerLinkActive="active">{{'status_hotmobile' | translate}}</button></mat-list-item>
+                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="{{getPath('status_cellcom')}}" routerLinkActive="active">{{'status_cellcom' | translate}}</button></mat-list-item>
+                <mat-list-item *ngIf="authService.canUpdate()"><button mat-button  routerLink="{{getPath('agents_acounts')}}" routerLinkActive="active">{{'agents_acounts' | translate}}</button></mat-list-item>
+                <mat-list-item><button mat-button  routerLink="{{getPath('general_report')}}" routerLinkActive="active">{{'general_report' | translate}}</button></mat-list-item>
             </mat-list>   
         </mat-sidenav>
        <mat-sidenav-content style="padding: 20px;height:-webkit-fill-available">

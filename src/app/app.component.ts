@@ -146,7 +146,7 @@ export class AppComponent implements OnInit {
       });
     }
   }
-  timeoutNew() {
+  timeoutNew() { 
     setTimeout( ()=> {
       if(this.lsService.getStorage('count_new_orders') && this.lsService.getStorage('count_new_orders')!=null){
         this.count_new_orders=JSON.parse(this.lsService.getStorage('count_new_orders'));

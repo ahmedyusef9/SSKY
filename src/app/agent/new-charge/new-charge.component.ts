@@ -82,8 +82,8 @@ export class NewChargeComponent implements OnInit {
     }
   init(){
     //console.log('this.agent_id',this.agent_id);
-    this.filteredOptions = this.sim.valueChanges.map(val => this.filter(val), val => val.startWith(''));
-    this.filteredPhoneOptions = this.phone.valueChanges.map(val => this.filterPhones(val),val => val.startWith(''));
+    this.filteredOptions = this.sim.valueChanges.startWith('').map(val => this.filter(val));
+    this.filteredPhoneOptions = this.phone.valueChanges.startWith('').map(val => this.filterPhones(val));
     this.blockPackegesService.getAgentProducts(this.agent_id).subscribe(res=>{
       this._products=res;
       this.listProduct(this.agent_id);

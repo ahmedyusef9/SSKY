@@ -1,3 +1,63 @@
-<p>
-  company works!
-</p>
+<mat-toolbar color="primary">{{'companies_list'|translate}}</mat-toolbar>
+<mat-toolbar><button mat-button (click)="openDialog(0)" style="position: relative;
+    float: left;margin-bottom:5px;"><mat-icon color="primary">add_circle</mat-icon></button>
+    <button mat-button style="position: relative;
+    float: left;margin-bottom:5px;margin-right:10px;" (click)="loadExcel()">{{'excel'|translate}}&nbsp;<mat-icon color="primary">file_download</mat-icon></button>
+
+  </mat-toolbar>
+  <div class="example-container mat-elevation-z8">
+      <div class="example-table-container">
+
+    <table mat-table [dataSource]="companys" class="example-table" matSort >
+       
+          <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>#</th>
+              <td mat-cell *matCellDef="let row">{{row.id}}</td>
+            </ng-container>
+            <ng-container matColumnDef="comapny">
+                <th mat-header-cell *matHeaderCellDef>{{'name'|translate}}</th>
+                <td mat-cell *matCellDef="let row">{{getCompanyName(row)}}</td>
+              </ng-container>
+            <ng-container matColumnDef="created_at">
+                  <th mat-header-cell *matHeaderCellDef>{{'created_at'|translate}}</th>
+                  <td mat-cell *matCellDef="let row">{{row.created_at}}</td>
+            </ng-container>
+            <ng-container matColumnDef="number">
+                <th mat-header-cell *matHeaderCellDef>-</th>
+                <td mat-cell *matCellDef="let row">
+                     <mat-icon (click)="openDialog(item.id);" color="primary" style="cursor:pointer;">mode_edit</mat-icon>
+                    <mat-icon (click)="delete(item.id);" color="warn" style="cursor:pointer;">delete_forever</mat-icon>
+
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+<!--                             
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>{{'name'|translate}}</th>
+                <th>{{'created_at'|translate}}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of companys">
+                <td>{{item.id}} </td>
+                <td >
+                    {{getCompanyName(item)}}
+                </td>
+                <td>{{item.created_at}}</td>
+                <td>
+                    <mat-icon (click)="openDialog(item.id);" color="primary" style="cursor:pointer;">mode_edit</mat-icon>
+                    <mat-icon (click)="delete(item.id);" color="warn" style="cursor:pointer;">delete_forever</mat-icon>
+                </td>
+            </tr>
+
+        </tbody> -->
+    </table>
+
+</div>
+</div>
+<img *ngIf="loading"  style="position:absolute;top:200px;left:50%;"  src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+/>

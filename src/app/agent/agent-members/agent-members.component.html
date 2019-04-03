@@ -1,3 +1,96 @@
-<p>
-  agent-members works!
-</p>
+<div  class="first">
+    <mat-toolbar color="primary">{{'members'|translate}}</mat-toolbar>
+    <mat-toolbar>
+        <button mat-button (click)="loadExcel()">{{'excel'|translate}}&nbsp;<mat-icon color="primary">file_download</mat-icon></button>
+    </mat-toolbar>
+    
+    <div class="example-container  mat-elevation-z8" >
+            
+            <div class="example-header">
+                    <mat-form-field floatPlaceholder="never">
+                        <input matInput placeholder="{{'search'|translate}}" #filter1>
+                        <mat-icon matSuffix>search</mat-icon>
+                    </mat-form-field>
+                </div>
+            
+     <div class="example-table-container">
+        <table mat-table  #table [dataSource]="ds" style="max-height: 500px" matSortActive="id" dir="RTL" matSort matSortDisableClear matSortDirection="asc">
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+                <td mat-cell  *matCellDef="let row" >
+                    {{row.id}} 
+                  </td>
+            </ng-container>
+            <ng-container matColumnDef="consumer_name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'consumer'|translate}} </th >
+                <td mat-cell  *matCellDef="let row">{{row.consumer_name}}</td>
+            </ng-container>
+            <ng-container matColumnDef="phone">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'phone'|translate}}</th >
+                <td mat-cell  *matCellDef="let row">
+                  <span *ngIf="row.moved_to_phone=='0' && row.accepted_moved_to_phone=='0'">
+                      <button mat-button [routerLink]="['/מספר', row.phone_id]" color="primary">{{row.phone}}</button>
+                  </span>
+                  <span *ngIf="row.moved_to_phone!='0' && row.accepted_moved_to_phone=='1'">
+                      <ng-container *ngIf="authService.canUpdate(); else a1">
+                          <button mat-button [routerLink]="['/מספר', row.phone_id]" color="primary">
+                              <ng-container *ngIf="row.moved_to_phone">{{row.moved_to_phone}}</ng-container>
+                              <ng-container *ngIf="!row.moved_to_phone">{{row.phone}}</ng-container>
+                          </button>
+                      </ng-container>
+                      <ng-template #a1><button mat-button [routerLink]="['/מספר', row.phone_id]" color="primary">{{row.moved_to_phone}}</button></ng-template>
+                  </span> 
+                  <span  *ngIf="row.moved_to_phone!='0' && row.accepted_moved_to_phone=='0'">
+                      <ng-container *ngIf="authService.canUpdate(); else a2">
+                          <button mat-button [routerLink]="['/מספר', row.phone_id]" color="primary">
+                              <ng-container *ngIf="row.moved_to_phone">{{row.moved_to_phone}}</ng-container>
+                              <ng-container *ngIf="!row.moved_to_phone">{{row.phone}}</ng-container>
+                          </button>
+                      </ng-container>
+                      <ng-template #a2><button mat-button [routerLink]="['/מספר', row.phone_id]" color="primary">{{row.moved_to_phone}}</button></ng-template>
+                  </span>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="has_orders">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'product'|translate}}</th >
+                <td mat-cell  *matCellDef="let row">
+                    <ng-container *ngIf="row.has_orders">
+                        <strong>{{'company_name_'+row.company_id|translate}}</strong>&nbsp;/&nbsp;
+                        <span>{{'prod_name_'+row.product_id|translate}}</span>
+                    </ng-container>  
+                </td>
+            </ng-container>
+             <ng-container matColumnDef="status" >
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'status'|translate}}</th >
+                <td mat-cell  *matCellDef="let row">
+                    <ng-container *ngIf="row.has_orders">
+                        {{row.status|translate}} 
+                        <span *ngIf="row.status=='completed'">
+                          &nbsp;{{'until'|translate}}<br/>{{(row.completed_date_sec | amFromUnix)| amDateFormat: 'DD.MM.YYYY'}}
+                        </span>
+                    </ng-container>
+                 </td>
+            </ng-container> 
+            <ng-container matColumnDef="order_id" >
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+                <td mat-cell  *matCellDef="let row">
+                    <ng-container *ngIf="row.has_orders">
+                        <mat-icon matTooltip="{{'order'|translate}}" color="primary" style="cursor:pointer;" [routerLink]="['/הזמנה', row.order_id]" routerLinkActive="active">info</mat-icon>    
+                    </ng-container>
+                    <ng-container *ngIf="!row.has_orders">
+                        <span style="color:red;font-weight:bolder;">
+                            {{'has_no_orders'|translate}}
+                        </span>
+                      </ng-container>
+                 </td>
+            </ng-container> 
+            <tr mat-header-row *matHeaderRowDef="displayedColumns ; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+        <mat-paginator #paginator1 [length]="db.data.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+        </mat-paginator>
+   
+     
+    </div>
+  </div>

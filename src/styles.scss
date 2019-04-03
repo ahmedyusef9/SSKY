@@ -2,9 +2,12 @@
 
 @import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
 @import url( 'https://fonts.googleapis.com/css?family=Material+Icons');
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 @import url("https://fonts.googleapis.com/css?family=Cairo");
+// @import "~bootstrap/dist/css/bootstrap.css";
+
 
 
 body *:not(mat-icon):not(.fa){

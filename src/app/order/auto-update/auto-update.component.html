@@ -1,0 +1,31 @@
+<mat-toolbar color="primary">{{'automatic_update' | translate}}</mat-toolbar>
+<mat-toolbar *ngIf="authService.canUpdate()">
+  
+    <input type="file" #fileInput placeholder="Upload file..." style="display:none;" (change)="upload()" />
+    <button mat-button (click)="fileInput.click()" style="position: relative;
+  float: left;margin-bottom:5px;">{{'phones'|translate}}<mat-icon color="primary">file_upload</mat-icon></button>
+  </mat-toolbar>
+  <ng-container  *ngIf="excelPhones && excelPhones.length>0">
+  <div>
+    <mat-chip-list>
+      <mat-chip *ngFor="let phone of excelPhones;let i=index;">
+        <span >{{phone}} 
+          <ng-container *ngIf="excelPhonesAndMonths && excelPhonesAndMonths[i] && excelPhonesAndMonths[i][1] && excelPhonesAndMonths[i][1]>0;else unlimited;">
+            <strong>({{excelPhonesAndMonths[i][1]}} חודשים)</strong>
+          </ng-container>
+          <ng-template #unlimited>
+            <strong>(ללא הגבלה)</strong>
+          </ng-template>
+        </span>
+    </mat-chip>
+    </mat-chip-list>
+  </div>
+  <hr>
+  <button mat-button (click)="update()"  color="primary" style="position: relative; 
+  float: right;margin-bottom:5px;" matTooltip='חידוש אוטומאטי לכל מספר שיש עליו חבילת חודש. לתקופה של 11 חודשים'>חידוש</button>
+  <button mat-button (click)="cancel_update()"  color="primary" style="position: relative; 
+  float: right;margin-bottom:5px;" matTooltip='ביטול חידוש אוטומאטי לכל המספרים'>ביטול</button>
+</ng-container>
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+<!-- <pre dir="ltr">{{out|json}}</pre> -->
+  

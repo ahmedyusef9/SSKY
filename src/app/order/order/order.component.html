@@ -1,0 +1,149 @@
+<mat-toolbar color="primary">{{'orders'|translate}}</mat-toolbar>
+<mat-toolbar>
+    <button mat-button *ngIf="authService.canUpdate()" style="position: relative;
+    float: left;margin-bottom:5px;margin-right:10px;" (click)="add()"><mat-icon color="primary">add_circle</mat-icon></button>
+    <!-- <button mat-button style="position: relative;
+    float: left;margin-bottom:5px;margin-right:10px;" 
+    (click)="loadExcel()">{{'excel'|translate}}&nbsp;<mat-icon color="primary">file_download</mat-icon></button> -->
+</mat-toolbar>
+<div class="example-container mat-elevation-z8">
+        <div class="example-header">
+            <mat-form-field floatPlaceholder="never">
+                <input matInput placeholder="{{'search'|translate}}" #filter>
+                <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+        </div>
+        <div class="example-loading-shade"
+    *ngIf="loading">
+ <mat-spinner *ngIf="loading"></mat-spinner>
+ 
+</div>
+    
+    <mat-table #table [dataSource]="ds" dir="RTL" matSort matSortActive="last_update_sec" matSortDisableClear matSortDirection="desc">
+            <ng-container matColumnDef="agent_name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="{'dn':authService.isAgent()}">{{'agent'|translate}} </mat-header-cell>
+                <mat-cell *matCellDef="let row" [ngClass]="{'dn':authService.isAgent()}">
+                        <ng-container *ngIf="row.agent_name!='-' && (authService.canUpdate()||(authService.isAgent()&& row.agent_id==authService.getCurrentUserId()))">
+                                <button mat-raised-button color="primary" [routerLink]="['/סוכן', row.agent_id]" >{{row.agent_name}}</button>
+                        </ng-container>
+                        <ng-container *ngIf="row.agent_name=='-' ||(authService.isAgent()&& row.agent_id!=authService.getCurrentUserId())">
+                                <button mat-raised-button disabled>{{row.agent_name}}</button> 
+                        </ng-container>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="last_update_sec">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>{{'last_update'|translate}} </mat-header-cell>
+                <mat-cell *matCellDef="let row">{{(row.last_update_sec | amFromUnix)| amDateFormat: 'DD.MM.YYYY HH:mm:ss'}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="phone">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>{{'phone'|translate}} </mat-header-cell>
+                <mat-cell *matCellDef="let row">  
+                        <ng-container *ngIf="row.moved_to_phone=='0' && row.accepted_moved_to_phone=='0'">
+                                <button mat-button color="primary" [routerLink]="['/מספר', row.phone_id]" >{{row.phone}}</button>
+                        </ng-container>
+                        <ng-container *ngIf="row.moved_to_phone!='0' && row.accepted_moved_to_phone=='1'">
+                                <ng-container *ngIf="authService.canUpdate();else e1e">
+                                    <button mat-button color="primary" [routerLink]="['/מספר', row.phone_id]" >
+                                        <ng-container *ngIf="row.moved_to_phone">{{row.moved_to_phone}}</ng-container>
+                                        <ng-container *ngIf="!row.moved_to_phone">{{row.phone}}</ng-container>
+                                    </button>
+                                </ng-container>
+                                <ng-template #e1e>
+                                    <button mat-button color="primary" [routerLink]="['/מספר', row.phone_id]" >
+                                        {{row.moved_to_phone}}
+                                    </button>
+                                </ng-template>
+                        </ng-container> 
+                        <ng-container *ngIf="row.moved_to_phone!='0' && row.accepted_moved_to_phone=='0'">
+                                <ng-container *ngIf="authService.canUpdate();else e2e">
+                                    <button mat-button color="primary"[routerLink]="['/מספר', row.phone_id]" >
+                                        <ng-container *ngIf="row.moved_to_phone">{{row.moved_to_phone}}</ng-container>
+                                         <ng-container *ngIf="!row.moved_to_phone">{{row.phone}}</ng-container>
+                                    </button>
+                                </ng-container>
+                                <ng-template #e2e>
+                                    <button mat-button color="primary" [routerLink]="['/מספר', row.phone_id]" >
+                                        {{row.moved_to_phone}}
+                                    </button>
+                                </ng-template>
+                        </ng-container>
+                   </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="product_name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>{{'product'|translate}} </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                        <span innerHTML="{{'prod_name_'+row.product_id|translate}}"></span>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="company_name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>{{'company'|translate}} </mat-header-cell>
+                <mat-cell *matCellDef="let row">{{'company_name_'+row.company_id|translate}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="automatic_update">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>{{'automatic_update'|translate}} </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <ng-container *ngIf="(row.days_or_months=='months' && row.days_or_months_numbers==1 && row.status=='completed')">
+                            <mat-slide-toggle [checked]="row.automatic_update=='1'" (change)="setAutomaticUpdate(row,$event);" color="primary"></mat-slide-toggle>
+                            <ng-container *ngIf="row.automatic_update=='1'">
+                                <mat-select [(ngModel)]="row.months" placeholder="{{'months'|translate}}" (change)="setAutomaticUpdate1(row,$event)">
+                                  <mat-option value="1">1</mat-option>
+                                  <mat-option value="2">2</mat-option>
+                                  <mat-option value="3">3</mat-option>
+                                  <mat-option value="4">4</mat-option>
+                                  <mat-option value="5">5</mat-option>
+                                  <mat-option value="6">6</mat-option>
+                                  <mat-option value="7">7</mat-option>
+                                  <mat-option value="8">8</mat-option>
+                                  <mat-option value="9">9</mat-option>
+                                  <mat-option value="10">10</mat-option>
+                                  <mat-option value="11">11</mat-option>
+                                </mat-select>
+                            </ng-container>
+                        </ng-container>
+                    </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="status">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>{{'status'|translate}}</mat-header-cell>
+                <mat-cell *matCellDef="let row" [ngClass]="row.status">{{row.status|translate}}
+                    <ng-container *ngIf="authService.canUpdate() && allow_release(row)">
+                        <button mat-raised-button color="warn" (click)="releaseMember(row)">
+                            {{'release'|translate}}
+                        </button>
+                    </ng-container>
+                    <span *ngIf="row.status=='completed'">&nbsp;{{'until'|translate}}<br/>{{(row.completed_date_sec | amFromUnix)| amDateFormat: 'DD.MM.YYYY'}}</span></mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                <mat-cell *matCellDef="let row" > 
+                        <mat-icon matTooltip="{{'complete'|translate}}" (click)="complete(row)" color="primary" style="cursor:pointer;"  *ngIf="authService.canUpdate() && (row.status=='new' || row.status=='declined')">done</mat-icon>
+                        <mat-icon matTooltip="{{'order'|translate}}" color="primary" style="cursor:pointer;" [routerLink]="['/הזמנה', row.id]" routerLinkActive="active">info</mat-icon>
+                        <mat-icon matTooltip="{{'decline'|translate}}" color="warn" *ngIf="authService.canUpdate() && row.status=='new'" style="cursor:pointer;" (click)="decline(row)">clear</mat-icon>
+                        <mat-icon matTooltip="{{'cancellation'|translate}}"  *ngIf="authService.canUpdate() && row.status=='completed'" style="cursor:pointer;" (click)="cancel(row)">clear</mat-icon>
+                        <button mat-raised-button color="primary" [routerLink]="['/הזמנה-חדשה', row.phone_id]" *ngIf="authService.isAgent() && row.status!='new'" [disabled]="authService.isAgent() && row.block=='1'">{{'new_order'|translate}}</button>
+                    </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+        <mat-paginator [length]="resultsLength" [pageSize]="30" style="display:none;">
+            </mat-paginator>
+           
+            <nav aria-label="..." style="padding:0 10px;">
+                    <ul class="pager" *ngIf="current_total>0">
+                      <li class="" [ngClass]="{'disabled':pageIndex==1,'previous':true}"><a (click)="prev()" style="cursor:pointer;"><span aria-hidden="true">&rarr;</span> הקודם</a></li>
+                      <li>
+                          <span>דף {{pageIndex}} &nbsp; מ &nbsp; {{total_pages}}&nbsp;| &nbsp;{{((pageIndex-1)*30)+1}} <i class=""></i>&nbsp;- &nbsp;{{((pageIndex-1)*30)+current_total}}&nbsp; מ &nbsp;{{resultsLength}}</span>
+                      </li>
+                      <li>
+                            <a (click)="loadExcel()" style="cursor:pointer;">{{'excel'|translate}} ({{current_total}})</a>
+                      </li>
+                      <li>
+                            <a (click)="loadExcel2()" style="cursor:pointer;">{{'excel'|translate}} ({{resultsLength}})</a>
+                      </li>
+                      <li class="next" [ngClass]="{'disabled':pageIndex==total_pages,'next':true}"><a (click)="next()" style="cursor:pointer;">הבא <span aria-hidden="true">&larr;</span></a></li>
+                    </ul>
+                  </nav>
+                 
+        </div>
+        
+        <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>

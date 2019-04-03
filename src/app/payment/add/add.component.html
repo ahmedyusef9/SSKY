@@ -1,0 +1,95 @@
+<div mat-dialog-content dir="RTL">
+<p *ngIf="!edit">{{'add_payment'|translate}}?</p>
+<p *ngIf="edit">{{'edit_payment'|translate}}?</p>
+<form novalidate [formGroup]="paymentForm" class="form-inline">
+  <mat-select placeholder="{{'payment_art'|translate}}" formControlName="art" tabindex="1" [compareWith]="compareWith">
+    <mat-option [value]="0">{{'shek'|translate}}</mat-option>
+    <mat-option [value]="1">{{'promotional'|translate}}</mat-option>
+    <mat-option [value]="2">{{'cash'|translate}}</mat-option>
+    <mat-option [value]="4">{{'bank_transfer'|translate}}</mat-option>
+    <mat-option [value]="5">{{'standing_order'|translate}}</mat-option>
+  </mat-select>
+  <valid-err [control]="paymentForm.controls['art']"></valid-err>
+  <mat-form-field [ngClass]="{'dn':paymentForm.value.art!=0}">
+    <input matInput formControlName="shek_number" placeholder="{{'shek_number'|translate}}"/>
+  </mat-form-field>
+  <mat-form-field [ngClass]="{'dn':paymentForm.value.art!=0}">
+    <input matInput formControlName="bank_name" placeholder="{{'bank_name'|translate}}"/>
+  </mat-form-field>
+  <mat-form-field [ngClass]="{'dn':paymentForm.value.art!=0}">
+    <input matInput formControlName="bank_branch" placeholder="{{'bank_branch'|translate}}"/>
+  </mat-form-field>
+  <mat-form-field [ngClass]="{'dn':paymentForm.value.art!=0}">
+    <input matInput [matDatepicker]="picker1" placeholder="{{'shek_maturity_date'|translate}}" formControlName="shek_maturity_date">
+    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1></mat-datepicker>
+  </mat-form-field>
+  <ng-container *ngIf="paymentForm.value.art>3 && paymentForm.value.bs_bank">
+    <ng-container *ngIf="paymentForm.value.bs_bank=='בנק פועלים'">
+      <strong>שם בעל החשבון</strong>: ניו ויזיון סיסי אס בע״מ
+      <br/><strong>מס' חשבון</strong>: 378746
+      <br/><strong>סניף</strong>:735
+    </ng-container>
+    <ng-container *ngIf="paymentForm.value.bs_bank=='בנק לאומי'">
+      <strong>שם בעל החשבון</strong>: ניו ויזיון סיסי אס בע״מ
+      <br/><strong>מס' חשבון</strong>: 25280095
+      <br/><strong>סניף</strong>: 896
+    </ng-container>
+    <ng-container *ngIf="paymentForm.value.bs_bank=='בנק הדואר'">
+      <strong>שם בעל החשבון</strong>: ניו ויזיון סיסי אס בע״מ
+      <br/><strong>מס' חשבון</strong>: 8130273
+    </ng-container>
+  </ng-container>
+  <mat-select [ngClass]="{'dn':paymentForm.value.art<4}" formControlName="bs_bank" placeholder="{{'bank_name'|translate}}">
+    <mat-option  value="בנק פועלים" style="text-align:right;">בנק פועלים</mat-option>
+    <mat-option  value="בנק לאומי" style="text-align:right;">בנק לאומי</mat-option>
+    <mat-option  value="בנק הדואר" style="text-align:right;">בנק הדואר</mat-option>
+</mat-select>
+  <mat-form-field>  
+    <img matSuffix *ngIf="agentSearch" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+    <mat-chip-list matPrefix #chipList >
+        <mat-chip  [selectable]="selectable" [removable]="removable" (remove)="resetUser()" *ngIf="selectedAgent._username!=''">
+            {{selectedAgent._username|translate}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+    </mat-chip-list>
+    <input 
+        matInput 
+        placeholder="{{'agent'|translate}}"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="addOnBlur"
+        formControlName="agent_id" 
+        aria-label="Number"  
+        [matAutocomplete]="auto" 
+        tabindex="1"
+        (keyup)="searchAgent($event)" 
+        (focusout)="chooseAgent($event)" 
+    />
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        <mat-option *ngFor="let option of filteredOptions|async" [value]="option" style="text-align:right;">
+        {{ option._username }}
+        </mat-option>
+    </mat-autocomplete>
+ </mat-form-field>
+  <valid-err [control]="paymentForm.controls['agent_id']"></valid-err>
+  <mat-form-field>
+    <input matInput formControlName="amount" placeholder="{{'amount'|translate}}"/>
+    <valid-err [control]="paymentForm.controls['amount']"></valid-err>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [matDatepicker]="picker" placeholder="{{'choose_a_date'|translate}}" formControlName="related_to_date">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field>
+    <textarea matInput formControlName="note" placeholder="{{'note'|translate}}"></textarea>
+  </mat-form-field>
+  <input type="hidden" formControlName="id" *ngIf="edit"/>
+</form>
+</div>
+<div mat-dialog-actions dir="RTL">
+  <button mat-button color="primary" (click)="save()" tabindex="2" [disabled]="btnOff()">{{'save'|translate}}</button>
+  <button mat-button color="warn" (click)="onNoClick()" tabindex="-1">{{'no_thanks'|translate}}</button>
+</div>
+<mat-spinner *ngIf="loading" style="position:absolute;top:100px;right:50%;z-index:9999999999;"></mat-spinner>

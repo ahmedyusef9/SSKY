@@ -1,3 +1,44 @@
-<p>
-  agent-notes works!
-</p>
+<div  class="first">
+  <mat-toolbar color="primary">{{'remarks'|translate}}&nbsp;
+    <mat-icon (click)="openNoteAdd()" style="cursor:pointer;" *ngIf="authService.canUpdate()">add_circle</mat-icon></mat-toolbar> 
+  
+  <div class="example-container mat-elevation-z8">
+      <div class="example-header">
+          <mat-form-field floatPlaceholder="never">
+              <input matInput placeholder="{{'search'|translate}}" #filter>
+              <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+      </div>
+      <mat-table #table [dataSource]="ds" dir="RTL" matSort>
+          <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+              <mat-cell *matCellDef="let row" >
+                <mat-icon (click)="delete(row)" color="warn" style="cursor:pointer;" *ngIf="authService.canUpdate();">delete</mat-icon>
+                </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="note">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>{{'note'|translate}} </mat-header-cell>
+              <mat-cell *matCellDef="let row" [matTooltip]="row.note">
+                <span [innerHTML]="row.note"  >
+                </span>
+              </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="created_at">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{'created_at'|translate}}</mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                {{row.created_at}}
+            </mat-cell>
+        </ng-container>
+          <ng-container matColumnDef="add_by">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>{{'add_by'|translate}}</mat-header-cell> 
+              <mat-cell *matCellDef="let row">
+                  {{row.created_by_name}}    
+              </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+      <mat-paginator #paginator [length]="db.data.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+      </mat-paginator>
+  </div>
+</div>

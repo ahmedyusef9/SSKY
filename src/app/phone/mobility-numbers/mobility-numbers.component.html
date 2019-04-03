@@ -1,0 +1,55 @@
+<mat-toolbar color="primary">{{'mobility_numbers' | translate}}</mat-toolbar>
+<mat-toolbar>
+  <button mat-button style="position: relative;
+  float: left;margin-bottom:5px;margin-right:10px;" (click)="loadExcel()">{{'excel'|translate}}&nbsp;<mat-icon color="primary">file_download</mat-icon></button>
+  
+  </mat-toolbar>
+<div class="example-container mat-elevation-z8">
+        <div class="example-header">
+            <mat-form-field floatPlaceholder="never">
+                <input matInput placeholder="{{'search'|translate}}" #filter>
+                <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+        </div>
+        <mat-table #table [dataSource]="dataSource" dir="RTL" matSort>
+            <ng-container matColumnDef="phone">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>{{'phone'|translate}} </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                        <button mat-button color="primary" [routerLink]="['/מספר', row.id]" >{{row.phone}}</button>
+                    </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="moved_to_phone">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>{{'moved_number'|translate}} </mat-header-cell>
+                    <mat-cell *matCellDef="let row" >
+                        <span *ngIf="row.accepted_moved_to_phone=='0'" style="color:red;"><strong> {{row.moved_to_phone}} </strong></span>
+                        <span *ngIf="row.accepted_moved_to_phone=='1'" style="color:green;"><strong> {{row.moved_to_phone}} </strong></span>
+                    </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="agent_name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>{{'agent'|translate}} </mat-header-cell>
+                <mat-cell *matCellDef="let row"> 
+                  
+                     
+                    <button mat-raised-button color="primary" [routerLink]="['/סוכן', row.agent_id]" *ngIf="row.agent_id">{{row.agent_name}}</button>
+                    </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="company_name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>{{'company'|translate}} </mat-header-cell>
+                <mat-cell *matCellDef="let row">  {{'company_name_'+row.company_id|translate}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                        <mat-icon matTooltip="{{'confirm_transfer'|translate}}" (click)="complete(row)" color="primary" style="cursor:pointer;" *ngIf="row.accepted_moved_to_phone=='0'">done</mat-icon>
+                        <span style="color:green" *ngIf="row.accepted_moved_to_phone=='1'">&nbsp;{{'tarns_in_date'|translate}}<br/>{{(row.accepted_moved_date_num | amFromUnix)| amDateFormat: 'DD.MM.YYYY'}}</span>
+                        <mat-icon matTooltip="{{'edit'|translate}}" (click)="edit(row)" color="primary" style="cursor:pointer;" *ngIf="authService.canUpdate()">edit</mat-icon>
+                </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+        <mat-paginator #paginator [length]="phonesDatabase.data.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+        </mat-paginator>
+    </div>
+    <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    

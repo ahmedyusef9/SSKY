@@ -1,21 +1,24 @@
 <h2 class="sub-header">{{'add_consumer'|translate}}:</h2>
 <div class="col-mat-12">
-    <form novalidate [formGroup]="consumerForm" (ngSubmit)="save()" autocomplete="off" dir="rtl" >
+
+    <form novalidate [formGroup]="consumerForm" (ngSubmit)="save()" autocomplete="off"   >
         <mat-form-field>
             <input matInput formControlName="firstname" placeholder="{{'firstname'|translate}}"/>
             <valid-err [control]="consumerForm.controls['firstname']"></valid-err>
         </mat-form-field>
+
         <mat-form-field>
             <input matInput formControlName="lastname" placeholder="{{'lastname'|translate}}"/>
             <valid-err [control]="consumerForm.controls['lastname']"></valid-err>
         </mat-form-field>
-
-        <mat-select placeholder="{{'related_to_agent'|translate}}" formControlName="parent" tabindex="1" *ngIf="!authService.isAgent()">
+        <mat-form-field>
+            <mat-select placeholder="{{'related_to_agent'|translate}}" formControlName="parent" tabindex="1" *ngIf="!authService.isAgent()">
                 <mat-option *ngFor="let e of agents"  value="{{e.id}}">
                     {{e._username|translate}}
                 </mat-option>
             </mat-select>
             <valid-err [control]="consumerForm.controls['parent']"></valid-err>
+        </mat-form-field>
         <mat-form-field>
             <input matInput formControlName="national_id" placeholder="{{'personal_id'|translate}}"/>
             <valid-err [control]="consumerForm.controls['national_id']"></valid-err>
@@ -24,7 +27,7 @@
                 <input matInput [matDatepicker]="picker" placeholder="{{'birthday'|translate}}" formControlName="birthday">
                 <mat-datepicker-toggle mdSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker startView="year" [startAt]="startDate"></mat-datepicker>
-              </mat-form-field>
+        </mat-form-field>
         <mat-form-field>
             <input matInput formControlName="email" placeholder="{{'email'|translate}}"/>
         </mat-form-field>
@@ -38,7 +41,6 @@
         <button mat-raised-button [disabled]="!consumerForm.valid" type="submit" >{{'add'|translate}}</button>
 
     </form>
-   
 </div>
 <BR/>
 <BR/>

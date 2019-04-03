@@ -1,3 +1,53 @@
-<p>
-  add-product works!
-</p>
+<div mat-dialog-content dir="RTL">
+  <p>{{'add_product'|translate}}?</p>
+  
+  <form novalidate [formGroup]="data.product.productForm"  class="form-inline">
+      <mat-form-field>
+        <input matInput tabindex="1" formControlName="name" placeholder="{{'product_name'|translate}}" />
+        <valid-err [control]="data.product.productForm.controls['name']"></valid-err>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput tabindex="1" formControlName="name_ar" placeholder="{{'product_name_ar'|translate}}" />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput tabindex="1" formControlName="name_en" placeholder="{{'product_name_en'|translate}}" />
+      </mat-form-field>
+      <mat-form-field>
+        <textarea matInput formControlName="description" placeholder="{{'product_description'|translate}}" matTextareaAutosize matAutosizeMinRows="2"
+        matAutosizeMaxRows="5"></textarea>
+        <valid-err [control]="data.product.productForm.controls['description']"></valid-err>
+      </mat-form-field>
+      <mat-form-field>
+        <textarea matInput formControlName="description_ar" placeholder="{{'product_description_ar'|translate}}" matTextareaAutosize matAutosizeMinRows="2"
+        matAutosizeMaxRows="5"></textarea>
+      </mat-form-field>
+      <mat-form-field>
+        <textarea matInput formControlName="description_en" placeholder="{{'product_description_en'|translate}}" matTextareaAutosize matAutosizeMinRows="2"
+        matAutosizeMaxRows="5"></textarea>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput tabindex="1" formControlName="price" placeholder="{{'product_price'|translate}}" />
+        <valid-err [control]="data.product.productForm.controls['price']"></valid-err>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput tabindex="1" formControlName="days_or_months_numbers" placeholder="{{'_number'|translate}} {{data.product.productForm.value.days_or_months|translate}}" />
+      </mat-form-field>
+      <mat-form-field>
+      <mat-select placeholder="{{'months'|translate}} {{'or'|translate}} {{'days'|translate}}" formControlName="days_or_months" tabindex="1">
+        <mat-option  [value]="'months'">{{'months'|translate }}</mat-option>
+        <mat-option  [value]="'days'">{{'days'|translate }}</mat-option> 
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select placeholder="{{'product_company'|translate}}" formControlName="company_id" tabindex="1">
+        <mat-option *ngFor="let company of data.product.companies" [value]="company.id">
+          {{ company.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions dir="RTL">
+<button mat-button color="primary" (click)="save()" tabindex="2" [disabled]="!data.product.productForm.valid">{{'save'|translate}}</button>
+<button mat-button color="warn" (click)="onNoClick()" tabindex="-1">{{'no_thanks'|translate}}</button>
+</div>

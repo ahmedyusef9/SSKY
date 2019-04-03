@@ -1,0 +1,57 @@
+<mat-toolbar color="primary">{{'users_list'|translate}}</mat-toolbar>
+<mat-toolbar>
+    <button 
+        mat-button 
+        routerLink="/הוספת-משתמש" 
+        routerLinkActive="active" 
+        style="position: relative;float: left;margin-right: 10px;">
+            <mat-icon color="primary">add_circle</mat-icon>
+    </button>
+    <button  mat-button style="position: relative;
+    float: left;margin-right: 10px;" (click)="loadExcel()">{{'excel'|translate}}&nbsp;<mat-icon color="primary">file_download</mat-icon></button>
+</mat-toolbar>
+<div class="example-container mat-elevation-z8">
+    <div class="example-header">
+        <mat-form-field floatPlaceholder="never">
+            <input matInput placeholder="{{'search'|translate}}" #filter>
+            <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+    </div>
+    <table mat-table  #table [dataSource]="dataSource" dir="RTL" matSort>
+        <ng-container matColumnDef="username">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'name'|translate}} </th>
+            <td mat-cell *matCellDef="let row"> 
+                <ng-container *ngIf="row.level_id!=3">
+                        {{row.firstname}} {{row.lastname}}
+                </ng-container> 
+                <ng-container *ngIf="row.level_id==3">
+                    <button mat-button [routerLink]="['/סוכן', row.id]" color="primary">{{row.firstname}} {{row.lastname}}</button>
+                </ng-container>   
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="level_id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'user_art'|translate}} </th>
+            <td mat-cell *matCellDef="let row"> 
+                <span *ngIf="row.level_id==1">{{'admin'|translate}}</span>
+                <span *ngIf="row.level_id==2">{{'worker'|translate}}</span>
+                <span *ngIf="row.level_id==3">{{'agent'|translate}}</span>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="mobile">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'phone'|translate}} {{'mobile'|translate}} </th>
+                <td mat-cell *matCellDef="let row"> {{row.mobile}} </td>
+            </ng-container>
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+            <td mat-cell *matCellDef="let row">
+                 <mat-icon [routerLink]="['/עריכת-משתמש', row.id]" routerLinkActive="active" color="primary" style="cursor:pointer;">mode_edit</mat-icon>
+                <mat-icon (click)="delete(row.id)" color="warn" style="cursor:pointer;" *ngIf="row.level_id!=1 && authService.isAdmin()" >delete</mat-icon>
+            </td>
+        </ng-container>
+        <tr mat-header-row  *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator #paginator [length]="usersDatabase.data.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
+</div>
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>

@@ -1,0 +1,67 @@
+
+
+<mat-toolbar color="primary" *ngIf="authService.isAdmin()">{{'add_user'|translate}}:</mat-toolbar>
+<mat-toolbar color="primary" *ngIf="!authService.isAdmin()">{{'add_agent'|translate}}:</mat-toolbar>
+<!-- <div class="col-mat-12"> -->
+        <div class="example-container mat-elevation-z8">
+    <form novalidate [formGroup]="userForm" (ngSubmit)="save()" autocomplete="off">
+        <mat-form-field>
+            <input matInput formControlName="username" placeholder="{{'username'|translate}}"/>
+            <valid-err [control]="userForm.controls['username']"></valid-err>
+        </mat-form-field>
+        <mat-form-field>
+        <mat-select placeholder="{{'user_art'|translate}}" formControlName="level_id" tabindex="1"  *ngIf="authService.isAdmin()">
+            <mat-option *ngFor="let e of userLevels" [value]="e.id">
+                {{e.name|translate}}
+            </mat-option>
+        </mat-select>
+        <valid-err [control]="userForm.controls['level_id']"></valid-err>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput formControlName="firstname" placeholder="{{'firstname'|translate}}"/>
+            <valid-err [control]="userForm.controls['firstname']"></valid-err>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput formControlName="lastname" placeholder="{{'lastname'|translate}}"/>
+            <valid-err [control]="userForm.controls['lastname']"></valid-err>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput formControlName="national_id" placeholder="{{'personal_id'|translate}}"/>
+            <valid-err [control]="userForm.controls['national_id']"></valid-err>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput [matDatepicker]="picker" placeholder="{{'birthday'|translate}}" formControlName="birthday">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker startView="year" [startAt]="startDate"></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="address" placeholder="{{'address'|translate}}"/>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput formControlName="password" placeholder="{{'password'|translate}}" autocomplete="new-password" type="password"/>
+            <valid-err [control]="userForm.controls['password']"></valid-err>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput formControlName="re_password" placeholder="{{'password_verification'|translate}}" autocomplete="new-password" type="password"/>
+            <valid-err [control]="userForm.controls['re_password']"></valid-err>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput formControlName="email" placeholder="{{'email'|translate}}"/>
+            <valid-err [control]="userForm.controls['email']"></valid-err>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput formControlName="mobile" placeholder="{{'phone'|translate}} {{'mobile'|translate}}"/>
+            <valid-err [control]="userForm.controls['mobile']"></valid-err>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput formControlName="phone" placeholder="{{'phone'|translate}}"/>
+            <valid-err [control]="userForm.controls['phone']"></valid-err>
+        </mat-form-field>
+        <button mat-raised-button [disabled]="!userForm.valid" type="submit" >{{'add'|translate}}</button>
+    </form>
+</div>
+
+<BR/>
+<BR/>
+<BR/>
+    

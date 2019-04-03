@@ -2,7 +2,7 @@
 import { CommonModule } from '@angular/common';
 import {NgModule} from '@angular/core';
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
-import { CdkTableModule } from "@angular/cdk/table";
+import { CdkTableModule, CdkCell, CdkColumnDef, CdkCellDef, CdkColumnDefBase } from "@angular/cdk/table";
 import { CdkTreeModule } from "@angular/cdk/tree";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import {DragDropModule} from '@angular/cdk/drag-drop';
@@ -137,7 +137,8 @@ import { BidiModule } from '@angular/cdk/bidi';
         ScrollingModule,
         BidiModule,
         //FlexLayoutModule,
-      ]
+      ],
+      providers:[CdkColumnDef,CdkCell,CdkCellDef,CdkColumnDefBase]
     })
 export class MaterialModule {
   constructor(private dateAdapter:DateAdapter<any>) {

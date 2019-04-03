@@ -18,10 +18,10 @@ select.ng-invalid.ng-touched {
     width: 100%!important;
     border: 0!important;
 }
-
+/* 
 .calClass {
     padding: 0!important;
-}
+} */
 .mat-form-field ,.mat-select{
     width: 100%;
     margin: 20px 0 0 0;

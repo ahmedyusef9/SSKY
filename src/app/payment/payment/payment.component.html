@@ -1,0 +1,109 @@
+<mat-toolbar color="primary">{{'payments'|translate}}</mat-toolbar>
+<mat-toolbar>
+    <ng-container *ngIf="authService.canUpdate();">
+        <button mat-button (click)="openAddDialog()" style="position: relative;float: left;margin-bottom:5px;margin-right:10px;">
+            <mat-icon color="primary">add_circle</mat-icon>
+        </button>
+    </ng-container>
+    <button mat-button style="position: relative;
+    float: left;margin-bottom:5px;margin-right:10px;" (click)="loadExcel()">{{'excel'|translate}}&nbsp;<mat-icon color="primary">file_download</mat-icon></button>
+    <mat-chip-list *ngIf="obligation" style="display: table;width: auto;margin: auto;">
+        <mat-chip style="margin-bottom:10px;" >
+          <span style="color:green" *ngIf="obligation.credit>0">
+              {{'credit'|translate}}&nbsp;:&nbsp;{{(obligation.credit?obligation.credit:0)|currency:'ILS':'code'}}
+          </span>
+          <span *ngIf="obligation.credit==0">
+              {{'credit'|translate}}&nbsp;:&nbsp;{{(obligation.credit?obligation.credit:0)|currency:'ILS':'code'}}
+          </span>
+          <span style="color:red" *ngIf="obligation.credit<0">
+              {{'credit'|translate}}&nbsp;:&nbsp;{{(obligation.credit?obligation.credit:0)|currency:'ILS':'code'}}
+          </span>
+          <mat-icon style="color:green;" *ngIf="obligation.credit>0">arrow_drop_up</mat-icon>
+          <mat-icon style="color:red;" *ngIf="obligation.credit<0">arrow_drop_down</mat-icon>
+        </mat-chip>
+        <mat-chip style="margin-bottom:10px;">{{'obligation'|translate}}&nbsp;:&nbsp;{{(obligation.obligation?obligation.obligation:0)|currency:'ILS':'code'}}</mat-chip>
+       <mat-chip style="margin-bottom:10px;">{{'can_use'|translate}}&nbsp;:&nbsp;{{(obligation.can_use?obligation.can_use:0)|currency:'ILS':'code'}}</mat-chip>
+    </mat-chip-list>
+</mat-toolbar>
+
+<div class="example-container mat-elevation-z8">
+        <div class="example-header">
+            <mat-form-field floatPlaceholder="never">
+                <input matInput placeholder="{{'search'|translate}}" #filter>
+                <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+        </div>
+        <mat-table #table [dataSource]="ds" dir="RTL" matSort>
+            <ng-container matColumnDef="agent_name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>{{'agent'|translate}} </mat-header-cell>
+                <mat-cell *matCellDef="let row"> 
+                        
+                        <ng-container *ngIf="row.agent_name=='-'">
+                                {{row.agent_name}} 
+                        </ng-container>
+
+                        <button [routerLink]="['/סוכן', row.agent_id]" mat-button *ngIf="row.agent_name!='-'" color="primary">
+                            {{row.agent_name}} 
+                        </button>
+                         </mat-cell>
+            </ng-container> 
+            <ng-container matColumnDef="add_by_name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>{{'add_by'|translate}} </mat-header-cell>
+                <mat-cell *matCellDef="let row"> 
+                        
+                        <ng-container >
+                                {{row.add_by_name}} 
+                        </ng-container>
+
+                        
+                         </mat-cell>
+
+                         
+            </ng-container> 
+            <ng-container matColumnDef="amount">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>{{'amount'|translate}} </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.amount|currency:'ILS':'code'}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="account_before">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>{{'account_before'|translate}} </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.account_before|currency:'ILS':'code'}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="related_to_date">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>{{'related_to_date'|translate}} </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{(row.related_to_date_sec | amFromUnix)| amDateFormat: 'DD.MM.YYYY'}} 
+                    <input type="hidden" [(ngModel)]="row.related_to_date" value="{{(row.related_to_date_sec | amFromUnix)| amDateFormat: 'DD.MM.YYYY'}}"/>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="art">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>{{'payment_art'|translate}} </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.art|translate}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="phone">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>{{'phone'|translate}} </mat-header-cell>
+                <mat-cell *matCellDef="let row"> <button *ngIf="row.phone_id" [routerLink]="['/מספר', row.phone_id]" mat-button  color="primary">
+                    {{row.phone}} 
+                </button></mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="note">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>{{'note'|translate}} </mat-header-cell>
+                <mat-cell *matCellDef="let row"> 
+                    <span *ngIf="row.rest_order>0" [innerHTML]="row.note"></span>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                
+                <mat-cell *matCellDef="let row" > 
+                        <mat-icon (click)="openEditDialog(row)" color="primary" style="cursor:pointer;"  *ngIf="authService.canUpdate()">mode_edit</mat-icon>
+                    <mat-icon (click)="delete(row.id)" color="warn" style="cursor:pointer;" *ngIf="authService.canUpdate() && row.art!='rest'">delete</mat-icon>
+                 </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+        <mat-paginator #paginator [length]="db.data.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+        </mat-paginator>
+       
+    </div>
+    
+    <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>

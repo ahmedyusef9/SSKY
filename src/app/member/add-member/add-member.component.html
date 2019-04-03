@@ -1,0 +1,98 @@
+<div mat-dialog-content dir="RTL">
+    <p>{{'add_member'|translate}}?</p>
+   
+    <form novalidate [formGroup]="memberForm" class="form-inline">
+        <mat-form-field *ngIf="authService.canUpdate()">
+             
+                        <img matSuffix
+                        *ngIf="agentSearch"
+                        src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+                        />
+               
+            <mat-chip-list matPrefix #chipList >
+                <mat-chip  [selectable]="selectable" [removable]="removable" (remove)="resetUser()" *ngIf="selectedAgent._username!=''">
+                    {{selectedAgent._username|translate}}
+                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                </mat-chip>
+            </mat-chip-list>
+            <input 
+                matInput 
+                placeholder="{{'agent'|translate}}"
+                [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="addOnBlur"
+                formControlName="agent_id" 
+                aria-label="Number"  
+                [matAutocomplete]="auto" 
+                tabindex="1"
+                (keyup)="searchAgent($event)" 
+                (focusout)="chooseAgent($event)" 
+            />
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                <mat-option *ngFor="let option of filteredOptions|async" [value]="option" style="text-align:right;">
+                {{ option._username }}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+        <mat-chip-list *ngIf="consumersNotFound">
+            <mat-chip style="color:red;margin-bottom:20px;">{{'consumersNotFound'|translate}}</mat-chip>
+        </mat-chip-list>
+        <mat-select placeholder="{{'consumer'|translate}}" formControlName="consumer_id" tabindex="1" [ngClass]="{'dn': !consumers}">
+            <mat-option *ngFor="let consumer of consumers" [value]="consumer.id">
+                {{consumer.firstname }} {{consumer.lastname}}
+            </mat-option>
+        </mat-select>
+        
+        <mat-select placeholder="{{'company'|translate}}" formControlName="company_id" tabindex="1" (change)="initCompanyData($event.value)" [ngClass]="{'dn': selectedAgent.id==0}">
+            <mat-option *ngFor="let company of companies" [value]="company.id">
+                {{'company_name_'+company.id|translate}}
+            </mat-option>
+        </mat-select>
+        <mat-form-field [ngClass]="{'dn':!memberForm.value.company_id || selectedAgent.id==0}">
+                <img matSuffix
+                *ngIf="simSearch"
+                src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+                />
+                <input type="text" placeholder="{{'sim'|translate}}" aria-label="Number" matInput formControlName="sim_id" 
+                [matAutocomplete]="auto1" tabindex="1"
+                  (keyup)="searchSim($event)" (focusout)="chooseSim($event)">
+                  <valid-err [control]="memberForm.controls['sim_id']"></valid-err>
+                <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayFnSim"  >
+                  <mat-option *ngFor="let option of sims|async" [value]="option" style="text-align:right;" >
+                    {{ option.sim }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+        <mat-chip-list *ngIf="phonesNotFound">
+            <mat-chip style="color:red;margin-bottom:20px;">{{'phonesNotFound'|translate}}</mat-chip>
+            
+        </mat-chip-list>
+        <mat-select placeholder="{{'phone'|translate}}" formControlName="phone_id" tabindex="1" [ngClass]="{'dn': !phones}">
+            <mat-option *ngFor="let phone of phones" [value]="phone.id">
+                {{phone.phone}}
+            </mat-option>
+        </mat-select>
+        <mat-slide-toggle matInput formControlName="moved" [ngClass]="{'dn': !phones}"
+            class="example-margin"
+            [color]="'primary'">
+            {{'moved_number'|translate}}
+        </mat-slide-toggle>
+        <mat-form-field [ngClass]="{'dn': !memberForm.value.moved}">
+            <input matInput formControlName="moved_to_phone" placeholder="{{'moved_to_phone'|translate}}">
+        </mat-form-field>
+        <mat-slide-toggle matInput formControlName="free" *ngIf="block_others_agents"
+            class="example-margin"
+            [color]="'primary'">
+            {{'_free'|translate}}
+        </mat-slide-toggle>
+        <mat-form-field>
+            <textarea matInput formControlName="note" placeholder="{{'note'|translate}}"></textarea>
+            <valid-err [control]="memberForm.controls['note']"></valid-err>
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions dir="RTL">
+    <button mat-button color="primary" (click)="save()" tabindex="2" [disabled]="!memberForm.valid || !memberForm.value.sim_id.sim">{{'save'|translate}}</button>
+    <button mat-button color="warn" (click)="onNoClick()" tabindex="-1">{{'no_thanks'|translate}}</button>
+</div>
+<mat-spinner *ngIf="loading" style="position:absolute;top:100px;right:50%;z-index:9999999999;"></mat-spinner>

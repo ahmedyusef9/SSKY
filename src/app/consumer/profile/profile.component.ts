@@ -91,6 +91,7 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.id =+params['id'];
+      // console.log(this.id);
       this.loadCustomer();
       //console.log(this.customer);
     });
@@ -100,21 +101,23 @@ export class ProfileComponent implements OnInit {
     this.loading=true;
     this.customerService.getConsumer(this.id).subscribe(res=>{
       this.loading=false;
+      
       this.customer=res;
-     this.memberService.getAgentMembers(this.customer.parent).subscribe(members=>{
-      this.loading=false;
-      this.customer.members=members.filter(el=>el.consumer_id==this.customer.id);
-      this.load_orders=this.customer.members.length;
-      this.customer.members.forEach(member => {
-        this.loading=true;
-        this.orderService.getMemberOrders(member.id).subscribe(orders=>{
-          this.load_orders--;
+        this.memberService.getAgentMembers(this.customer.parent).subscribe(members=>{
           this.loading=false;
-         if(orders && !orders['message'])
-          member.orders=[orders.reverse()[0]];
+          console.log(members);
+          this.customer.members = members.filter(el=>el.consumer_id==this.customer.id);
+          this.load_orders=this.customer.members.length;
+          this.customer.members.forEach(member => {
+            this.loading=true;
+            this.orderService.getMemberOrders(member.id).subscribe(orders=>{
+              this.load_orders--;
+              this.loading=false;
+            if(orders && !orders['message'])
+              member.orders=[orders.reverse()[0]];
+            });
+          });
         });
-      });
-    });
     });
   }
  

@@ -2,7 +2,11 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../out-tsc/app",
-    "types": []
+    "types": ["node","hammerjs"],
+
+    "typeRoots": [
+      "../node_modules/@types"
+    ]
   },
   "exclude": [
     "test.ts",

@@ -1,3 +1,47 @@
-<p>
-  agent works!
-</p>
+<div class="row">
+    <div class="col" style="padding:20px;">
+      <button mat-button color="primary" (click)="loadMembers()">{{'load_members'|translate}}</button>
+    </div>
+  </div>
+  <mat-tab-group  *ngIf="agent">
+      <mat-tab label="{{'members'|translate}}" *ngIf="agent.members && check_member_orders!=null && check_member_orders==0">
+          <div class="demo-tab-content">
+            <app-agent-members [agent]="agent"></app-agent-members>
+          </div>
+        </mat-tab>
+   <mat-tab label="{{'agent'|translate}}">
+      <div class="demo-tab-content">
+        <app-agent-info [agent]="agent" [load]="loadAgentData.bind(this)"></app-agent-info>
+      </div>
+    </mat-tab>
+    
+    <mat-tab label="{{'agent_account'|translate}}" *ngIf="agent.obligation">
+      <div class="demo-tab-content">
+        <app-agent-obligation [agent]="agent" [openObligationUpdate]="openObligationUpdate.bind(this)" *ngIf="agent"></app-agent-obligation>
+      </div>
+    </mat-tab>
+  
+    <mat-tab label="{{'payments'|translate}}" *ngIf="agent.payments">
+      <div class="demo-tab-content">
+        <app-agent-payments [agent]="agent" [openPaymentAdd]="openPaymentAdd.bind(this)" *ngIf="agent.payments"></app-agent-payments>
+      </div>
+    </mat-tab>
+   
+    <mat-tab label="{{'settings'|translate}}" *ngIf="authService.canUpdate()">
+      <div class="demo-tab-content">
+        <app-price-change [agent]="agent" [openMore]="openMore.bind(this)" *ngIf="agent"></app-price-change >
+      </div>
+    </mat-tab> 
+        
+    <mat-tab label="{{'agreements'|translate}}" *ngIf="authService.canUpdate()">
+      <div class="demo-tab-content">
+        <app-agent-agreement [agent]="agent" [openMore]="openMore.bind(this)" *ngIf="agent"></app-agent-agreement>
+      </div>
+    </mat-tab>
+    <mat-tab label="{{'remarks'|translate}}" *ngIf="authService.canUpdate()">
+      <div class="demo-tab-content">
+        <app-agent-notes [agent]="agent" [openMore]="openMore.bind(this)" *ngIf="agent"></app-agent-notes>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+  <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>

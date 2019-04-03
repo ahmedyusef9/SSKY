@@ -24,9 +24,15 @@ export const Routes={
     redirect_to:{path:'**'},
     settings:{path:'הגדרות',icon:'settings'},
     permissions:{path:'הרשאות',icon:'lock'},
-    users:{path:'משתמשים',icon:'supervisor_account'},
+    users:{path:'משתמשים',icon:'supervisor_account',
+            add:{path:'הוספת-משתמש' },edit:{path: 'עריכת-משתמש/:id' }},
     companies:{path:'חברות',icon:'domain'},
     consumers:{path:'לקוחות',icon:'assignment_ind'},
+    addConsumer:{path:'לקוח-חדש'},
+    editConsumer:{path: 'עריכת-לקוח/:id'},
+    viewAgent:{path: 'סוכן/:id'},
+    viewPhoneInfo:{ path: 'מספר/:id'},
+    viewConsumer:{path: 'לקוח/:id'},
     products:{path:'חבילות',icon:'work'},
     price_list:{path:'מחירון',icon:'attach_money'},
     discounts:{path:'הנחות',icon:'money_off'},
@@ -45,5 +51,6 @@ export const Routes={
     general_report:{path:'דוח-כללי-חדש',icon:'assignment'},
     agents_acounts:{path:'חשבונות-סוכנים',icon:'assignment'},
     automatic_update:{path:'חידוש-אוטומאטי',icon:'update'},
+
     
 };

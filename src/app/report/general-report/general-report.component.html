@@ -1,0 +1,184 @@
+<mat-toolbar color="primary">{{'general_report'|translate}}</mat-toolbar>
+<div class="row" style="padding:16px;width:90%;">
+    <div class="col-lg-4 col-mat-4 col-xs-12">
+        <mat-checkbox [(ngModel)]="all_rows" color="primary" (change)="all_rows_true();loadOrders()">{{'all_rows'|translate}}</mat-checkbox>
+    </div>
+    <div class="col-lg-4 col-mat-4 col-xs-12">
+        <mat-checkbox [(ngModel)]="!all_rows" color="primary" (change)="all_rows_false();loadOrders()">{{'part'|translate}}</mat-checkbox>
+        <div *ngIf="!all_rows" class="form-inline">
+            <div class="form-group">
+                <label>{{'number_of_rows'|translate}}</label>
+                <input  class="form-control" [(ngModel)]="limit"  (keyup)="page=1;setPages();loadOrders();"/>
+            </div> 
+            <div class="form-group">
+                <label>{{'page'|translate}}</label>
+                <select  class="form-control" *ngIf="pages"  [(ngModel)]="page" (change)="loadOrders()" >
+                    <option *ngFor="let page of pages" value="{{page}}" >
+                    {{page}}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-mat-4 col-xs-12">
+        <mat-checkbox [(ngModel)]="filter_by_date" color="primary" (change)="resetDates()">{{'filter_by_date'|translate}}</mat-checkbox>
+        <div *ngIf="orders && filter_by_date">
+            <section  class="filter_by_date">
+                <mat-form-field>
+                    <input matInput [matDatepicker]="picker" placeholder="{{'_begin'|translate}}" [(ngModel)]="_begin" (dateChange)="setDates()">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput [matDatepicker]="picker1" placeholder="{{'_end'|translate}}" [(ngModel)]="_end" (dateChange)="setDates()">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+            </section>
+        </div>
+    </div>
+</div>
+<mat-toolbar *ngIf="orders">
+    <button mat-button style="position: relative;float: left;margin-bottom:5px;margin-right:10px;" 
+                    (click)="loadExcel()">
+                    {{'excel'|translate}}&nbsp;
+                    <mat-icon color="primary">file_download</mat-icon>
+    </button>
+    <img *ngIf="loading"
+           src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+    />
+</mat-toolbar>
+<div class="example-container mat-elevation-z8">
+    <div class="example-header" >
+        <mat-form-field floatPlaceholder="never">
+            <input matInput placeholder="{{'search'|translate}}" #filter>
+            <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+    </div>
+    <input #filter1 matInput style="display:none!important;" />
+    <div class="row">
+        <div class="button-row col-lg-12 col-mat-12 col-sm-12 col-xs-12" *ngIf="orders">
+            <button mat-raised-button [color]="filter1.value==''?'':'primary'" (click)="changeStatus('');filter1.click();">{{'_all'|translate}}</button>
+            <button mat-raised-button [color]="filter1.value=='cancel'?'':'primary'" (click)="changeStatus('cancel');filter1.click();">{{'cancel'|translate}}</button>
+            <button mat-raised-button [color]="filter1.value=='new'?'':'primary'"  (click)="changeStatus('new');filter1.click();">{{'new'|translate}}</button>
+            <button mat-raised-button [color]="filter1.value=='declined'?'':'primary'"  (click)="changeStatus('declined');filter1.click();">{{'declined'|translate}}</button>
+            <button mat-raised-button [color]="filter1.value=='completed'?'':'primary'"  (click)="changeStatus('completed');filter1.click();">{{'completed'|translate}}</button>
+            <button mat-raised-button [color]="filter1.value=='disconnected'?'':'primary'"  (click)="changeStatus('disconnected');filter1.click();">{{'disconnected'|translate}}</button>
+            <button mat-raised-button [color]="filter1.value=='finished'?'':'primary'"  (click)="changeStatus('finished');filter1.click();">{{'finished'|translate}}</button>
+            <button mat-raised-button [color]="filter1.value=='trans'?'':'primary'"  (click)="_trans('trans');filter1.click();">ניודים</button>
+        </div>
+    </div>
+    <mat-table #table [dataSource]="ds" dir="RTL" matSort>
+        <ng-container matColumnDef="agent_name">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{'agent'|translate}} </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                <ng-container *ngIf="row.agent_name=='-'">
+                    {{row.agent_name}} 
+                </ng-container>
+                <button mat-button color="primary" *ngIf="row.agent_name!='-'" [routerLink]="['/סוכן', row.agent_id]">
+                    {{row.agent_name}}
+                </button> 
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="valid_from_sec">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{'valid_from'|translate}} </mat-header-cell>
+            <mat-cell *matCellDef="let row">{{(row.valid_from_sec | amFromUnix)| amDateFormat: 'DD.MM.YYYY HH:mm:ss'}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="last_update_sec">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{'last_update'|translate}} </mat-header-cell>
+            <mat-cell *matCellDef="let row">{{(row.last_update_sec | amFromUnix)| amDateFormat: 'DD.MM.YYYY HH:mm:ss'}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="phone">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{'phone'|translate}} </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                <ng-container *ngIf="authService.isAgent() && row.moved_to_phone!='0';else e4e">
+                    <button mat-button color="primary" [routerLink]="['/מספר', row.phone_id]">
+                        <ng-container *ngIf="!__trans">{{row.moved_to_phone}}</ng-container>
+                        <ng-container *ngIf="__trans">
+                            {{row.phone}}&nbsp; <strong style="color:green;">>>&nbsp;<span>{{row.moved_to_phone}}</span></strong>
+                        </ng-container>
+                        
+                    </button>
+                </ng-container>
+                <ng-template #e4e>
+                    <button mat-button color="primary" [routerLink]="['/מספר', row.phone_id]" *ngIf="row.moved_to_phone=='0' && row.accepted_moved_to_phone=='0'">
+                        {{row.phone}}
+                    </button>
+                    <button mat-button color="primary" [routerLink]="['/מספר', row.phone_id]" *ngIf="row.moved_to_phone!='0' && row.accepted_moved_to_phone=='1'">
+                        <ng-container *ngIf="__trans"> {{row.phone}}&nbsp; <strong style="color:green;">>>&nbsp;<span>{{row.moved_to_phone}}</span></strong></ng-container>
+                        <ng-container *ngIf="row.moved_to_phone && !__trans">{{row.moved_to_phone}}</ng-container>
+                        <ng-container *ngIf="!row.moved_to_phone && !__trans">{{row.phone}}</ng-container>
+                    </button> 
+                    <button mat-button color="primary" [routerLink]="['/מספר', row.phone_id]" *ngIf="row.moved_to_phone!='0' && row.accepted_moved_to_phone=='0'">
+                        <ng-container *ngIf="__trans"> {{row.phone}}&nbsp; <strong>>>&nbsp;<span style="color:red;">{{row.moved_to_phone}}</span></strong> </ng-container>
+                        <ng-container *ngIf="row.moved_to_phone && !__trans">{{row.moved_to_phone}}</ng-container>
+                        <ng-container *ngIf="!row.moved_to_phone && !__trans">{{row.phone}}</ng-container>
+                    </button> 
+                </ng-template>
+                
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef mat-sort-header># </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                    <ng-container *ngIf="row.status=='completed'">
+                        <button mat-mini-fab [color]="'primary'" style="margin-left:15px;" (click)="refreshConnect(row);">{{'refresh_member'|translate}}</button> 
+                    </ng-container>
+                    <ng-container *ngIf="row.status=='completed' && authService.isRent()">
+                        <button mat-mini-fab [color]="'warn'" style="margin-left:15px;" (click)="disconnectMember(row);">{{'disconnect2'|translate}}</button> 
+                    </ng-container>
+                    <ng-container *ngIf="authService.canUpdate()">
+                            <button mat-mini-fab  style="margin-left:15px;" (click)="addRest(row);">{{'rest'|translate}}</button> 
+                    </ng-container>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="product_name">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{'product'|translate}} </mat-header-cell>
+            <mat-cell *matCellDef="let row">{{'company_name_'+row.company_id|translate}}&nbsp;/&nbsp;
+                <span innerHTML="{{'prod_name_'+row.product_id|translate}}"></span>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="note">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{'note'|translate}} </mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.note}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="price">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+                {{'recommended_price'|translate}}<br/>{{'all'|translate}}:{{sum_price|number : '1.2-2'}}
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.price|currency:'ILS':'code'}} </mat-cell> 
+        </ng-container>
+        <ng-container matColumnDef="price_agent">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+                {{'cost'|translate}} <br/>{{'all'|translate}}:{{sum_price_agent|number : '1.2-2'}}
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.price_agent|currency:'ILS':'code'}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="rest">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+                {{'rest'|translate}} <br/>{{'all'|translate}}:{{sum_rest|number : '1.2-2'}}
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.rest|currency:'ILS':'code'}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="profit">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+                {{'sold_to_the_customer'|translate}}<br/>{{'all'|translate}}:{{sum_profit|number : '1.2-2'}}
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row">{{(row.profit*1)+(row.price*1)|currency:'ILS':'code'}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="status">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{'status'|translate}} </mat-header-cell>
+            <mat-cell *matCellDef="let row" [ngClass]="row.status">
+                {{row.status|translate}}
+                <span *ngIf="row.status=='completed'">
+                    &nbsp;{{'until'|translate}}<br/>{{(row.completed_date_sec | amFromUnix)| amDateFormat: 'DD.MM.YYYY'}}
+                </span>
+            </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [length]="db.data.length" [pageIndex]="0" [pageSize]="100"></mat-paginator>
+</div>
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>

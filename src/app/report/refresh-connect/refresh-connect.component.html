@@ -1,0 +1,14 @@
+<div mat-dialog-content dir="RTL" style="overflow:hidden;">
+  <h3>{{'refresh_member'|translate}} {{'member'|translate}} {{company}}</h3>
+  <span> <label for="">{{'company'|translate}}:</label>&nbsp;&nbsp;{{row.company_name}}</span><br/>
+  <span> <label for="">{{'sim'|translate}}:</label>&nbsp;&nbsp;{{row.sim}}</span><br/>
+  <span *ngIf="row.accepted_moved_to_phone=='1'"> <label for="">{{'phone'|translate}}:</label>&nbsp;&nbsp;{{row.moved_to_phone}} </span>
+  <span *ngIf="row.accepted_moved_to_phone=='0'"> <label for="">{{'phone'|translate}}:</label>&nbsp;&nbsp;{{row.phone}} </span>
+  <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+  <span style="color:red;" *ngIf="loading">{{'wait_msg'|translate}}</span>
+</div>
+<div mat-dialog-actions dir="RTL">
+    <button mat-button color="primary" (click)="connect()" tabindex="2" >{{'make_refresh'|translate}}</button>
+    <button mat-button color="warn" (click)="onNoClick()" tabindex="-1">{{'no_thanks'|translate}}</button>
+</div>
+

@@ -11,14 +11,16 @@
 </mat-menu>
 </mat-toolbar> 
 
-  <div class="example-header">
-    <mat-form-field floatPlaceholder="never">
-      <input matInput placeholder="{{'search'|translate}}" #filter>
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field> 
-  </div>   
+  
 
   <div class="example-container mat-elevation-z8">
+      <div class="example-header">
+          <mat-form-field floatPlaceholder="never">
+            <input matInput placeholder="{{'search'|translate}}" #filter>
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field> 
+        </div>   
+  <div class="example-table-container">
   <table mat-table #table [(dataSource)]="dataSource" dir="RTL" matSort matSortActive="id" matSortDisableClear matSortDirection="asc">
     <ng-container matColumnDef="sim">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'sim'|translate}} </th>
@@ -47,12 +49,16 @@
         </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
   </table>
-
-  <mat-paginator class="mat-paginator-sticky" [pageSize]="30" [length]="resultsLength"  showFirstLastButtons></mat-paginator>
+</div>
+  <!-- <mat-paginator class="mat-paginator-sticky" #paginator [length]="resultsLength.data.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons>
+    </mat-paginator> -->
+  <!-- <mat-paginator class="mat-paginator-sticky" [pageSize]="30" [length]="resultsLength"  showFirstLastButtons></mat-paginator> -->
+  <mat-paginator #paginator class="mat-paginator-sticky" [pageSize]="30" [length]="resultsLength"  [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+  
   <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
     <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
     <div class="example-rate-limit-reached" *ngIf="isRateLimitReached"></div>

@@ -1,3 +1,34 @@
-<p>
-  edit works!
-</p>
+<div mat-dialog-content dir="RTL">
+  <p>{{'update'|translate}}</p>
+  <form novalidate [formGroup]="agentForm"  class="form-inline">
+    <mat-form-field>
+      <input matInput tabindex="1" formControlName="username" placeholder="{{'username'|translate}}"/>
+      <valid-err [control]="agentForm.controls['username']"></valid-err>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput tabindex="1" formControlName="national_id" placeholder="{{'personal_id'|translate}}"/>
+      <valid-err [control]="agentForm.controls['national_id']"></valid-err>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [matDatepicker]="picker" placeholder="{{'birthday'|translate}}" formControlName="birthday">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker startView="year" [startAt]="startDate"></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput tabindex="1" formControlName="mobile" placeholder="{{'phone'|translate}} {{'mobile'|translate}}"/>
+      <valid-err [control]="agentForm.controls['mobile']"></valid-err>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput formControlName="phone" placeholder="{{'phone'|translate}}"/>
+      <valid-err [control]="agentForm.controls['phone']"></valid-err>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput formControlName="email" placeholder="{{'email'|translate}}"/>
+      <valid-err [control]="agentForm.controls['email']"></valid-err>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions dir="RTL">
+  <button mat-button color="primary" (click)="save()" tabindex="2" [disabled]="!agentForm.valid">{{'save'|translate}}</button>
+  <button mat-button color="warn" (click)="onNoClick()" tabindex="-1">{{'no_thanks'|translate}}</button>
+</div>

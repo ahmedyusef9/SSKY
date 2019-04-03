@@ -1,4 +1,4 @@
- <!-- <div class="row">
+<div class="row">
   <div class="col-lg-12">
       <mat-toolbar color="primary">{{'new_order'|translate}}</mat-toolbar>  
   </div>
@@ -39,7 +39,7 @@
   </div>
   <div class="col-lg-12" style="margin-top:20px;">
         <mat-chip-list *ngIf="agent_id && authService.canUpdate()">
-                <mat-chip><strong>{{'agent'|translate}}<mat-icon mdChipRemove (click)="resetAgent()">cancel</mat-icon></strong></mat-chip>
+                <mat-chip><strong>{{'agent'|translate}}<mat-icon matChipRemove (click)="resetAgent()">cancel</mat-icon></strong></mat-chip>
                 <mat-chip>
                     <span >{{getAgentName(agent_id)}}</span>
                 </mat-chip> 
@@ -51,7 +51,7 @@
             </mat-chip> 
         </mat-chip-list>
         <mat-chip-list *ngIf="selectedProduct">
-          <mat-chip><strong>{{'product'|translate}}</strong><mat-icon mdChipRemove (click)="resetProduct()">cancel</mat-icon></mat-chip>
+          <mat-chip><strong>{{'product'|translate}}</strong><mat-icon matChipRemove (click)="resetProduct()">cancel</mat-icon></mat-chip>
           <mat-chip>
                 <span [innerHTML]="getProductName(selectedProduct)"></span>
           </mat-chip> 
@@ -70,18 +70,18 @@
             </mat-chip>
         </mat-chip-list>
         <mat-chip-list *ngIf="selectedSim">
-            <mat-chip><strong>{{'sim'|translate}}</strong><mat-icon mdChipRemove (click)="resetSim()">cancel</mat-icon></mat-chip>
+            <mat-chip><strong>{{'sim'|translate}}</strong><mat-icon matChipRemove (click)="resetSim()">cancel</mat-icon></mat-chip>
             <mat-chip>{{selectedSim.sim}}</mat-chip>
         </mat-chip-list>
         <mat-chip-list *ngIf="selectedPhone">
-            <mat-chip><strong>{{'phone'|translate}}</strong><mat-icon mdChipRemove (click)="resetPhone()">cancel</mat-icon></mat-chip>
+            <mat-chip><strong>{{'phone'|translate}}</strong><mat-icon matChipRemove (click)="resetPhone()">cancel</mat-icon></mat-chip>
             <mat-chip>{{selectedPhone.phone}}</mat-chip>
-            <mat-chip *ngIf="moved_number"><strong [ngClass]="{'green':isPhone(moved_to_phone),'red':!isPhone(moved_to_phone)}">{{'moved_to_phone'|translate}}</strong><mat-icon mdChipRemove (click)="resetMovedNumber()">cancel</mat-icon></mat-chip>
+            <mat-chip *ngIf="moved_number"><strong [ngClass]="{'green':isPhone(moved_to_phone),'red':!isPhone(moved_to_phone)}">{{'moved_to_phone'|translate}}</strong><mat-icon matChipRemove (click)="resetMovedNumber()">cancel</mat-icon></mat-chip>
             <mat-chip *ngIf="moved_number && moved_to_phone!=''" [ngClass]="{'green':isPhone(moved_to_phone),'red':!isPhone(moved_to_phone)}">{{moved_to_phone}}</mat-chip>
           </mat-chip-list>
         <div class="col-lg-12"  style="margin:20px 0;" *ngIf="choose_sim && !selectedSim">
             <mat-form-field style="min-width:250px;">
-                <input type="text" mdInput [formControl]="sim" [mdAutocomplete]="auto" placeholder="{{'sim'|translate}}" style="min-width:250px;">
+                <input type="text" matInput [formControl]="sim" [matAutocomplete]="auto" placeholder="{{'sim'|translate}}" style="min-width:250px;">
               </mat-form-field>
           <mat-autocomplete  style="min-width:250px;" #auto="matAutocomplete" (optionSelected)="setSim($event)">
             <mat-option *ngFor="let sim of filteredOptions | async" [value]="sim.sim" style="min-width:250px;">  
@@ -91,7 +91,7 @@
         </div>
         <div class="col-lg-12"  style="margin:20px 0;" *ngIf="choose_phone && !selectedPhone">
             <mat-form-field style="min-width:250px;">
-                <input type="text" mdInput [formControl]="phone" [mdAutocomplete]="auto1" placeholder="{{'phone'|translate}}" style="min-width:250px;">
+                <input type="text" matInput [formControl]="phone" [matAutocomplete]="auto1" placeholder="{{'phone'|translate}}" style="min-width:250px;">
               </mat-form-field>
           <mat-autocomplete  style="min-width:250px;" #auto1="matAutocomplete" (optionSelected)="setPhone($event)">
             <mat-option *ngFor="let phone of filteredPhoneOptions | async" [value]="phone.phone" style="min-width:250px;">  
@@ -106,13 +106,13 @@
             <br/>
             <ng-container *ngIf="moved_number">
                 <mat-form-field>
-                    <input mdInput placeholder="{{'moved_to_phone'|translate}}" [(ngModel)]="moved_to_phone" type="tel">
+                    <input matInput placeholder="{{'moved_to_phone'|translate}}" [(ngModel)]="moved_to_phone" type="tel">
                 </mat-form-field>
             </ng-container>
             <br  *ngIf="moved_number && can_block_member"/>
             <mat-checkbox [(ngModel)]="block_others" *ngIf="can_block_member">{{'block_others'|translate}}</mat-checkbox><br/>
             <mat-form-field>
-                <textarea mdInput placeholder="{{'note'|translate}}" [(ngModel)]="note"></textarea>
+                <textarea matInput placeholder="{{'note'|translate}}" [(ngModel)]="note"></textarea>
             </mat-form-field>
         </div>
         <div class="col-lg-12"  style="margin:20px 0;" *ngIf="selectedProduct">
@@ -174,4 +174,4 @@
 </ng-container>
 </div>
 <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
-<span style="color:red;" *ngIf="loading">{{'wait_msg'|translate}}</span>  -->
+<span style="color:red;" *ngIf="loading">{{'wait_msg'|translate}}</span>

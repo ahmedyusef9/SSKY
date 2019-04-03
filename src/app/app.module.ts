@@ -10,7 +10,7 @@ import { AgentComponent } from './agent/agent/agent.component';
 import { HomeModule } from './home/home.module';
 import { LoginModule } from './login/login.module';
 import { TranslateModule, TranslateLoader, TranslateStaticLoader } from 'ng2-translate';
-import { Http } from '@angular/http';
+import { Http, HttpModule } from '@angular/http';
 import { MaterialModule } from './material/material.module';
 import { AuthGuard } from './login/auth.guard';
 import { AdminGuard } from './login/admin.guard';
@@ -33,6 +33,15 @@ import { CompanyModule } from './company/company.module';
 import { SimModule } from './sim/sim.module';
 import { AgentModule } from './agent/agent.module';
 import { ConsumerModule } from './consumer/consumer.module';
+import { PaymentModule } from './payment/payment.module';
+import { MemberModule } from './member/member.module';
+import { PhoneModule } from './phone/phone.module';
+import { UsersModule } from './users/users.module';
+import { ReportModule } from './report/report.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HotmobileStatusModule } from './hotmobile-status/hotmobile-status.module';
+import { CellcomStatusModule } from './cellcom-status/cellcom-status.module';
+import { IpPermissionModule } from './ip-permission/ip-permission.module';
 
 export function createTranslateLoader(http: Http) {
   return new TranslateStaticLoader(http, 'https://www.skypanel.net/api/lan', '.php');
@@ -43,12 +52,38 @@ export function createTranslateLoader(http: Http) {
     MsgComponent
   ],
   imports: [
+    AgentModule,
+    AgentOrderModule,
+    BrowserModule,
+    CompanyModule,
+    MemberModule,
+    SimModule,
+    PhoneModule,
+    PaymentModule,
+    OrderModule,
+    HomeModule,
+    ConsumerModule,
+    UsersModule,
+    ProductModule,
+    BlockPackagesModule,
+    ReportModule,
+    LoginModule, 
+    HttpModule,
+    AppRoutingModule,
+
+    FormsModule,
+    ReactiveFormsModule,
+    HotmobileStatusModule ,
+    CellcomStatusModule,
     MaterialModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HomeModule,
     LoginModule,
+    PaymentModule,
+    IpPermissionModule,
+    SettingsModule,
      TranslateModule.forRoot({
       provide: TranslateLoader,
       useFactory: (createTranslateLoader),

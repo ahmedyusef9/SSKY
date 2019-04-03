@@ -1,3 +1,47 @@
-<p>
-  agent-payments works!
-</p>
+<div  class="first">
+  <mat-toolbar color="primary">{{'payments'|translate}}&nbsp;
+    <mat-icon (click)="openPaymentAdd(0)" style="cursor:pointer;" *ngIf="authService.canUpdate()">add_circle</mat-icon></mat-toolbar> 
+   <mat-toolbar>
+      <button mat-button (click)="loadExcel()">{{'excel'|translate}}&nbsp;<mat-icon color="primary">file_download</mat-icon></button>
+  </mat-toolbar>
+  <div class="example-container mat-elevation-z8">
+      <div class="example-header">
+          <mat-form-field floatPlaceholder="never">
+              <input matInput placeholder="{{'search'|translate}}" #filter>
+              <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+      </div>
+      <mat-table #table [dataSource]="ds" dir="RTL" matSort>
+          <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+              <mat-cell *matCellDef="let row" >
+                  {{row.id}} 
+                </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="amount">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>{{'amount'|translate}} </mat-header-cell>
+              <mat-cell *matCellDef="let row">{{row.amount|currency:'ILS':'code'}}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="account_before">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{'account_before'|translate}} </mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.account_before|currency:'ILS':'code'}}</mat-cell>
+        </ng-container>
+          <ng-container matColumnDef="related_to_date_sec">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>{{'related_to_date'|translate}}</mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                  {{(row.related_to_date_sec | amFromUnix)| amDateFormat: 'DD.MM.YYYY'}}
+              </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="payment_art">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>{{'payment_art'|translate}}</mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                  {{row.art|translate}}    
+              </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+      <mat-paginator #paginator [length]="db.data.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+      </mat-paginator>
+  </div>
+</div>

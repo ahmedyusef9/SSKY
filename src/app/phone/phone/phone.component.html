@@ -1,0 +1,111 @@
+<mat-toolbar color="primary">{{'phones' | translate}}</mat-toolbar>
+<mat-toolbar *ngIf="authService.canUpdate()">
+    <button mat-button (click)="openAddDialog()" style="position: relative;
+  float: left;margin-bottom:5px;" ><mat-icon color="primary">add_circle</mat-icon></button>
+    <input type="file" #fileInput placeholder="Upload file..." style="display:none;" (change)="upload()" />
+    <button mat-button (click)="fileInput.click()" style="position: relative;
+  float: left;margin-bottom:5px;">{{'phones'|translate}}<mat-icon color="primary">file_upload</mat-icon></button>
+  <input type="file" #fileInput1 placeholder="Upload file..." style="display:none;" (change)="upload2()" />
+  <button mat-button (click)="fileInput1.click()" style="position: relative;
+float: left;margin-bottom:5px;margin-right:10px;">{{'internet'|translate}}<mat-icon color="primary">file_upload</mat-icon></button>
+<!-- <button mat-button style="position: relative;
+float: left;margin-bottom:5px;margin-right:10px;" (click)="loadExcel()">{{'excel'|translate}}&nbsp;<mat-icon color="primary">file_download</mat-icon></button> -->
+
+</mat-toolbar>
+
+<div class="example-container mat-elevation-z8">
+    <div class="example-header">
+        <mat-form-field floatPlaceholder="never">
+            <input matInput placeholder="{{'search'|translate}}" #filter>
+            <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+    
+    </div>
+    <div class="example-loading-shade"
+    *ngIf="loading">
+ <mat-spinner *ngIf="loading"></mat-spinner>
+ 
+</div>
+<div class="example-table-container">
+    <table mat-table #table [dataSource]="dataSource" dir="RTL" matSort matSortActive="id" matSortDisableClear matSortDirection="asc">
+        <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'phone'|translate}} </th>
+            <td mat-cell *matCellDef="let row">  
+                <button mat-button color="primary" [routerLink]="['/מספר', row.id]" *ngIf="row.moved_to_phone=='0' && row.accepted_moved_to_phone=='0'">{{row.phone}}</button>
+                <button mat-button color="primary" [routerLink]="['/מספר', row.id]" *ngIf="row.moved_to_phone!='0' && row.accepted_moved_to_phone=='1'">
+                    <ng-container *ngIf="row.moved_to_phone">{{row.moved_to_phone}}</ng-container>
+                    <ng-container *ngIf="!row.moved_to_phone">{{row.phone}}</ng-container>
+                </button>
+                <button mat-button color="primary" [routerLink]="['/מספר', row.id]" *ngIf="row.moved_to_phone!='0' && row.accepted_moved_to_phone=='0'">
+                    <ng-container *ngIf="row.moved_to_phone">{{row.moved_to_phone}}</ng-container>
+                    <ng-container *ngIf="!row.moved_to_phone">{{row.phone}}</ng-container>
+                </button>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="agent_id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="{'dn':!authService.canUpdate()}">{{'agent'|translate}} </th>
+            <td mat-cell *matCellDef="let row" [ngClass]="{'dn':!authService.canUpdate()}">
+                <button mat-button color="primary" [routerLink]="['/סוכן', row.agent_id]" *ngIf="row.agent_name!='-'">{{row.agent_name}}</button>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="company_id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'company'|translate}}&nbsp;/&nbsp;{{'product'|translate}} </th>
+            <td mat-cell *matCellDef="let row">{{'company_name_'+row.company_id|translate}}&nbsp;/
+                <ng-container *ngIf="row.product_id && row.product_id>0">
+                        &nbsp;{{'prod_name_'+row.product_id|translate}}
+                </ng-container>     
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="internet">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'internet'|translate}} </th>
+            <td mat-cell *matCellDef="let row">
+                <span *ngIf="row.internet==0">-</span>
+                <span *ngIf="row.internet>0"> {{row.internet}} {{'giga'|translate}} | 
+                    <span style="color:green">
+                        {{'last_update'|translate}}: &nbsp;
+                        {{(row.internet_update_sec | amFromUnix)| amDateFormat: 'DD.MM.YYYY'}}
+
+                    </span>
+                </span>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="used">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'used'|translate}} </th>
+            <td mat-cell *matCellDef="let row"> {{row.used|yn|translate}} </td>
+        </ng-container>
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header >#</th>
+            <td mat-cell *matCellDef="let row">
+                <mat-icon *ngIf="row.used=='0' && authService.canUpdate()" (click)="edit(row)" color="primary" style="cursor:pointer;">mode_edit</mat-icon>
+                <mat-icon (click)="delete(row.id)" color="warn" style="cursor:pointer;" *ngIf="row.used=='0' && authService.canUpdate()" >delete</mat-icon>
+                <button mat-raised-button color="primary" [routerLink]="['/הזמנה-חדשה', row.id]" *ngIf="row.used=='1' && authService.isAgent()">{{'new_order'|translate}}</button>
+            </td>
+           
+        </ng-container>
+        <tr mat-header-row  *matHeaderRowDef="displayedColumns ; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <!-- <mat-paginator [length]="resultsLength" [pageSize]="30" style="display:none;">
+        </mat-paginator> -->
+        </div>
+        <mat-paginator  [length]="resultsLength"  [pageIndex]="0"  [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]"class="mat-paginator-sticky"  [length]="resultsLength"  showFirstLastButtons></mat-paginator>
+        
+        <!-- <nav aria-label="..." style="padding:0 10px;">
+                <ul class="pager" *ngIf="current_total>0">
+                  <li class="" [ngClass]="{'disabled':pageIndex==1,'previous':true}"><a (click)="prev()" style="cursor:pointer;"><span aria-hidden="true">&rarr;</span> הקודם</a></li>
+                  <li>
+                      <span>דף {{pageIndex}} &nbsp; מ &nbsp; {{total_pages}}&nbsp;| &nbsp;{{((pageIndex-1)*30)+1}} <i class=""></i>&nbsp;- &nbsp;{{((pageIndex-1)*30)+current_total}}&nbsp; מ &nbsp;{{resultsLength}}</span>
+                  </li>
+                  <li>
+                        <a (click)="loadExcel()" style="cursor:pointer;">{{'excel'|translate}} ({{current_total}})</a>
+                  </li>
+                  <li>
+                        <a (click)="loadExcel2()" style="cursor:pointer;">{{'excel'|translate}} ({{resultsLength}})</a>
+                  </li>
+                  <li class="next" [ngClass]="{'disabled':pageIndex==total_pages,'next':true}"><a (click)="next()" style="cursor:pointer;">הבא <span aria-hidden="true">&larr;</span></a></li>
+                </ul>
+              </nav> -->
+             
+    </div>
+    
+    <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>

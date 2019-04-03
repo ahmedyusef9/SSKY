@@ -1,0 +1,23 @@
+<div mat-dialog-content dir="RTL" style="overflow:hidden;">
+  <p>{{'update'|translate}} </p>
+  <form novalidate [formGroup]="mobilityForm" class="form-inline">
+       
+      <mat-form-field>
+          <input matInput formControlName="phone" placeholder="{{'phone'|translate}}">
+          <valid-err [control]="mobilityForm.controls['phone']"></valid-err>
+      </mat-form-field> 
+      <mat-form-field>
+        <input matInput formControlName="moved_to_phone" placeholder="{{'moved_to_phone'|translate}}">
+      </mat-form-field>  
+      <mat-slide-toggle matInput formControlName="accepted_moved_to_phone"
+      class="example-margin"
+      [color]="'primary'">
+      {{'confirm_transfer'|translate}}
+  </mat-slide-toggle>   
+  </form>
+</div>
+<div mat-dialog-actions dir="RTL">
+  <button mat-button color="primary" (click)="save()" tabindex="2" [disabled]="!mobilityForm.valid">{{'save'|translate}}</button>
+  <button mat-button color="warn" (click)="onNoClick()" tabindex="-1">{{'no_thanks'|translate}}</button>
+</div>
+<mat-spinner *ngIf="loading" style="position:absolute;top:100px;right:50%;z-index:9999999999;"></mat-spinner>

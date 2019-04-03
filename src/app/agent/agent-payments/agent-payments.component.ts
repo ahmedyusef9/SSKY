@@ -1,4 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { TranslateService, LangChangeEvent } from 'ng2-translate';
+import { LocalStorageService } from 'src/app/local-storage.service';
+import { AuthenticationService } from 'src/app/login/authentication.service';
+import { DB } from 'src/app/database/db';
+import { DS } from 'src/app/datasource/ds';
+import { Observable } from 'rxjs';
+import { Moment } from 'moment';
+import { MatSort, MatPaginator } from '@angular/material';
+let moment = require('moment');
+
 
 @Component({
   selector: 'app-agent-payments',
@@ -6,10 +16,64 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./agent-payments.component.scss']
 })
 export class AgentPaymentsComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
+  lan:any;
+  constructor(private trans:TranslateService, 
+              private lsService:LocalStorageService,
+              // private excelService:ExcelService,
+              public authService:AuthenticationService) {
+   
+    this.lan=this.lsService.getStorage('lan');
+    this.trans.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.lan=event.lang;
+    });
+    localStorage.setItem('currentComponent','app-agent-payments');
+   }
+  @Input() agent:any;
+  @Input()
+  public openPaymentAdd: Function; 
+  public payments:any[];
+  @ViewChild('filter') filter: ElementRef;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('fileInput') fileInput;
+  displayedColumns = [ 'id','amount','account_before','related_to_date_sec','payment_art'];
+  db = new DB([]);
+  ds: DS | null;
+  initPaymentsDatabase(){
+    
+    this.db = new DB(this.payments);
+    this.ds = new DS(this.db, this.sort, this.paginator);
+    Observable.fromEvent(this.filter.nativeElement, 'keyup')
+    .debounceTime(150)
+    .distinctUntilChanged()
+    .subscribe(() => {
+      if (!this.ds) { return; }
+      this.ds.filter = this.filter.nativeElement.value;
+    });
   }
-
+  ngOnInit() {
+    this.payments=this.agent.payments;
+    this.initPaymentsDatabase();
+  }
+  getPaymentArt(art){
+    switch(art){
+      case 'rest': return 'החזר';
+      case 'shek': return 'שיק';
+      case 'credit': return 'אשראי';
+      case 'cash': return 'מזומן';
+    }
+  }
+  loadExcel(){
+    let excel:any=[];
+    this.ds.getFSData().forEach(el=>{
+      let a:any={
+        'id':el.id,
+        'סכום':el.amount+ '₪',
+        'קשור לתאריך':moment(el.related_to_date).format('DD.MM.YYYY'),
+        'סוג תשלום':this.getPaymentArt(el.art)
+      }
+      excel.push(a);
+    });
+    // this.excelService.exportAsExcelFile(excel, 'תשלומים עבור '+ this.agent.username);
+  }
 }

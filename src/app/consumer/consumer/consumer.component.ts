@@ -20,7 +20,7 @@ export { MatPaginatorIntl as ɵx } from '@angular/material';
 @Component({
   selector: 'app-consumer',
   templateUrl: './consumer.component.html',
-  styleUrls: ['./consumer.component.css'],
+  styleUrls: ['./consumer.component.scss'],
   providers: [ValidationService]
 })
 export class ConsumerComponent implements OnInit {
@@ -165,11 +165,14 @@ export class ConsumerComponent implements OnInit {
     .debounceTime(150)
     .distinctUntilChanged()
     .subscribe(() => {
+      console.log(this.dataSource);
+      console.log(this.filter.nativeElement.value);
       if (!this.dataSource) { return; }
       this.dataSource.filter = this.filter.nativeElement.value;
     });
    
   }
+
 }
 
 

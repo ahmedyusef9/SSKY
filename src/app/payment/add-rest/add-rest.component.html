@@ -1,0 +1,29 @@
+<div mat-dialog-content dir="RTL">
+  <p>{{'add'|translate}} {{'rest'|translate}}?</p>
+  <p>
+    <label for="">{{'phone'|translate}}: </label>&nbsp;{{phone}}
+  </p>
+    <form novalidate [formGroup]="paymentForm" class="form-inline">
+      <mat-form-field>
+        <input matInput formControlName="amount" placeholder="{{'amount'|translate}}"/>
+        <valid-err [control]="paymentForm.controls['amount']"></valid-err>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput [matDatepicker]="picker" placeholder="{{'choose_a_date'|translate}}" formControlName="related_to_date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <textarea matInput formControlName="note" placeholder="{{'note'|translate}}"></textarea>
+      </mat-form-field>
+      <input type="hidden" formControlName="rest_order"/>
+      <input type="hidden" formControlName="phone"/>
+      <input type="hidden" formControlName="art"/>
+      <input type="hidden" formControlName="agent_id"/>
+    </form>
+    </div>
+    <div mat-dialog-actions dir="RTL">
+      <button mat-button color="primary" (click)="save()" tabindex="2" [disabled]="!paymentForm.valid ">{{'save'|translate}}</button>
+      <button mat-button color="warn" (click)="onNoClick()" tabindex="-1">{{'no_thanks'|translate}}</button>
+    </div>
+    <mat-spinner *ngIf="loading" style="position:absolute;top:100px;right:50%;z-index:9999999999;"></mat-spinner>

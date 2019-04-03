@@ -5,6 +5,7 @@ import { FormControl, ValidationErrors } from "@angular/forms";
 })
 export class ValidationService {
   constructor() { }
+  
   legalPersonalId(control: FormControl): ValidationErrors{
     var tot = 0;
     let tz = control.value;

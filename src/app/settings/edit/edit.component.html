@@ -1,0 +1,14 @@
+<div mat-dialog-content dir="RTL">
+        <p>{{data.item.description}}?</p>
+      <form novalidate [formGroup]="settingsForm" class="form-inline">
+            <mat-form-field>
+            <input mdInput tabindex="1" formControlName="value" placeholder="{{'value'|translate}}" />
+            <valid-err [control]="settingsForm.controls['value']"></valid-err>
+          </mat-form-field>
+          <mat-slide-toggle formControlName="active" color="primary">{{'active'|translate}}</mat-slide-toggle>
+      </form>
+      </div>
+      <div mat-dialog-actions dir="RTL">
+        <button mat-button color="primary" (click)="save()" tabindex="2" [disabled]="!settingsForm.valid">{{'save'|translate}}</button>
+        <button mat-button color="warn" (click)="onNoClick()" tabindex="-1">{{'no_thanks'|translate}}</button>
+      </div>

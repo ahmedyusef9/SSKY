@@ -10,7 +10,7 @@ import { AuthenticationService } from '../../login/authentication.service';
 @Component({
   selector: 'app-decline',
   templateUrl: './decline.component.html',
-  styleUrls: ['./decline.component.css'],
+  styleUrls: ['./decline.component.scss'],
   providers: [YnPipe],
 })
 export class DeclineComponent implements OnInit {

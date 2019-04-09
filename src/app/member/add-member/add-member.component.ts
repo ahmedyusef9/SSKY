@@ -22,7 +22,7 @@ const COMMA = 188;
 @Component({
   selector: 'app-add-member',
   templateUrl: './add-member.component.html',
-  styleUrls: ['./add-member.component.css']
+  styleUrls: ['./add-member.component.scss']
 })
 export class AddMemberComponent implements OnInit {
   companies:Company[];

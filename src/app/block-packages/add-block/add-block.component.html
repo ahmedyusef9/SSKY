@@ -1,3 +1,28 @@
-<p>
-  add-block works!
-</p>
+<div mat-dialog-content dir="RTL">
+    <p>{{'add'|translate}} {{'block'|translate}}?</p>
+    <form novalidate [formGroup]="blockForm" class="form-inline">
+        <mat-select placeholder="{{'agent'|translate}}" formControlName="agent_id" tabindex="1">
+            <mat-option value="0">{{'all_agents'|translate}}</mat-option>
+            <mat-option *ngFor="let agent of agents" [value]="agent.id">
+                {{agent.firstname}} {{agent.lastname}} 
+            </mat-option>
+        </mat-select>
+        <mat-select placeholder="{{'company'|translate}}" formControlName="company_id" tabindex="1" (change)="resetAllPackages()"> 
+            <mat-option *ngFor="let company of companies" [value]="company.id">
+                {{'company_name_'+company.id|translate}} 
+            </mat-option>
+        </mat-select>
+        <mat-checkbox (click)="resetPackages()" formControlName="all_packages" [ngClass]="{'dn': (!blockForm.value.company_id)}">{{'all_packages'|translate}}</mat-checkbox>
+        <mat-select placeholder="{{'product'|translate}}" formControlName="package_id" tabindex="1" [ngClass]="{'dn': (!blockForm.value.company_id || blockForm.value.all_packages)}">
+          <ng-container  *ngFor="let package of packages">
+            <mat-option [value]="package.id" *ngIf="package.company_id==blockForm.value.company_id">
+                {{'prod_name_'+package.id|translate}} 
+            </mat-option>
+          </ng-container>
+        </mat-select>
+    </form>
+</div>
+<div mat-dialog-actions dir="RTL">
+    <button mat-button color="primary" (click)="save()" tabindex="2" [disabled]="!blockForm.valid ||(!blockForm.value.package_id && !blockForm.value.all_packages)">{{'save'|translate}}</button>
+    <button mat-button color="warn" (click)="onNoClick()" tabindex="-1">{{'no_thanks'|translate}}</button>
+</div>

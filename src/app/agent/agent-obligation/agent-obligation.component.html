@@ -4,25 +4,29 @@
     <ng-container *ngIf="agent.obligation.credit">
         <div style="color:green;" *ngIf="agent.obligation.credit>0">
           <dt>{{'credit'|translate}} </dt>
-          <dd>{{agent.obligation.credit?agent.obligation.credit:0|currency:'ILS':'code'}} &nbsp;
-        </div>
+          <dd>{{agent.obligation.credit?agent.obligation.credit:0 | currency:'ILS':'symbol'}} &nbsp;
+              <mat-icon style="color:green;" *ngIf="agent.obligation.credit>0">arrow_drop_up</mat-icon>
+          </div>
         <div style="color:red;" *ngIf="agent.obligation.credit<=0">
             <dt>{{'credit'|translate}} </dt>
-            <dd>{{agent.obligation.credit?agent.obligation.credit:0|currency:'ILS':'code'}} &nbsp;
-        </div>
-        <mat-icon style="color:green;" *ngIf="agent.obligation.credit>0">arrow_drop_up</mat-icon>
-        <mat-icon style="color:red;" *ngIf="agent.obligation.credit<=0">arrow_drop_down</mat-icon>
+            <dd>{{agent.obligation.credit?agent.obligation.credit:0 | currency:'ILS':'symbol'}} &nbsp;
+                <mat-icon style="color:red;" *ngIf="agent.obligation.credit<=0">arrow_drop_down</mat-icon>
+            </div>
+        
+        
     </ng-container>
     <dt>{{'obligation'|translate}} </dt>
-    <dd>{{agent.obligation.obligation?agent.obligation.obligation:0|currency:'ILS':'code'}} &nbsp;
+    <dd>{{agent.obligation.obligation?agent.obligation.obligation:0|currency:'ILS':'symbol'}} &nbsp;
       <mat-icon color="primary" (click)="openObligationUpdate()" style="cursor:pointer;" *ngIf="authService.canUpdate()">mode_edit</mat-icon>
     </dd>
     <dt>{{'can_use'|translate}}</dt>
-    <dd>{{agent.obligation.can_use?agent.obligation.can_use:0|currency:'ILS'}}</dd>
+    <dd>{{agent.obligation.can_use?agent.obligation.can_use:0 | currency:'ILS':'symbol'}}</dd>
     <dt>{{'all_payments'|translate}}</dt>
-    <dd>{{agent.obligation.total_payments?agent.obligation.total_payments:0|currency:'ILS'}}</dd>
+    <dd>{{agent.obligation.total_payments?agent.obligation.total_payments:0 | currency:'ILS':'symbol'}}</dd>
     <dt>{{'all_orders'|translate}}</dt>
-    <dd>{{agent.obligation.total_orders?agent.obligation.total_orders:0|currency:'ILS'}}</dd>
+    <dd>{{agent.obligation.total_orders?agent.obligation.total_orders:0 | currency:'ILS':'symbol'}}</dd>
   </dl> 
   
+
+  <!-- <div>{{123|currency:'ILS':'symbol'}}</div> -->
 </div>

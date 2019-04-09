@@ -7,7 +7,7 @@ import { OrderService } from '../../order/order.service';
 @Component({
   selector: 'app-disconnect-member',
   templateUrl: './disconnect-member.component.html',
-  styleUrls: ['./disconnect-member.component.css']
+  styleUrls: ['./disconnect-member.component.scss']
 })
 export class DisconnectMemberComponent implements OnInit {
 

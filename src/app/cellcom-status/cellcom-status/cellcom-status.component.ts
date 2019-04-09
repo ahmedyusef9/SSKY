@@ -8,7 +8,7 @@ import { CellcomStatusService } from '../cellcom-status.service';
 @Component({
   selector: 'app-cellcom-status',
   templateUrl: './cellcom-status.component.html',
-  styleUrls: ['./cellcom-status.component.css']
+  styleUrls: ['./cellcom-status.component.scss']
 })
 export class CellcomStatusComponent implements OnInit {
   details:any=null;

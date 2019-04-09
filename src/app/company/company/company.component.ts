@@ -74,18 +74,12 @@ export class CompanyComponent implements OnInit {
       this.item = {name: '',name_ar: '',name_en: '', id:0,created_at:'',created_at_sec:'',last_update:'',last_update_sec:'' };
   }
   loadExcel(){
-    let excel:any=[];
-    this.companys.forEach(el=>{
-      let a:any={
-        'id':el.id,
-        'שם':el.name,
-        'שם ערבית':el.name_ar,
-        'שם אנגלית':el.name_en,
-        'תאריך יצירה':el.created_at
-      }
-      excel.push(a);
+    this.loading=true;
+    this.companyService.getExcel().subscribe(res=>{
+      console.log(res);
+      // window.open(res['url']);
+           this.loading=false;
     });
-    // this.excelService.exportAsExcelFile(excel, 'חברות');
   }
   getCompanyName(row){
     if(this.lan=='he') {

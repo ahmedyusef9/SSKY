@@ -1,3 +1,59 @@
-<p>
-  block-packages works!
-</p>
+<mat-toolbar color="primary">{{'blocked_packages'|translate}}</mat-toolbar>
+<mat-toolbar><button mat-button (click)="openAddDialog()" style="position: relative;
+    float: left;margin-bottom:5px;margin-right:10px;"><mat-icon color="primary">add_circle</mat-icon></button>
+    <button mat-button style="position: relative;
+    float: left;margin-bottom:5px;margin-right:10px;" (click)="loadExcel()">{{'excel'|translate}}&nbsp;<mat-icon color="primary">file_download</mat-icon></button>
+  </mat-toolbar>
+<div class="example-container mat-elevation-z8">
+        <div class="example-header">
+            <mat-form-field floatPlaceholder="never">
+                <input matInput placeholder="{{'search'|translate}}" #filter>
+                <mat-icon matSuffix>search</mat-icon> 
+            </mat-form-field>
+        </div>
+    <div class="example-table-container">
+        <table mat-table #table [dataSource]="dataSource" dir="RTL" matSort>
+           
+            <ng-container matColumnDef="createdAt">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'created_at'|translate}} </th>
+                <td mat-cell *matCellDef="let row"> {{row.createdAt}} </td>
+            </ng-container>
+            <ng-container matColumnDef="company">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'company'|translate}} </th>
+                <td mat-cell *matCellDef="let row"> {{'company_name_'+row.company_id|translate}}  </td>
+            </ng-container>
+            <ng-container matColumnDef="package">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'product'|translate}} </th>
+              <td mat-cell *matCellDef="let row"> 
+                  <ng-container *ngIf="row.all_packages=='1'">
+                      {{'all_packages'|translate}}
+                  </ng-container>
+                  <ng-container *ngIf="row.all_packages=='0'">
+                      {{'prod_name_'+row.package_id|translate}} 
+                  </ng-container>  
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="agent">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'agent'|translate}} </th>
+              <td mat-cell *matCellDef="let row"> 
+                <ng-container *ngIf="row.agent_id>0">{{row.agent}}</ng-container> 
+                <ng-container *ngIf="row.agent_id==0">{{'all_agents'|translate}}</ng-container>  
+                </td>
+            </ng-container>
+           
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+                <td mat-cell *matCellDef="let row">
+                    <button mat-raised-button color="warn" *ngIf="row.active=='1'" (click)="active(row)">{{'unblock'|translate}}</button>
+                    <button mat-raised-button color="primary" *ngIf="row.active=='0'" (click)="active(row)">{{'block'|translate}}</button>
+                    <mat-icon (click)="delete(row)" color="warn" style="cursor:pointer;">delete</mat-icon>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+        <mat-paginator #paginator [length]="blocksDatabase.data.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+        </mat-paginator>
+    </div>
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>

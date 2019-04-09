@@ -1,3 +1,75 @@
-<p>
-  price-list works!
-</p>
+<mat-toolbar color="primary">{{'price_list'|translate}}</mat-toolbar>
+<mat-toolbar>
+   
+    <button mat-button style="position: relative;
+    float: left;margin-bottom:5px;margin-right:10px;" (click)="loadExcel()">{{'excel'|translate}}&nbsp;<mat-icon color="primary">file_download</mat-icon></button>
+
+</mat-toolbar>
+<div class="example-container mat-elevation-z8">
+    <div class="example-header">
+        <mat-form-field floatPlaceholder="never">
+            <input matInput placeholder="{{'search'|translate}}" #filter>
+            <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+    </div>
+    <table mat-table #table [dataSource]="dataSource" dir="RTL" matSort>
+        <ng-container matColumnDef="product_name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'product_name'|translate}}</th>
+            <td mat-cell *matCellDef="let row">
+                <span> {{'prod_name_'+row.product_id|translate}}</span>
+                <p style="color:blue;">(
+                    <span *ngIf="row.product_days_or_months=='months'">{{row.product_days_or_months_numbers}}&nbsp;{{'months'|translate}}</span> 
+                    <span *ngIf="row.product_days_or_months=='days'">{{row.product_days_or_months_numbers}}&nbsp;{{'days'|translate}}</span>
+                    )
+                </p>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="company_name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'provider'|translate}}</th>
+          <td mat-cell *matCellDef="let row">{{'company_name_'+row.company_id|translate}}</td>
+        </ng-container>
+        <ng-container matColumnDef="discount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'your_price'|translate}}</th>
+          <td mat-cell *matCellDef="let row">
+            {{(row.product_price-(0.01*row.discount*row.product_price))| number : '1.2-2' }}&nbsp;ש"ח </td>
+        </ng-container>
+        <ng-container matColumnDef="product_price">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <ng-container *ngIf="allow_to_change_price">{{'recommended_retail_price'|translate}}</ng-container>
+            <ng-container *ngIf="!allow_to_change_price">
+               {{'consumer_price'|translate}}
+            </ng-container>
+          </th>
+          <td mat-cell *matCellDef="let row">
+                <font color="green">{{row.product_price| number : '1.2-2' }}&nbsp;ש"ח</font>
+                </td>
+        </ng-container>
+        <ng-container matColumnDef="profit">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="{'dn':!allow_to_change_price}">{{'extension'|translate}}</th>
+              <td mat-cell *matCellDef="let row" [ngClass]="{'dn':!allow_to_change_price}">
+                  <button (click)="openProfit(row)" mat-raised-button color="primary">{{row.profit| number : '1.2-2' }}&nbsp;ש"ח <mat-icon>edit</mat-icon></button>
+                </td>
+        </ng-container>
+        <ng-container matColumnDef="all">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="{'dn':!allow_to_change_price}">{{'consumer_price'|translate}}</th>
+            <td mat-cell *matCellDef="let row" [ngClass]="{'dn':!allow_to_change_price}">
+                <font color="green">{{row.all| number : '1.2-2' }}&nbsp;ש"ח</font>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'view'|translate}}</th>
+          <td mat-cell *matCellDef="let row">
+              <mat-slide-toggle (change)="view(row)"
+              color="primary"
+              [checked]="row.active=='1'">
+              
+          </mat-slide-toggle>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row  *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator #paginator [length]="priceListDatabase.data.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
+</div>
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>

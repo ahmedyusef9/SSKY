@@ -1,5 +1,5 @@
  <div > 
-   <div > 
+   <div> 
         
       <div  *ngIf="authService.isAgent()"  style="text-align:center;">
         <app-obligation [loading]="loading" [id]="authService.getCurrentUserId()" ></app-obligation>
@@ -10,7 +10,7 @@
       <mat-progress-bar mode="buffer" *ngIf="loading" ></mat-progress-bar>
   </div>
  
-  <div class="row">
+  <div >
   <div fxLayout="row wrap"  fxLayout.sm="column" fxFlex fxLayoutGap="5px" fxLayoutAlign="center" > 
         <mat-card  *ngIf="isSearchActive && !phone" routerLink="/" routerLinkActive="active" color="warn" style="cursor: no-drop;">
           <mat-icon color="warn">not_interested</mat-icon>
@@ -20,8 +20,8 @@
         </mat-card>
      
  
-   <div *ngIf="isSearchActive && phones && phone">
-    <div  *ngFor="let p of phones">
+   <ng-container  *ngIf="isSearchActive && phones && phone">
+    <ng-container    *ngFor="let p of phones">
       <div  *ngIf="(p.member && authService.belongsToUser(p.member.agent_id)) || (p.member && p.member.free=='1')"> 
             <mat-card  [routerLink]="[phoneLink(), p.id]" style="color: #337ab7;"  color="primary" >
               <mat-icon style="color:red;" *ngIf="p.used=='0'">phone</mat-icon>
@@ -59,8 +59,8 @@
               </mat-card-content>
             </mat-card>
           </div>
-        <div class="col-lg-2 col-mat-4 col-xs-12" *ngIf="(p.member && !authService.belongsToUser(p.member.agent_id) && p.member.free=='0')">
-            <mat-card style="color: #337ab7;"  color="primary" disabled>
+        <!-- <div class="col-lg-2 col-mat-4 col-xs-12" > -->
+            <mat-card *ngIf="(p.member && !authService.belongsToUser(p.member.agent_id) && p.member.free=='0')" style="color: #337ab7;"  color="primary" disabled>
               <mat-icon style="color:red;" >phone</mat-icon>
               <mat-card-content>
                 <span style="color:red;white-space:normal">{{p.phone}}<br/>
@@ -69,25 +69,25 @@
               </mat-card-content>
             </mat-card>
           
-      </div>
-      <div class="col-lg-2 col-mat-4 col-xs-12" *ngIf="p.agent_name!='-' && authService.canUpdate()">
-        <mat-card   [routerLink]="['/סוכן', p.agent_id]" routerLinkActive="active" style="color:#795548;"   color="primary">
+      <!-- </div> -->
+      <!-- <div class="col-lg-2 col-mat-4 col-xs-12" > -->
+        <mat-card  *ngIf="p.agent_name!='-' && authService.canUpdate()" [routerLink]="['/סוכן', p.agent_id]" routerLinkActive="active" style="color:#795548;"   color="primary">
           <mat-icon style="color:#795548;">person</mat-icon>
           <mat-card-content>
             <span style="color:#795548;white-space:normal">{{p.agent_name}}</span>
           </mat-card-content>
         </mat-card>
-      </div>
-       <div class="col-lg-2 col-mat-4 col-xs-12" *ngIf="p.member && authService.canUpdate()">
-        <mat-card   [routerLink]="['/לקוח', p.member.consumer_id]" routerLinkActive="active" style="color:orange;"   color="primary">
+      <!-- </div> -->
+       <!-- <div class="col-lg-2 col-mat-4 col-xs-12" > -->
+        <!-- <mat-card *ngIf="p.member && authService.canUpdate()"  [routerLink]="['/לקוח', p.member.consumer_id]" routerLinkActive="active" style="color:orange;"   color="primary">
           <mat-icon style="color:orange;">assignment_ind</mat-icon>
           <mat-card-content>
             <span style="color:orange;white-space:normal">{{p.member.consumer_name}}</span>
           </mat-card-content>
-        </mat-card>
-      </div> 
-    </div>
-</div>
+        </mat-card> -->
+      <!-- </div>  -->
+    </ng-container>
+</ng-container >
     <!-- <ng-container *ngIf="customers"> -->
    
         <div *ngFor="let c of customers">

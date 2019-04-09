@@ -6,7 +6,7 @@ import { CellcomStatusService } from '../../cellcom-status/cellcom-status.servic
 @Component({
   selector: 'app-refresh-connect',
   templateUrl: './refresh-connect.component.html',
-  styleUrls: ['./refresh-connect.component.css']
+  styleUrls: ['./refresh-connect.component.scss']
 })
 export class RefreshConnectComponent implements OnInit {
 

@@ -10,7 +10,7 @@ import { Payment } from '../../model/payment';
 @Component({
   selector: 'app-add-rest',
   templateUrl: './add-rest.component.html',
-  styleUrls: ['./add-rest.component.css']
+  styleUrls: ['./add-rest.component.scss']
 })
 export class AddRestComponent implements OnInit {
 

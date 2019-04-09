@@ -1,12 +1,14 @@
 
-import { CommonModule } from '@angular/common';
-import {NgModule} from '@angular/core';
+import { CommonModule, registerLocaleData } from '@angular/common';
+import {NgModule, LOCALE_ID} from '@angular/core';
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
 import { CdkTableModule, CdkCell, CdkColumnDef, CdkCellDef, CdkColumnDefBase } from "@angular/cdk/table";
 import { CdkTreeModule } from "@angular/cdk/tree";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import localeHe from '@angular/common/locales/he'; 
+registerLocaleData(localeHe);
 import {
   MatAutocompleteModule,
   MatBadgeModule,
@@ -47,6 +49,7 @@ import {
   MatOptionModule,
   DateAdapter,
   MatIconRegistry,
+  MAT_SNACK_BAR_DEFAULT_OPTIONS,
 } from '@angular/material';
 import { BidiModule } from '@angular/cdk/bidi';
 
@@ -73,6 +76,7 @@ import { BidiModule } from '@angular/cdk/bidi';
         MatRadioModule,
         MatTableModule,
         BidiModule,
+        
         //FlexLayoutModule,
       ],
       exports: [
@@ -138,7 +142,16 @@ import { BidiModule } from '@angular/cdk/bidi';
         BidiModule,
         //FlexLayoutModule,
       ],
-      providers:[CdkColumnDef,CdkCell,CdkCellDef,CdkColumnDefBase]
+      providers:[
+        CdkColumnDef,
+        CdkCell,
+        CdkCellDef,
+        CdkColumnDefBase,
+        {
+          provide: LOCALE_ID,
+          useValue: 'he-IL' // 'de-DE' for Germany, 'fr-FR' for France ...
+        },
+        {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {horizontalPosition:'left',duration: 10000}}]
     })
 export class MaterialModule {
   constructor(private dateAdapter:DateAdapter<any>) {

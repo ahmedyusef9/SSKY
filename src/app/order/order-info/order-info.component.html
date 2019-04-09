@@ -1,8 +1,9 @@
 <mat-toolbar color="primary">{{'order_info'|translate}} {{'number'|translate}} {{id}}</mat-toolbar>
-<div class="container-fluid-in"  *ngIf="loading==false">
-    <div class="row">
-        <div class="col-lg-6">
-            <mat-card class="example-card">
+<div class="example-container mat-elevation-z8"     *ngIf="loading==false">
+    <div  fxLayout="column" fxFlex fxLayoutGap>
+    <div fxLayout="row"  >
+        <div fxflex="33" fxflex.gt-sm="67" style="width:-webkit-fill-available"> 
+            <mat-card >
                 <mat-card-header><mat-card-title><h3>{{'order'|translate}}:</h3></mat-card-title></mat-card-header>
                 <mat-card-content>
                     <mat-list>
@@ -123,8 +124,11 @@
                 </mat-card-content> 
             </mat-card>
         </div>
-        <div class="col-lg-6">
-            <mat-card class="example-card" *ngIf="authService.canUpdate()">
+        <!-- </div> -->
+        <!-- <div class="col-lg-6"> -->
+    <div fxflex="67" fxflex.gt-sm="33" style="width:-webkit-fill-available">
+        <ng-container *ngIf="authService.canUpdate()">
+            <mat-card  *ngIf="authService.canUpdate()">
                 <mat-card-header><mat-card-title><h3>{{'agent'|translate}}:</h3></mat-card-title></mat-card-header>
                 <mat-card-content>
                     <mat-list>
@@ -151,7 +155,9 @@
                     </mat-list>
                 </mat-card-content> 
             </mat-card>
-            <mat-card class="example-card" *ngIf="authService.canUpdate() || authService.belongsToUser(consumer.parent)" >
+        </ng-container>
+        <ng-container *ngIf="authService.canUpdate() || authService.belongsToUser(consumer.parent)">
+            <mat-card  >
                 <mat-card-header><mat-card-title><h3>{{'consumer'|translate}}:</h3></mat-card-title></mat-card-header>
                 <mat-card-content>
                     <mat-list>
@@ -172,6 +178,8 @@
                     </mat-list>
                 </mat-card-content> 
             </mat-card>
+        </ng-container>
+    </div>
         </div>
     </div>
 </div>

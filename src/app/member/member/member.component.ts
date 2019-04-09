@@ -29,10 +29,12 @@ import { ResetMemberComponent } from '../reset-member/reset-member.component';
 import {merge} from 'rxjs/observable/merge';
 import {of as observableOf} from 'rxjs/observable/of';
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+import { startWith,map, debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
+// import { map } from 'rxjs-compat/operator/map';
 @Component({
   selector: 'app-member',
   templateUrl: './member.component.html',
-  styleUrls: ['./member.component.css']
+  styleUrls: ['./member.component.scss']
 })
 export class MemberComponent implements OnInit {
   members:Member[];
@@ -47,6 +49,7 @@ export class MemberComponent implements OnInit {
   @ViewChild('fileInput') fileInput;
   lan:any;
   agents:any[]=null;
+  dataSource: DS | null;
   constructor(
     private memberService:MemberService,
     private userService:UsersService,
@@ -248,33 +251,66 @@ export class MemberComponent implements OnInit {
     this.userService.getAgents().subscribe(res=>{
       this.agents=res;
     })
-    this.sort.sortChange.subscribe(() =>{ this.paginator.pageIndex = 0;
-      this.pageIndex=0;
-    });
-    Observable.fromEvent(this.filter.nativeElement,'keyup').subscribe(() =>{ this.paginator.pageIndex = 0;
-      this.pageIndex=0;
-    });
-    
-      merge(this.sort.sortChange, this.paginator.page,Observable.fromEvent(this.filter.nativeElement,'keyup'))
-          .startWith({})
-          .debounceTime(150)
-          .distinctUntilChanged()
-          .switchMap(() => {
-            let active=this.sort.active?this.sort.active:'order_id';
-            let direction=this.sort.direction?this.sort.direction:'desc';
-            this.pageIndex=this.pageIndex+1
-            let search=this.filter.nativeElement.value;
-            this.loading = true;
-            return this.memberService!.get(active, direction, this.pageIndex,search,this.agent_id,this.status);
-          }).
-          map(members => {
-            if(this.authService.isAgent()){
-              members.items=members.items.filter(el=>(el.agent_id==0||el.agent_id==this.authService.getCurrentUserId()));
-            }
-           return this.init_data(members);
-          })
-        .subscribe(data =>  {
+    // this.sort.sortChange.subscribe(() =>{ this.paginator.pageIndex = 0;
+    //   this.pageIndex=0;
+    // });
+    // Observable.fromEvent(this.filter.nativeElement,'keyup').subscribe(() =>{ this.paginator.pageIndex = 0;
+    //   this.pageIndex=0;
+    // });
+      merge(this.sort.sortChange,Observable.fromEvent(this.filter.nativeElement,'keyup')).subscribe(() => this.paginator.pageIndex = 0);
+      merge(this.sort.sortChange, this.paginator.page,Observable.fromEvent(this.filter.nativeElement,'keyup')).pipe(
+        startWith({}),
+        debounceTime(150),
+        distinctUntilChanged(),
+        switchMap(() => {
+          let active=this.sort.active?this.sort.active:'order_id';
+          let direction=this.sort.direction?this.sort.direction:'desc';
+          this.pageIndex=this.pageIndex+1
+          let search=this.filter.nativeElement.value;
+          this.loading = true;
+          return this.memberService!.get(active, direction, this.paginator.pageIndex +1,search,this.agent_id,this.status);
+        }),
+        map(members => {
+          this.loading = false;
+          this.isLoadingResults = false;
+          this.isRateLimitReached = false;
+          this.resultsLength = members.total_count;
+           this.total_pages=members.total_pages;
+           this.current_total=members.items.length; 
+          if(this.authService.isAgent()){
+            members.items=members.items.filter(el=>(el.agent_id==0||el.agent_id==this.authService.getCurrentUserId()));
+          }
+          // this.resultsLength = members.total_count;
+         return members.items;
+        }),
+        
+      catchError(() => {
+          this.isLoadingResults = false;
+          this.isRateLimitReached = true;
+          return observableOf([]);
+        })
+
+      ).subscribe(data =>  {
+        this.dataSource = data;
       });
+          
+          // .debounceTime(150)
+          // .distinctUntilChanged()
+          // .switchMap(() => {
+          //   let active=this.sort.active?this.sort.active:'order_id';
+          //   let direction=this.sort.direction?this.sort.direction:'desc';
+          //   this.pageIndex=this.pageIndex+1
+          //   let search=this.filter.nativeElement.value;
+          //   this.loading = true;
+          //   return this.memberService!.get(active, direction, this.pageIndex,search,this.agent_id,this.status);
+          // }).
+          // map(members => {
+          //   if(this.authService.isAgent()){
+          //     members.items=members.items.filter(el=>(el.agent_id==0||el.agent_id==this.authService.getCurrentUserId()));
+          //   }
+          //  return this.init_data(members);
+          // })
+        
     this.loadCompanies();
   }
   addMember(member:Member){
@@ -380,7 +416,7 @@ export class MemberComponent implements OnInit {
   }
   displayedColumns = [ 'agent_name','status','company_name','phone','sim','id'];
   membersDatabase = new DB([]);
-  dataSource: DS | null;
+  
   initMemberDatabase(){
     this.membersDatabase = new DB(this.members);
     this.dataSource = new DS(this.membersDatabase, this.sort, this.paginator);
@@ -396,6 +432,7 @@ export class MemberComponent implements OnInit {
    
   }
   init_data(data){
+    console.log(data);
     this.loading = false;
     this.isRateLimitReached = false;
     this.resultsLength = data.total_count;
@@ -404,6 +441,7 @@ export class MemberComponent implements OnInit {
     this.membersDatabase = new DB(data.items);
     this.paginator.pageIndex=0;
     this.dataSource = new DS(this.membersDatabase, this.sort, this.paginator);
+    console.log(this.membersDatabase);
   }
 }
 @Component({

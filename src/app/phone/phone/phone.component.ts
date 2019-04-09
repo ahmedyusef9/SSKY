@@ -48,6 +48,8 @@ export class PhoneComponent implements OnInit {
   }
   prev(){
     if(this.pageIndex>1){
+      console.log("ahmed");
+      
       this.pageIndex=this.pageIndex-1;
       let active=this.sort.active?this.sort.active:'id';
       let direction=this.sort.direction?this.sort.direction:'asc';

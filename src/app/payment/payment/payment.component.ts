@@ -16,7 +16,7 @@ import { ObligationService } from '../../users/obligation.service';
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',
-  styleUrls: ['./payment.component.css']
+  styleUrls: ['./payment.component.scss']
 })
 export class PaymentComponent implements OnInit {
   payments:Payment[]=null;

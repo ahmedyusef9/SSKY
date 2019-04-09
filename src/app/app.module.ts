@@ -42,6 +42,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HotmobileStatusModule } from './hotmobile-status/hotmobile-status.module';
 import { CellcomStatusModule } from './cellcom-status/cellcom-status.module';
 import { IpPermissionModule } from './ip-permission/ip-permission.module';
+import { GlobalDiscountModule } from './global-discount/global-discount.module';
+import { ComparisonsModule } from './comparisons/comparisons.module';
+import { ExcelOrderModule } from './excel-order/excel-order.module';
+import { AgentsCreditsModule } from './agents-credits/agents-credits.module';
 
 export function createTranslateLoader(http: Http) {
   return new TranslateStaticLoader(http, 'https://www.skypanel.net/api/lan', '.php');
@@ -70,7 +74,6 @@ export function createTranslateLoader(http: Http) {
     LoginModule, 
     HttpModule,
     AppRoutingModule,
-
     FormsModule,
     ReactiveFormsModule,
     HotmobileStatusModule ,
@@ -84,6 +87,10 @@ export function createTranslateLoader(http: Http) {
     PaymentModule,
     IpPermissionModule,
     SettingsModule,
+    ComparisonsModule,
+    GlobalDiscountModule,
+    ExcelOrderModule,
+    AgentsCreditsModule,
      TranslateModule.forRoot({
       provide: TranslateLoader,
       useFactory: (createTranslateLoader),

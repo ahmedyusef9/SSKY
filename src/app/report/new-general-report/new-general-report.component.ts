@@ -16,10 +16,12 @@ import { DS } from '../../datasource/ds';
 import { RefreshConnectComponent } from '../refresh-connect/refresh-connect.component';
 import { DisconnectMemberComponent } from '../disconnect-member/disconnect-member.component';
 import { AddRestComponent } from '../../payment/add-rest/add-rest.component';
+import { startWith, map,debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+// import { map } from 'rxjs-compat/operator/map';
 @Component({
   selector: 'app-new-general-report',
   templateUrl: './new-general-report.component.html',
-  styleUrls: ['./new-general-report.component.css']
+  styleUrls: ['./new-general-report.component.scss']
 })
 export class NewGeneralReportComponent implements OnInit {
   resultsLength = 0;
@@ -60,6 +62,21 @@ export class NewGeneralReportComponent implements OnInit {
     this.loadAgents();
     this.resetPageIndex();
     this.loadData();
+  }
+  loadPrice(){
+      this.filterData.page=this.paginator.pageIndex +1;
+      this.filterData.sort_active=this.sort.active?this.sort.active:'last_update_sec';
+      this.filterData.sort_direction=this.sort.direction?this.sort.direction:'desc';
+      this.loading = true;
+      this.loadParams();
+      console.log(this.url);
+    this.reportService.getPrices(this.url).pipe(
+
+
+
+    ).subscribe(data=>{
+      console.log(data);
+    });
   }
   filterData:any={
     begin:null,
@@ -104,21 +121,34 @@ export class NewGeneralReportComponent implements OnInit {
     this.dataSource = new DS(this.database, this.sort, this.paginator);
   }
   loadData(){
-    merge(this.sort.sortChange, this.paginator.page).startWith({}).debounceTime(150).distinctUntilChanged()
-    .switchMap(() => {
-      this.pageIndex=1;
-      this.filterData.page=this.pageIndex;
+    merge(this.sort.sortChange, this.paginator.page).pipe(
+    startWith({})
+    ,debounceTime(150)
+    ,distinctUntilChanged()
+    ,switchMap(() => {
+     
+      this.filterData.page=this.paginator.pageIndex +1;
       this.filterData.sort_active=this.sort.active?this.sort.active:'last_update_sec';
       this.filterData.sort_direction=this.sort.direction?this.sort.direction:'desc';
       this.loading = true;
       this.loadParams();
+      console.log(this.url);
       return this.reportService!.get(this.url);
     })
-    .map(data => {
-      this.loading = false;
-      this.initData(data);
+    ,map(data => {
+      // this.loading = false;
+      this.loading=false;
+      this.isRateLimitReached = false;
+      this.resultsLength = data.total_count;
+      this.total_pages=data.total_pages;
+      this.current_total=data.items.length;
+      return data.items;
+      // this.initData(data);
     })
-    .subscribe(data =>{});
+    ).subscribe(data =>{
+      console.log(data);
+      this.dataSource = data;
+    });
   }
   getParamsFromFilterData(){
     let params='?';

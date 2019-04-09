@@ -4,6 +4,9 @@ import { TranslateService, LangChangeEvent } from 'ng2-translate';
 import { LocalStorageService } from 'src/app/local-storage.service';
 import { AuthenticationService } from 'src/app/login/authentication.service';
 import * as AppConst from './../../app.const'; 
+import { MsgComponent } from 'src/app/msg/msg.component';
+import { MatSnackBar } from '@angular/material';
+import { NotificationService } from 'src/app/notification.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -13,7 +16,9 @@ export class HomeComponent implements OnInit {
   lan:any;
   show_accounts=false;
   constructor(
+    private snackBar:MatSnackBar,
     private router:Router,
+    private notifi:NotificationService,
     private trans:TranslateService, 
     private lsService:LocalStorageService,
     public authService:AuthenticationService) {
@@ -34,7 +39,18 @@ export class HomeComponent implements OnInit {
   agents:any[]=null;
   hasOrders:boolean=true;//set in member-search
   orders:any[];//set in member-search
-  ngOnInit() {}
+  ngOnInit() {
+   
+    this.notifi.getNewOrders().subscribe(data =>{
+      this.snackBar.openFromComponent(MsgComponent, {
+       
+        data:{data:data,art:'new',place:'notification'}
+      });
+      
+    });
+   
+    
+  }
   phoneLink(){
     if(this.authService.isAgent()){
       return '/הזמנה-חדשה';

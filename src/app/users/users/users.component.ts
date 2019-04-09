@@ -80,26 +80,13 @@ export class UsersComponent implements OnInit {
       }
     }
     loadExcel(){
-      let excel:any=[];
-      //'username', 'product_name','discount' ,'user_id'
-      this.dataSource.getFSData().forEach(el=>{
-        let a:any={
-          'id':el.id,
-          'שם משתמש':el.username,
-          'סוג משתמש':this.getUserArt(el.level_id),
-          'שם פרטי':el.firstname,
-          'שם משפחה':el.lastname,
-          'תעודת זהות':el.national_id,
-          //'תאריך לידה':el.birhday,
-          'דואר אלקטרוני':el.email,
-          'טלפון נייד':el.mobile,
-          'טלפון':el.phone,
-          'משתמש מתאריך':el.created_at,
-          'סוג תשלום':el.level_id!=3?'':el.payment_art=='others'?'אחר':el.payment_art=='direct_debit'?'הוראת קבע':'כרטיס אשראי'
-        }
-        excel.push(a);
-      });
-      // this.excelService.exportAsExcelFile(excel, 'משתמשים');
+      
+    this.loading=true;
+    this.userService.getExcel().subscribe(res=>{
+      console.log(res);
+      window.open(res['url']);
+           this.loading=false;
+    });
     }
   onChangeEvent({target}){
     this.name = target.value;

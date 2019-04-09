@@ -6,6 +6,7 @@ import { User } from '../model/user';
 import { Level } from '../model/level';
 import { AuthenticationService } from '../login/authentication.service';
 import { distinctUntilChanged, debounceTime, filter } from 'rxjs/operators';
+import { Angular2TokenService } from 'angular2-token';
 @Injectable({
   providedIn: 'root'
 })
@@ -135,8 +136,20 @@ export class UsersService {
     this.options = new RequestOptions({headers: headers});
      return this.http.delete(this.apiRoot+'user/delete.php?id='+id, this.options );  
   }
+  getExcel(){
+    let headers = new Headers({'Content-Type': 'application/json'});  
+    let ls = localStorage.getItem('currentUser');
+    let jls=JSON.parse(ls);
+    let authToken=jls.token;
+    headers.append('Authorization',`Bearer ${authToken}`)
+    this.options = new RequestOptions({headers: headers});
+    this.tokenService.init();
+    let url=this.apiRoot+'user/get_excel.php';
+    return this.http.get(url, this.options).map(x=>x.json());
+  }
   constructor(private _http:Http,
-    private authenticationService: AuthenticationService) { 
+    private authenticationService: AuthenticationService,
+    private tokenService: Angular2TokenService) { 
     this.http = _http;
   }
 }

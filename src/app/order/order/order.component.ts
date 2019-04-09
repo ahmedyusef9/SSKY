@@ -16,10 +16,12 @@ import { ExcelService } from '../../excel.service';
 import * as moment from 'moment/moment';
 import { AuthenticationService } from '../../login/authentication.service';
 import {merge} from 'rxjs/observable/merge';
+import { startWith, map,debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+// import { map } from 'rxjs-compat/operator/map';
 @Component({
   selector: 'app-order',
   templateUrl: './order.component.html',
-  styleUrls: ['./order.component.css']
+  styleUrls: ['./order.component.scss']
 })
 export class OrderComponent implements OnInit {
   orders:Order[]=null;
@@ -174,27 +176,27 @@ export class OrderComponent implements OnInit {
    })
   }
   ngOnInit() {
-    this.sort.sortChange.subscribe(() =>{ this.paginator.pageIndex = 0;
-      this.pageIndex=0;
-    });
-    Observable.fromEvent(this.filter.nativeElement,'keyup').subscribe(() =>{ this.paginator.pageIndex = 0;
-      this.pageIndex=0;
-    });
-    
-      merge(this.sort.sortChange, this.paginator.page,Observable.fromEvent(this.filter.nativeElement,'keyup'))
-          .startWith({})
-          .debounceTime(150)
-          .distinctUntilChanged()
-          .switchMap(() => {
+    // this.sort.sortChange.subscribe(() =>{ this.paginator.pageIndex = 0;
+    //   this.pageIndex=0;
+    // });
+    // Observable.fromEvent(this.filter.nativeElement,'keyup').subscribe(() =>{ this.paginator.pageIndex = 0;
+    //   this.pageIndex=0;
+    // });
+    merge(this.sort.sortChange,Observable.fromEvent(this.filter.nativeElement,'keyup')).subscribe(() => this.paginator.pageIndex = 0);
+      merge(this.sort.sortChange, this.paginator.page,Observable.fromEvent(this.filter.nativeElement,'keyup')).pipe(
+          startWith({})
+          ,debounceTime(150)
+          ,distinctUntilChanged()
+          ,switchMap(() => {
             let active=this.sort.active?this.sort.active:'id';
             let direction=this.sort.direction?this.sort.direction:'asc';
             this.pageIndex=this.pageIndex+1
             let search=this.filter.nativeElement.value;
             this.loading = true;
             return this.orderService!.get(active, direction, this.pageIndex,search);
-          }).
+          }),
           map(data => {this.init_data(data);})
-        .subscribe(data =>  {
+      ).subscribe(data =>  {
       });
     this.newOrder();
     //this.loadOrders();

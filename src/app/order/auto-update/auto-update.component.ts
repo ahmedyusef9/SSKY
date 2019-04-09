@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-auto-update',
   templateUrl: './auto-update.component.html',
-  styleUrls: ['./auto-update.component.css']
+  styleUrls: ['./auto-update.component.scss']
 })
 export class AutoUpdateComponent implements OnInit {
   loading:Boolean=false;

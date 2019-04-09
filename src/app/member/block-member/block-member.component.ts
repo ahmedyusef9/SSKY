@@ -10,7 +10,7 @@ import { AuthenticationService } from '../../login/authentication.service';
 @Component({
   selector: 'app-block-member',
   templateUrl: './block-member.component.html',
-  styleUrls: ['./block-member.component.css']
+  styleUrls: ['./block-member.component.scss']
 })
 export class BlockMemberComponent implements OnInit {
 

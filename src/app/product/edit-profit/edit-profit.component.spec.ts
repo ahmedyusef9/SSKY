@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditProfitComponent } from './edit-profit.component';
+import { EditProfitComponent } from '../edit-profit2/edit-profit.component';
 
 describe('EditProfitComponent', () => {
   let component: EditProfitComponent;

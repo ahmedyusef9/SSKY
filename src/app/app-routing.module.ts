@@ -21,6 +21,23 @@ import { UsersComponent } from './users/users/users.component';
 import { AddUserComponent } from './users/add-user/add-user.component';
 import { EditUserComponent } from './users/edit-user/edit-user.component';
 import { ProductComponent } from './product/product/product.component';
+import { PriceListComponent } from './product/price-list/price-list.component';
+import { GlobalDiscountComponent } from './global-discount/global-discount/global-discount.component';
+import { BlockPackagesComponent } from './block-packages/block-packages/block-packages.component';
+import { MemberComponent } from './member/member/member.component';
+import { PaymentComponent } from './payment/payment/payment.component';
+import { OrderComponent } from './order/order/order.component';
+import { MobilityNumbersComponent } from './phone/mobility-numbers/mobility-numbers.component';
+import { ReportComponent } from './agent/report/report.component';
+import { ComparisonsComponent } from './comparisons/comparisons/comparisons.component';
+import { ExcelOrderComponent } from './excel-order/excel-order/excel-order.component';
+import { ExcelChargeComponent } from './excel-order/excel-charge/excel-charge.component';
+import { HotmobileStatusComponent } from './hotmobile-status/hotmobile-status/hotmobile-status.component';
+import { CellcomStatusComponent } from './cellcom-status/cellcom-status/cellcom-status.component';
+import { NewGeneralReportComponent } from './report/new-general-report/new-general-report.component';
+import { AgentsCreditsComponent } from './agents-credits/agents-credits/agents-credits.component';
+import { AutoUpdateComponent } from './order/auto-update/auto-update.component';
+import { OrderInfoComponent } from './order/order-info/order-info.component';
 
 const routes: Routes = [
   { path: AppConst.Routes.home.path,component: HomeComponent , canActivate: [AuthGuard]},
@@ -38,7 +55,25 @@ const routes: Routes = [
   { path: AppConst.Routes.users.path, component: UsersComponent , canActivate: [AuthGuard] },  
   { path: AppConst.Routes.users.add.path, component: AddUserComponent , canActivate: [AuthGuard] },  
   { path: AppConst.Routes.users.edit.path, component: EditUserComponent , canActivate: [AuthGuard] },
-  { path: AppConst.Routes.products.path, component: ProductComponent , canActivate: [AuthGuard] },    
+  { path: AppConst.Routes.products.path, component: ProductComponent , canActivate: [AuthGuard] }, 
+  { path: AppConst.Routes.price_list.path, component: PriceListComponent , canActivate: [AuthGuard] },
+  { path: AppConst.Routes.discounts.path, component: GlobalDiscountComponent , canActivate: [AuthGuard] },
+  { path: AppConst.Routes.block_packages.path, component: BlockPackagesComponent , canActivate: [AuthGuard] },   
+  { path: AppConst.Routes.members.path, component: MemberComponent , canActivate: [AuthGuard] },
+  { path: AppConst.Routes.payments.path, component: PaymentComponent , canActivate: [AuthGuard] },
+  { path: AppConst.Routes.orders.path, component: OrderComponent , canActivate: [AuthGuard] },
+  { path: AppConst.Routes.mobility_numbers.path, component: MobilityNumbersComponent , canActivate: [AuthGuard] },
+  { path: AppConst.Routes.agents_report.path, component: ReportComponent , canActivate: [AuthGuard] },
+  { path: AppConst.Routes.comparisons.path, component: ComparisonsComponent , canActivate: [AuthGuard] },
+  { path: AppConst.Routes.excel_order.path, component: ExcelOrderComponent , canActivate: [AuthGuard] },
+  { path: AppConst.Routes.excel_charge.path, component: ExcelChargeComponent , canActivate: [AuthGuard] },
+  { path: AppConst.Routes.status_hotmobile.path, component: HotmobileStatusComponent , canActivate: [AuthGuard] },
+  { path: AppConst.Routes.status_cellcom.path, component: CellcomStatusComponent , canActivate: [AuthGuard] },
+  { path: AppConst.Routes.general_report.path, component: NewGeneralReportComponent , canActivate: [AuthGuard] },
+  { path: AppConst.Routes.agents_acounts.path, component: AgentsCreditsComponent , canActivate: [AuthGuard] },
+  { path: AppConst.Routes.automatic_update.path, component: AutoUpdateComponent , canActivate: [AuthGuard] },
+  { path: AppConst.Routes.viewOrderInfo.path, component: OrderInfoComponent , canActivate: [AuthGuard] },
+  
   // { path: AppConst.Routes.new_charge.path,      component: NewChargeComponent , canActivate: [AuthGuard]},
   { path: AppConst.Routes.sims.path, component: SimComponent , canActivate: [AuthGuard,CanEditGuard]},
   { path: AppConst.Routes.redirect_to.path, redirectTo: '', canActivate: [AuthGuard]},

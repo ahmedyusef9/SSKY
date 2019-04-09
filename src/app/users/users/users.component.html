@@ -10,6 +10,10 @@
     <button  mat-button style="position: relative;
     float: left;margin-right: 10px;" (click)="loadExcel()">{{'excel'|translate}}&nbsp;<mat-icon color="primary">file_download</mat-icon></button>
 </mat-toolbar>
+<div class="example-loading-shade"*ngIf="loading">
+        <mat-spinner *ngIf="loading"></mat-spinner>
+
+    </div>
 <div class="example-container mat-elevation-z8">
     <div class="example-header">
         <mat-form-field floatPlaceholder="never">

@@ -76,18 +76,12 @@ export class ConsumerComponent implements OnInit {
     localStorage.setItem('currentComponent','app-consumer');
   }
   loadExcel(){
-    let excel:any=[];
-    this.dataSource.getFSData().forEach(el=>{
-      let a:any={
-        'id':el.id,
-        'שם לקוח':el.firstname+' '+el.lastname,
-        'שם סוכן':el.parent_name,
-        'טלפון':el.phone,
-        'לקוח מתאריך':el.created_at
-      }
-      excel.push(a);
+    this.loading=true;
+    this.consumerService.getExcel().subscribe(res=>{
+      console.log(res);
+      window.open(res['url']);
+           this.loading=false;
     });
-    // this.excelService.exportAsExcelFile(excel, 'לקוחות');
   }
   onChangeEvent({target}){
     this.name = target.value;

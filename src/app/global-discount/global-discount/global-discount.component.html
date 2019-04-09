@@ -1,0 +1,100 @@
+<mat-toolbar color="primary">{{'discounts'|translate}}</mat-toolbar>
+<!-- <pre>
+  {{companies|json}}
+</pre> -->
+
+<!-- <div class="col-mat-12" style="padding-top: 20px;"> -->
+  <div class="example-container mat-elevation-z8">
+  <form class="example-form" *ngIf="companies" dir="rtl" >
+    <mat-form-field>
+      <mat-select placeholder="{{'company'|translate}}"  tabindex="1" (selectionChange)="changeCompany($event)" style="width:100%;">
+          <mat-option *ngFor="let company of companies" [value]="company.id">
+              {{'company_name_'+company.id|translate}}
+          </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="example-full-width" *ngIf="selectedCompany!=null && filteredOptions!=null">
+      <input type="text" placeholder="{{'select_product'|translate}}" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto" 
+        (ngModelChange)="changeProduct($event)"  style="width:100%;">
+      <mat-icon (click)="empty()" *ngIf="myControl.value!=null && myControl.value!=''" matSuffix>close</mat-icon>
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" >
+        <mat-option *ngFor="let option of filteredOptions|async" [value]="option" style="text-align:right;" >
+            {{'prod_name_'+option.id|translate}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+  <mat-card class="example-card" *ngIf="selectedProduct!=null">
+    <mat-card-header>
+      <mat-card-title>
+        <h2>
+            {{'prod_name_'+selectedProduct.id|translate}}
+        </h2>
+      </mat-card-title>
+      <mat-card-subtitle>{{'company'|translate}}:
+          {{'company_name_'+selectedProduct.company_id|translate}}
+      </mat-card-subtitle>
+      <mat-card-subtitle>{{'price'|translate}}: ₪{{selectedProduct.price}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p><button mat-raised-button color="primary" (click)="openAddAllDialog(selectedProduct.name,selectedProduct.company_name)" >{{'discount_for_all'|translate}}</button></p>
+      <p innerHTML="{{'prod_desc_'+selectedProduct.id|translate}}">
+          
+      </p>
+    </mat-card-content> 
+  </mat-card>
+
+
+
+<div [ngClass]="{'discountshide': !selectedDiscounts ||selectedDiscounts.length==0}" *ngIf="selectedProduct!=null">
+    <!-- <div class="row">
+        <div class="col"> -->
+         
+        <!-- </div>
+      </div> -->
+  <div class="example-header" >
+    <mat-form-field floatPlaceholder="never">
+      <input matInput  placeholder="{{'filter_users'|translate}}" #filter >
+    </mat-form-field>
+    <button *ngIf="selectedProduct!=null" mat-button style="position: relative;
+    float: right;    margin: 10px 15px;" (click)="loadExcel()">{{'excel'|translate}}&nbsp;<mat-icon color="primary">file_download</mat-icon></button>
+    
+  </div>
+  <div class="example-table-container">
+  <table mat-table #table [dataSource]="dataSource" dir="RTL" matSort>
+    <ng-container matColumnDef="discount">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'discount'|translate}} </th>
+      <td mat-cell *matCellDef="let row">{{row.discount| number : '1.2-2' }}%&nbsp;|&nbsp;{{0.01*row.discount*selectedProduct.price| number : '1.2-2' }}&nbsp;ש"ח </td>
+    </ng-container>
+   
+    <ng-container matColumnDef="product_name">
+      <th mat-header-cell *matHeaderCellDef>{{'product'|translate}} </th>
+      <td mat-cell *matCellDef="let row">
+          {{'prod_name_'+row.product_id|translate}}
+      </td>
+      
+    </ng-container>
+    <ng-container matColumnDef="username">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'agent'|translate}}</th>
+      <td mat-cell *matCellDef="let row"> {{row.username}} </td>
+    </ng-container>
+    <ng-container matColumnDef="user_id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+      <td mat-cell *matCellDef="let row"> 
+        <mat-icon (click)="openEditDialog(row.user_id)" color="primary" style="cursor:pointer;">mode_edit</mat-icon>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+  <mat-paginator #paginator
+    numberOfPage="sds" 
+    [length]="selectedDiscounts.length"
+    [pageIndex]="0"
+    [pageSize]="25"
+    [pageSizeOptions]="[ 10, 25, 100]">
+  </mat-paginator>
+</div>
+</div>
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>

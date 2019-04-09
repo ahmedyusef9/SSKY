@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Http, RequestOptions , Headers } from '@angular/http';
-import { Observable } from 'rxjs';
-
-import * as AppConst from '../app.const';
-@Injectable({
-  providedIn: 'root'
-})
+import { Observable } from "rxjs/Observable";
+import { Http, Headers, RequestOptions, URLSearchParams } from '@angular/http';
+import 'rxjs';
+import * as AppConst from './../app.const';
+@Injectable()
 export class BlockPackegesService {
 
   http: Http;

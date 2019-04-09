@@ -8,7 +8,7 @@ import { HotmobileStatusService } from '../hotmobile-status.service';
 @Component({
   selector: 'app-hotmobile-status',
   templateUrl: './hotmobile-status.component.html',
-  styleUrls: ['./hotmobile-status.component.css']
+  styleUrls: ['./hotmobile-status.component.scss']
 })
 export class HotmobileStatusComponent implements OnInit {
   details:any=null;

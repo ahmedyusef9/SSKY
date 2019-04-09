@@ -10,7 +10,7 @@ import { AuthenticationService } from '../../login/authentication.service';
 @Component({
   selector: 'app-delete',
   templateUrl: './delete.component.html',
-  styleUrls: ['./delete.component.css'],
+  styleUrls: ['./delete.component.scss'],
   providers: [YnPipe],
 })
 export class DeleteComponent implements OnInit {

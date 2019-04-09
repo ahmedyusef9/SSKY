@@ -26,7 +26,18 @@ export class ReportService {
     headers.append('Authorization',`Bearer ${authToken}`)
     this.options = new RequestOptions({headers: headers});
     this.tokenService.init();
-    let url=this.apiRoot+'order/_orders_report.php'+params; 
+    let url=this.apiRoot+'order/_orders_report_copy.php'+params; 
+    return this.http.get(url, this.options).map(x=>x.json());
+  }
+  getPrices(params){
+    let headers = new Headers({'Content-Type': 'application/json'});  
+    let ls = localStorage.getItem('currentUser');
+    let jls=JSON.parse(ls);
+    let authToken=jls.token;
+    headers.append('Authorization',`Bearer ${authToken}`)
+    this.options = new RequestOptions({headers: headers});
+    this.tokenService.init();
+    let url=this.apiRoot+'order/_orders_report_total.php'+params; 
     return this.http.get(url, this.options).map(x=>x.json());
   }
   getExcel(params){

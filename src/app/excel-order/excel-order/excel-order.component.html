@@ -1,0 +1,93 @@
+<div class="row"  *ngIf="company_list">
+  <div class="col-lg-12">
+      <mat-toolbar color="primary">{{'excel_order'|translate}}</mat-toolbar>  
+  </div>
+  <div class="col-lg-12"  style="margin:10px 0 0 0;" *ngIf="company">
+    <a (click)="resetCompany()" *ngIf="company" mat-raised-button style="margin:2px;">{{'company_name_'+company|translate}}
+      <mat-icon>close</mat-icon>
+    </a>
+    <a (click)="resetProduct()" *ngIf="product" mat-raised-button style="margin:2px;">{{'prod_name_'+product|translate}}
+        <mat-icon>close</mat-icon>
+    </a>
+    <a (click)="resetAgent()" *ngIf="agent && agent.id" mat-raised-button style="margin:2px;">{{getAgentName(agent)}}
+        <mat-icon>close</mat-icon>
+      </a>
+    </div>
+  <div class="col-lg-12" >
+    <div style="padding: 0 30px;">
+      <mat-form-field *ngIf="!company" >
+  <mat-select  placeholder="{{'company'|translate}}" [(ngModel)]="company" tabindex="1" [ngClass]="{'dn': false}" >
+    <mat-option *ngFor="let c of company_list" [value]="c.id">
+        {{'company_name_'+c.id|translate}}
+    </mat-option>
+  </mat-select>
+</mat-form-field> 
+  <ng-container *ngIf="company && !product">
+    <br/>
+  <mat-form-field> 
+    <mat-select  placeholder="{{'product'|translate}}" [(ngModel)]="product" tabindex="1" [ngClass]="{'dn': !company}">
+      <mat-option *ngFor="let p of getCompanyProducts(company)" [value]="p.id">
+        {{'prod_name_'+p.id|translate}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field> 
+  </ng-container>
+  <ng-container *ngIf="agent_list">
+      <br/>
+      <mat-form-field *ngIf="!agent || !agent.id">
+          <input matInput placeholder="{{'agent'|translate}}" [(ngModel)]="agent" (keyup)="agentSearch($event)" [matAutocomplete]="auto">
+          <mat-autocomplete  #auto="matAutocomplete">
+              <mat-option *ngFor="let option of searchAgents" [value]="option">
+                  {{option.firstname}} {{option.lastname}}
+              </mat-option>
+            </mat-autocomplete>
+      </mat-form-field>
+    </ng-container>
+    <mat-checkbox   [(ngModel)]="api">{{'connect_api'|translate}}</mat-checkbox><br/>
+    <mat-checkbox   [(ngModel)]="sent_msg">{{'sent_msg'|translate}}</mat-checkbox><br/>
+    <mat-form-field>
+      <input matInput [matDatepicker]="picker" placeholder="{{'start_date'|translate}}" [(ngModel)]="start_date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field><br/>
+    <ng-container *ngIf="company&&product&&agent&&agent.id">
+        <input type="file" #fileInput placeholder="Upload file..." style="display:none;" (change)="upload()" />
+    <button mat-button (click)="fileInput.click()" style="position: relative;margin-bottom:5px;">העלאת מספרי טלפון וסים<mat-icon color="primary">file_upload</mat-icon></button>
+    </ng-container>
+  </div>
+  </div>
+  <div class="col-lg-12"  style="margin:10px 0 10px 0;padding:30px;">
+        <ng-container *ngIf="number_list && number_list.length>0">
+          <br/><br/>
+          <button mat-raised-button color="primary" (click)="createOrders()" style="position: relative;margin-bottom:5px;float:left">ביצוע הזמנות</button>
+   
+          <br/><br/>
+            
+       
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{'phone'|translate}}</th>
+              <th>{{'sim'|translate}}</th>
+              <th>{{'days_to_disconnect'|translate}}</th> 
+              <th>#</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr  *ngFor="let item of number_list;let i=index">
+              <td>{{i+1}}</td>
+              <td [ngClass]="{'table-danger':!item.phone_in,'table-success':item.phone_in}">{{item.phone}}</td>
+              <td [ngClass]="{'table-danger':!item.sim_in,'table-success':item.sim_in}">{{item.sim}}</td>
+              <td >{{item?.day_count}}</td>
+              <td><mat-icon (click)="resetNumber(i)" style="cursor:pointer;">close</mat-icon></td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </ng-container>
+  </div>
+  
+</div>
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+<span style="color:red;" *ngIf="loading">{{'wait_msg'|translate}}</span>

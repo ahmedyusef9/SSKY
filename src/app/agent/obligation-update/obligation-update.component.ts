@@ -20,7 +20,9 @@ export class ObligationUpdateComponent implements OnInit {
     private validationService:ValidationService,
     private formBuilder:FormBuilder,
     private obligationService:ObligationService,
-    public snackBar: MatSnackBar,private trans:TranslateService, private lsService:LocalStorageService,
+    public snackBar: MatSnackBar,
+    private trans:TranslateService,
+    private lsService:LocalStorageService,
     public authService:AuthenticationService) {
       this.lan=this.lsService.getStorage('lan');
       this.trans.onLangChange.subscribe((event: LangChangeEvent) => {

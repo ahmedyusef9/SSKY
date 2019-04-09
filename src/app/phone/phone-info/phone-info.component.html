@@ -22,7 +22,8 @@
         </mat-toolbar>
         
     </div>
-    <div class="col-lg-4 col-mat-6 col-sm-6 col-xs-12">
+  <div id="cardContiner" fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="start" >
+    <div>
       <mat-card>
         <mat-card-header>
           <mat-card-title >
@@ -119,7 +120,7 @@
         </mat-card-content>
       </mat-card>
     </div>
-    <div class="col-lg-4 col-mat-6 col-sm-6 col-xs-12" [ngClass]="{'dn':!member.sim}" *ngIf="authService.belongsToUser(phone.agent_id)">
+    <div  [ngClass]="{'dn':!member.sim}" *ngIf="authService.belongsToUser(phone.agent_id)">
         <mat-card>
           <mat-card-header>
             <mat-card-title >
@@ -212,7 +213,8 @@
           </mat-card-content>
         </mat-card>
       </div>
-      <div class="col-lg-4 col-mat-6 col-sm-6 col-xs-12" *ngIf="lastOrder && lastOrder!=null " [ngClass]="{'dn':!member.has_orders}">
+    <!-- </div> -->
+      <div  *ngIf="lastOrder && lastOrder!=null " [ngClass]="{'dn':!member.has_orders}">
           <mat-card>
             <mat-card-header>
               <mat-card-title [ngClass]="{'red':lastOrder.status=='declined'||lastOrder.status=='cancel'||lastOrder.status=='disconnected','blue':lastOrder.status=='new'||lastOrder.status=='finished','green':lastOrder.status=='completed'}">
@@ -266,6 +268,7 @@
             </mat-card-content>
           </mat-card>
         </div>
+      </div>
         <div  class="col-lg-12 col-mat-12 col-sm-12 col-xs-12" [ngClass]="{'dn':!member.has_orders||db.data.length==0}" >
             <mat-toolbar class="head" color="primary" style="text-align:center;font-weight:bold;">{{'orders'|translate}}&nbsp;(
                 <ng-container *ngIf="phone.moved_to_phone && phone.moved_to_phone!='0'">{{phone.moved_to_phone}}</ng-container>
@@ -321,7 +324,7 @@
                               </mat-cell>
                               
                     </ng-container> 
-                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
                 </mat-table>
                 <mat-paginator #paginator [length]="db.data.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">

@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { Level } from '../model/level';
 import { AuthenticationService } from '../login/authentication.service';
 import { User } from '../model/user';
+import { Angular2TokenService } from 'angular2-token';
 @Injectable({
   providedIn: 'root'
 })
@@ -14,6 +15,17 @@ export class ConsumerService {
   headers: Headers;
   options: RequestOptions;
   apiRoot:String=AppConst.API_ENDPOINT;
+  getExcel(){
+    let headers = new Headers({'Content-Type': 'application/json'});  
+    let ls = localStorage.getItem('currentUser');
+    let jls=JSON.parse(ls);
+    let authToken=jls.token;
+    headers.append('Authorization',`Bearer ${authToken}`)
+    this.options = new RequestOptions({headers: headers});
+    this.tokenService.init();
+    let url=this.apiRoot+'consumer/get_excel.php';
+    return this.http.get(url, this.options).map(x=>x.json());
+  }
   getConsumers() :Observable<Array<Consumer>>{
     let headers = new Headers({'Content-Type': 'application/json'});  
     let ls = localStorage.getItem('currentUser');
@@ -105,7 +117,8 @@ export class ConsumerService {
      return this.http.delete(this.apiRoot+'consumer/delete.php?id='+id, this.options );  
   }
   constructor(private _http:Http,
-    private authenticationService: AuthenticationService) { 
+    private authenticationService: AuthenticationService,
+    private tokenService: Angular2TokenService) { 
     this.http = _http;
   }
 }

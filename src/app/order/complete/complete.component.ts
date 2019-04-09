@@ -11,7 +11,7 @@ import { AuthenticationService } from '../../login/authentication.service';
 @Component({
   selector: 'app-complete',
   templateUrl: './complete.component.html',
-  styleUrls: ['./complete.component.css'],
+  styleUrls: ['./complete.component.scss'],
   providers: [YnPipe],
 })
 export class CompleteComponent implements OnInit {

@@ -30,7 +30,7 @@ import { AuthenticationService } from '../../login/authentication.service';
 @Component({
   selector: 'app-order-info',
   templateUrl: './order-info.component.html',
-  styleUrls: ['./order-info.component.css']
+  styleUrls: ['./order-info.component.scss']
 })
 export class OrderInfoComponent implements OnInit {
   position = 'above';

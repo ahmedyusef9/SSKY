@@ -2,7 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { TranslateService, LangChangeEvent } from 'ng2-translate';
 import { LocalStorageService } from 'src/app/local-storage.service';
 import { AuthenticationService } from 'src/app/login/authentication.service';
-
+import { MaterialModule} from '../../material/material.module'
+ 
 @Component({
   selector: 'app-agent-obligation',
   templateUrl: './agent-obligation.component.html',

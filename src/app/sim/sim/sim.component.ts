@@ -55,6 +55,7 @@ export class SimComponent implements OnInit {
   
   loadExcel(all=true){
     this.isLoadingResults=true;
+      console.log(this.filter.nativeElement.value);
     this.simService.getExcel(this.filter.nativeElement.value,!all?this.ids:[]).subscribe(res=>{
       window.open(res['url']);
       this.isLoadingResults=false;

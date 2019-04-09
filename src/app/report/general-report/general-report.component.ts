@@ -14,7 +14,7 @@ import { DisconnectMemberComponent } from '../disconnect-member/disconnect-membe
 @Component({
   selector: 'app-general-report',
   templateUrl: './general-report.component.html',
-  styleUrls: ['./general-report.component.css']
+  styleUrls: ['./general-report.component.scss']
 })
 export class GeneralReportComponent implements OnInit {
   orders:any[]=null;alls:any[]=null;loading:Boolean=false;db=new DB([]);ds:DS|null;lan:any;filter_by_date:Boolean=false;

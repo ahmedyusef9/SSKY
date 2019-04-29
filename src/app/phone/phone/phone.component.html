@@ -10,7 +10,13 @@
 float: left;margin-bottom:5px;margin-right:10px;">{{'internet'|translate}}<mat-icon color="primary">file_upload</mat-icon></button>
 <!-- <button mat-button style="position: relative;
 float: left;margin-bottom:5px;margin-right:10px;" (click)="loadExcel()">{{'excel'|translate}}&nbsp;<mat-icon color="primary">file_download</mat-icon></button> -->
-
+<button mat-button [matMenuTriggerFor]="menu" color="primary">הורדת אקסל
+    <mat-icon color="primary">cloud_download</mat-icon>
+  </button>
+<mat-menu #menu="matMenu">
+<button mat-menu-item (click)="loadExcel(true)">דף זה</button>
+<button mat-menu-item  (click)="loadExcel()">כל התוצאות</button>
+</mat-menu>
 </mat-toolbar>
 
 <div class="example-container mat-elevation-z8">
@@ -88,9 +94,15 @@ float: left;margin-bottom:5px;margin-right:10px;" (click)="loadExcel()">{{'excel
     <!-- <mat-paginator [length]="resultsLength" [pageSize]="30" style="display:none;">
         </mat-paginator> -->
         </div>
-        <mat-paginator  [length]="resultsLength"  [pageIndex]="0"  [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]" class="mat-paginator-sticky"   showFirstLastButtons></mat-paginator>
+        <mat-paginator  [length]="resultsLength"  [pageIndex]="0"  [pageSize]="30"  class="mat-paginator-sticky"   showFirstLastButtons>
         
-        <!-- <nav aria-label="..." style="padding:0 10px;">
+        </mat-paginator>
+       
+        
+        <!-- 
+            [pageSizeOptions]="[5, 10, 25, 100]"
+            
+            <nav aria-label="..." style="padding:0 10px;">
                 <ul class="pager" *ngIf="current_total>0">
                   <li class="" [ngClass]="{'disabled':pageIndex==1,'previous':true}"><a (click)="prev()" style="cursor:pointer;"><span aria-hidden="true">&rarr;</span> הקודם</a></li>
                   <li>

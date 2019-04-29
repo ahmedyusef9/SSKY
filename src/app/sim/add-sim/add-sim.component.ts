@@ -86,7 +86,7 @@ export class AddSimComponent implements OnInit {
           //this.data.sim.msgs.push({severity:'success', summary:'נשמר בהצלחה', detail:this.item.sim +' נשמר '});
           this.snackBar.openFromComponent(MsgComponent,{
             duration: 3000,
-            horizontalPosition:'right',
+            horizontalPosition:'left',
             data:{title:'נשמר בהצלחה',detail:this.item.sim +' נשמר ',art:'add',place:'sim'}
           });
           this.data.sim.loadSims();
@@ -106,7 +106,7 @@ export class AddSimComponent implements OnInit {
            // this.data.sim.msgs.push({severity:'success', summary:'נשמר בהצלחה', detail:' נשמר '});
             this.snackBar.openFromComponent(MsgComponent,{
               duration: 3000,
-              horizontalPosition:'right',
+              horizontalPosition:'left',
               data:{title:'נשמר בהצלחה',detail:' נשמר ',art:'add',place:'sim'}
             });
             this.data.sim.loadSims();

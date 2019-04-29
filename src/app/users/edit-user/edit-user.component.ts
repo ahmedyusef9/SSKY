@@ -120,7 +120,7 @@ export class EditUserComponent implements OnInit {
    // this.msgs.push({severity:'success', summary:'נשמר בהצלחה', detail:this.userForm.value +' נשמר '});
     this.snackBar.openFromComponent(MsgComponent,{
       duration: 3000,
-      horizontalPosition:'right',
+      horizontalPosition:'left',
       data:{title:'נשמר בהצלחה',detail:this.userForm.value +' נשמר ',art:'add',place:'user'}
     });
     this.router.navigate(['/']);

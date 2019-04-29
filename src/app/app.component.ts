@@ -10,6 +10,8 @@ import { MatSnackBar } from '@angular/material';
 import { SettingsService } from './settings/settings.service';
 import { MsgComponent } from './msg/msg.component';
 import * as AppConst from './app.const'; 
+import { MaterialModule } from './material/material.module';
+import { from } from 'rxjs';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -300,7 +302,7 @@ export class AppComponent implements OnInit {
     if(nn.length>0){
       this.snackBar.openFromComponent(MsgComponent, {
         duration: 7000,
-        horizontalPosition:'right',
+        horizontalPosition:'left',
         data:{data:nn,art:'new',place:'notification'}
       });
     }
@@ -321,7 +323,7 @@ export class AppComponent implements OnInit {
     if(nn.length>0){
       this.snackBar.openFromComponent(MsgComponent,{
         duration: 7000,
-        horizontalPosition:'right',
+        horizontalPosition:'left',
         data:{data:nn,art:'cancel',place:'notification'}
       });
     }
@@ -342,7 +344,7 @@ export class AppComponent implements OnInit {
     if(nn.length>0){
       this.snackBar.openFromComponent(MsgComponent,{
         duration: 7000,
-        horizontalPosition:'right',
+        horizontalPosition:'left',
         data:{data:nn,art:'trans',place:'notification'}
       });
     }

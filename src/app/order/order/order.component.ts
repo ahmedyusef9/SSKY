@@ -133,48 +133,33 @@ export class OrderComponent implements OnInit {
   getPhone(el){
     if(el.moved_to_phone && el.moved_to_phone!=0) return el.moved_to_phone; return el.phone;
    }
-   loadExcel(){
-     let excel:any=[];
-     this.ds.getFSData().forEach(el=>{
-       let a:any={
-         'id':el.id,
-         'עדכון אחרון':el.last_update,
-         'טלפון':this.getPhone(el),
-         'סוכן':el.agent_name,
-         'סים':el.sim,
-         'חברה':el.company_name,
-         'חבילה':el.product_name,
-         'סטטוס':this.transStatus(el.status) ,
-         'פעיל עד':el.status==='completed'?('עד :'+el.completed_date):'לא פעיל'
-       }
-       excel.push(a);
-     });
-    //  this.excelService.exportAsExcelFile(excel, 'הזמנות');
+   generateURL():String{
+        
+    let active=this.sort.active?this.sort.active:'id';
+    let direction=this.sort.direction?this.sort.direction:'asc';
+    // this.pageIndex=this.pageIndex+1
+    let search=this.filter.nativeElement.value;
+    return this.orderService.getUrl(active, direction, this.pageIndex,search);
+
    }
-   loadExcel2(){
-    this.loading=true;
-   this.orderService.getExcel(this.filter.nativeElement.value).subscribe(res=>{
-      this.loading=false;
-      let excel:any=[];
-      res.items.forEach(el=>{
-      let a:any={
-        'id':el.id,
-        'טלפון':this.getPhone(el),
-        'תאריך יצירה':el.created_at,
-        'מנויד ל' :el.moved_to_phone==='0'?'':el.moved_to_phone,
-        'ניוד פעיל':el.moved_to_phone==='0'?'':el.accepted_moved_to_phone==='1'?'כן':'לא',
-        'בשימוש':  el.used==='1'?'כן':'לא',      
-        'סוכן':el.agent_name,
-        'חברה':el.company_name,
-        'חבילה':el.product_name,
-        'אינטרנט':el.internet==0?'':el.internet,
-        'עדכון אינטרנט':el.internet==0?'':el.internet_update,
-      }
-      excel.push(a);
-    });
-    // this.excelService.exportAsExcelFile(excel, 'הזמנות');
-   })
-  }
+   loadExcel(value:boolean){
+    let url = this.generateURL();
+    console.log(url);
+    this.loading = true;
+    if(value==true){
+      this.orderService.getExcel(url+'&limit=30').subscribe(res=>{
+        window.open(res['url']);
+        this.loading=false;
+      });
+    }else{
+      // this.url = '';
+      this.orderService.getExcel(url).subscribe(res=>{
+        window.open(res['url']);
+        this.loading=false;
+      });
+    }
+   }
+   
   ngOnInit() {
     // this.sort.sortChange.subscribe(() =>{ this.paginator.pageIndex = 0;
     //   this.pageIndex=0;

@@ -17,6 +17,29 @@ export class MemberService {
   constructor(private _http:Http,private tokenService: Angular2TokenService) { 
     this.http = _http;
   }
+  getUrl(order:string,direction:string,page:number,search:string,agent_id=0,status=0):string{
+
+    let url='?order='+order+'&direction='+direction+'&page='+page;
+    if(agent_id>0){
+      url+='&agent_id='+agent_id;
+    }
+    if(status){
+      url+='&status='+status;
+    }
+    if(search && search.length>0){
+      url+='&search='+search; 
+    }
+    return url;
+  }
+  getCountOfAgentOrder(agent_id):Observable<any>{
+    let headers = new Headers({'Content-Type': 'application/json'});  
+    let ls = localStorage.getItem('currentUser');
+    let jls=JSON.parse(ls);
+    let authToken=jls.token;
+    headers.append('Authorization',`Bearer ${authToken}`)
+    this.options = new RequestOptions({headers: headers});
+    return this.http.get(this.apiRoot+'member/get1.php?count=all&agent_id='+agent_id, this.options);
+   }
   get(order:string,direction:string,page:number,search:string,agent_id=0,status=0){
     let headers = new Headers({'Content-Type': 'application/json'});  
     let ls = localStorage.getItem('currentUser');
@@ -37,7 +60,7 @@ export class MemberService {
     }
     return this.http.get(url, this.options).map(x=>x.json());
   }
-  getExcel(search:string,agent_id=0,status=0){
+  getExcel(search:String){
     let headers = new Headers({'Content-Type': 'application/json'});  
     let ls = localStorage.getItem('currentUser');
     let jls=JSON.parse(ls);
@@ -45,11 +68,8 @@ export class MemberService {
     headers.append('Authorization',`Bearer ${authToken}`)
     this.options = new RequestOptions({headers: headers});
     this.tokenService.init();
-    let url=this.apiRoot+'member/get_excel.php?agent_id='+agent_id+'&status='+status;
-   
-    if(search && search.length>0){
-      url+='&search='+search;
-    }
+    let url=this.apiRoot+'member/get_excel1.php'+search;
+    console.log(search);
     return this.http.get(url, this.options).map(x=>x.json());
   }
   delete(id:number){
@@ -70,7 +90,7 @@ export class MemberService {
     headers.append('Authorization',`Bearer ${authToken}`)
     this.options = new RequestOptions({headers: headers});
     this.tokenService.init();
-    return this.http.get(this.apiRoot+'member/get.php?agent_id='+agent, this.options).map(x=>x.json());
+    return this.http.get(this.apiRoot+'member/get1.php?agent_id='+agent+'&page=1', this.options).map(x=>x.json());
   }
   getNumbersMembers(number_search:string) :Observable<Array<Member>>{
     let headers = new Headers({'Content-Type': 'application/json'});  

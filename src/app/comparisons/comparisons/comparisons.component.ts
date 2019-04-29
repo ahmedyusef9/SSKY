@@ -9,6 +9,8 @@ import { TranslateService, LangChangeEvent } from 'ng2-translate';
 import { Router } from '@angular/router';
 import { ExcelService } from '../../excel.service';
 import { AuthenticationService } from '../../login/authentication.service';
+import { MsgComponent } from 'src/app/msg/msg.component';
+import { toBase64String } from '@angular/compiler/src/output/source_map';
 @Component({
   selector: 'app-comparisons',
   templateUrl: './comparisons.component.html',
@@ -39,11 +41,14 @@ export class ComparisonsComponent implements OnInit {
     private lsService:LocalStorageService,
     private mdPaginatorIntl:MatPaginatorIntl,
     public dialog: MatDialog,
+    // private msg:MsgComponent,
+    private snackBar: MatSnackBar,
     // private excelService:ExcelService,
     public authService:AuthenticationService) {
       localStorage.setItem('currentComponent','app-comparisons');
      }
   ngOnInit() {
+
    this.fromLs=this.hasCashe();
    this._selectedAll=false;
   }
@@ -78,30 +83,53 @@ export class ComparisonsComponent implements OnInit {
   getPhone(el){
     if(el.moved_to_phone && el.moved_to_phone!=0) return el.moved_to_phone; return el.phone;
    }
+   phones_statuses : string | null;
+   active_phones : string | null;
+   unActive_phones : string | null;
   loadExcel(){
     let excel:any=[];
     let name='השוואות ';
     let arr:any[];
     if(this.selectedTab=='phones_statuses'){
-      name+='סטטוסי טלפונים';
-      arr=this.dataSource.getFSData();
+ 
+       
+        if(this.phones_statuses){
+          window.open(this.phones_statuses);
+        }else{
+          this.snackBar.open("לא נמצא מספרים", 'Undo',{
+            duration: 2000,
+          });
+          name+='סטטוסי טלפונים';
+        // arr=this.dataSource3.getFSData();
+      }
+      // arr=this.dataSource.getFSData();
     }
     else if(this.selectedTab=='active_phones'){
-      name+='מספרים פעילים';
-      arr=this.dataSource2.getFSData();
+
+        if(this.active_phones){
+          window.open(this.active_phones);
+        }else{
+          this.snackBar.open("לא נמצא מספרים פעילים", 'Undo',{
+            duration: 2000,
+          });
+          name+='מספרים פעילים';
+        // arr=this.dataSource3.getFSData();
+      }
+
     }
     else{
+      if(this.unActive_phones){
+        window.open(this.unActive_phones);
+      }else{
+        this.snackBar.open("לא נמצא מספרים מנותקים", 'Undo',{
+          duration: 2000,
+        });
+       
       name+='מספרים מנותקים';
-      arr=this.dataSource3.getFSData();
+      // arr=this.dataSource3.getFSData();
     }
-    arr.forEach(el=>{
-      let a:any={
-        'טלפון':this.getPhone(el),
-        'סטטוס':this.getStatusName(el.status),
-        'תאריך ניתוק':el.completed_date
-      }
-      excel.push(a);
-    });
+  }
+
     // this.excelService.exportAsExcelFile(excel, name);
   }
   delete_cash(){
@@ -143,7 +171,7 @@ export class ComparisonsComponent implements OnInit {
   upload() {
     const fileBrowser = this.fileInput.nativeElement;
     if (fileBrowser.files && fileBrowser.files[0]) {
-      this.loading=true;
+      // this.loading=true;
       this.comparisonsService.uploadExcel(fileBrowser.files[0]).subscribe(
         res=>{
           if(res['_body'] ){
@@ -151,6 +179,11 @@ export class ComparisonsComponent implements OnInit {
             this.lsService.setStorage('excelPhones',JSON.stringify(r.data),99999999999999);
             this.fromLs=this.hasCashe();
             this.loading=false;
+            let url = r['url'];
+            this.phones_statuses = (url['all'])?url['all']:null;
+            this.active_phones = (url['in'])?url['in']:null;
+            this.unActive_phones = (url['notIn'])?url['notIn']:null;
+            console.log(r);
           }
       });
     }

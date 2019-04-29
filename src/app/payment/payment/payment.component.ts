@@ -73,23 +73,11 @@ export class PaymentComponent implements OnInit {
       });
     }
     loadExcel(){
-      let excel:any=[];
-      this.ds.getFSData().forEach(el=>{
-        let a:any={
-          'id':el.id,
-          'סוכן':el.agent_name,
-          'הוסף על ידי':el.add_by_name,
-          'סכום':el.amount,
-          'קשור לתאריך':el.related_to_date2,
-          'סוג תשלום' :this.getPaymentArt(el.art),
-          'חשבון לפני':el.account_before,
-          'טלפון':el.phone,
-          'הערה':el.note
-  
-        }
-        excel.push(a);
+      this.paymentService.getExcel().subscribe(res=>{
+        window.open(res['url']);
+        // this.isLoadingResults=false;
       });
-      // this.excelService.exportAsExcelFile(excel, 'תשלומים');
+
     }
   ngOnInit() {
     this.loadPayments();

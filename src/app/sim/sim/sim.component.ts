@@ -54,11 +54,11 @@ export class SimComponent implements OnInit {
               }
   
   loadExcel(all=true){
-    this.isLoadingResults=true;
+    // this.isLoadingResults=true;
       console.log(this.filter.nativeElement.value);
     this.simService.getExcel(this.filter.nativeElement.value,!all?this.ids:[]).subscribe(res=>{
       window.open(res['url']);
-      this.isLoadingResults=false;
+      // this.isLoadingResults=false;
     });
   }
   sims:Sim[];
@@ -278,7 +278,7 @@ export class DeleteDialog {
       
       this.snackBar.openFromComponent(MsgComponent,{
         duration: 3000,
-        horizontalPosition:'right',
+        horizontalPosition:'left',
         data:{title:todelete,detail:this.data.sim,art:'delete',place:'sim'}
       });
       this.data.isLoadingResults=false;

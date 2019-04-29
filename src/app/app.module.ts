@@ -46,7 +46,8 @@ import { GlobalDiscountModule } from './global-discount/global-discount.module';
 import { ComparisonsModule } from './comparisons/comparisons.module';
 import { ExcelOrderModule } from './excel-order/excel-order.module';
 import { AgentsCreditsModule } from './agents-credits/agents-credits.module';
-
+import { FlexLayoutModule } from '@angular/flex-layout';
+// import { ExcellentExport } from 'excellentexport';
 export function createTranslateLoader(http: Http) {
   return new TranslateStaticLoader(http, 'https://www.skypanel.net/api/lan', '.php');
 }
@@ -56,6 +57,8 @@ export function createTranslateLoader(http: Http) {
     MsgComponent
   ],
   imports: [
+    // ExcellentExport,
+    FlexLayoutModule,
     AgentModule,
     AgentOrderModule,
     BrowserModule,
@@ -107,7 +110,7 @@ export function createTranslateLoader(http: Http) {
      AgentModule,
      ConsumerModule
   ],
-  exports:[MaterialModule],
+  exports:[MaterialModule,FlexLayoutModule],
   providers: [
     AuthGuard,
     AdminGuard,

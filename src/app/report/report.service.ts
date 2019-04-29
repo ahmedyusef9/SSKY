@@ -48,7 +48,8 @@ export class ReportService {
     headers.append('Authorization',`Bearer ${authToken}`)
     this.options = new RequestOptions({headers: headers});
     this.tokenService.init();
-    let url=this.apiRoot+'order/_orders_report_excel.php'+params; 
+    console.log(params);
+    let url=this.apiRoot+'order/_orders_report_excel1.php'+params; 
     return this.http.get(url, this.options).map(x=>x.json());
   }
 }

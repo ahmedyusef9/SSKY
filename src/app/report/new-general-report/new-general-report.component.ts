@@ -252,56 +252,43 @@ export class NewGeneralReportComponent implements OnInit {
     if(el.moved_to_phone && el.moved_to_phone!=0)return el.moved_to_phone;
     return el.phone;
   }
-  loadExcel(){
-    let excel:any=[];
-    this.dataSource.getFSData().forEach(el=>{
-      let a:any={
-        'id':el.id,
-        'ביצוע הזמנה':el.valid_from,
-        'טלפון':this.getPhone(el),
-        'סוכן':el.agent_name,
-        'סים':el.sim,
-        'חברה':el.company_name,
-        'חבילה':el.product_name,
-        'סטטוס':this.transStatus(el.status) ,
-        'הערה':el.note ,
-        'פעיל עד':el.status==='completed'?('עד :'+el.completed_date):'לא פעיל',
-        'מחיר מומלץ':el.price,
-        'עלות':el.price_agent,
-        'החזר':el.rest,
-        'נמכר ללקוח':parseFloat(el.price)+parseFloat(el.profit)
-      }
-      if(this.__trans)a['טלפון זמני']=el.phone;
-      excel.push(a);
-    });
-    let name=this.transStatus(this.filterData.status);
-    // this.excelService.exportAsExcelFile(excel, 'דו"ח כללי'+'('+name+')');
+  loadExcel(value:boolean){
+    this.loadParams();
+    this.loading=true;
+
+    console.log(value);
+    if(value == true){
+      
+      this.reportService.getExcel(this.url+'&excelPage=1').subscribe(res=>{
+        
+        window.open(res['url']);
+        this.loading=false;
+        
+      // this.excelService.exportAsExcelFile(excel, 'דו"ח כללי');
+     })
+    }else{
+      
+      this.reportService.getExcel(this.url).subscribe(res=>{
+        console.log(res);
+        res['url'].forEach(element => {
+          window.open(element);
+        });
+        this.loading=false;
+        // window.open(res['url']);
+        
+      // this.excelService.exportAsExcelFile(excel, 'דו"ח כללי');
+     })
+
+    }
+    
   }
   loadExcel2(){
    this.loadParams();
    this.loading=true;
    this.reportService.getExcel(this.url).subscribe(res=>{
       this.loading=false;
-      let excel:any=[];
-      res.items.forEach(el=>{
-      let a:any={
-        'id':el.id,
-        'ביצוע הזמנה':el.valid_from,
-        'טלפון':this.getPhone(el),
-        'סוכן':el.agent_name,
-        'סים':el.sim,
-        'חברה':el.company_name,
-        'חבילה':el.product_name,
-        'סטטוס':this.transStatus(el.status) ,
-        'הערה':el.note ,
-        'פעיל עד':el.status==='completed'?('עד :'+el.completed_date):'לא פעיל',
-        'מחיר מומלץ':el.price,
-        'עלות':el.price_agent,
-        'החזר':el.rest,
-        'נמכר ללקוח':parseFloat(el.price)+parseFloat(el.profit)
-      }
-      excel.push(a);
-    });
+      window.open(res['url']);
+      
     // this.excelService.exportAsExcelFile(excel, 'דו"ח כללי');
    })
   }

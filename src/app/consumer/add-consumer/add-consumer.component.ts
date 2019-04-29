@@ -13,7 +13,7 @@ import { AuthenticationService } from '../../login/authentication.service';
 @Component({
   selector: 'app-add-consumer',
   templateUrl: './add-consumer.component.html',
-  styleUrls: ['./add-consumer.component.css'],
+  styleUrls: ['./add-consumer.component.scss'],
   providers: [ValidationService]
 })
 export class AddConsumerComponent implements OnInit {

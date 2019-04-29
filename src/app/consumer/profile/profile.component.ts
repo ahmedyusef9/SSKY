@@ -13,7 +13,7 @@ import { AuthenticationService } from '../../login/authentication.service';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
   id:number=null;
@@ -98,25 +98,65 @@ export class ProfileComponent implements OnInit {
   }
   load_orders:number=null;
   loadCustomer(){
+    let orders_array = new Array(); 
     this.loading=true;
     this.customerService.getConsumer(this.id).subscribe(res=>{
       this.loading=false;
       
       this.customer=res;
         this.memberService.getAgentMembers(this.customer.parent).subscribe(members=>{
-          this.loading=false;
-          console.log(members);
-          this.customer.members = members.filter(el=>el.consumer_id==this.customer.id);
+          // this.customer.members=members;
+          this.customer.members = members;
           this.load_orders=this.customer.members.length;
-          this.customer.members.forEach(member => {
-            this.loading=true;
-            this.orderService.getMemberOrders(member.id).subscribe(orders=>{
-              this.load_orders--;
+          console.log(this.customer.members);
+          // if(this.authService.isAgent()){
+          //   this.customer.members=this.customer.members.map(el=>(el.agent_id==0||el.agent_id==this.authService.getCurrentUserId()));
+          // }
+          // else{
+          //   this.customer.members=this.customer.members.map(el=>(el.agent_id==this.id));
+          // }
+          if(this.customer.members.length==0){
+           // this.loading=false;
+          }
+          if(this.customer.members.length>0){
+            this.customer.members.forEach(member=>{
+            
+              member.orders.map(v => orders_array.push(v));
+        
+              
+              });
+          }
               this.loading=false;
-            if(orders && !orders['message'])
-              member.orders=[orders.reverse()[0]];
-            });
-          });
+              
+         
+          
+          console.log(orders_array.length);
+          console.log(this.customer.members);
+          if(orders_array.length){
+            this.load_orders--;
+            this.customer.orders = orders_array;
+            
+          }
+          //if(this.check_member_orders==0)
+              //this.loading=false;
+    
+              this.loading=false;
+         
+         
+         
+          // this.loading=false;
+          // console.log(members);
+          // this.customer.members = members.filter(el=>el.consumer_id==this.customer.id);
+          // this.load_orders=this.customer.members.length;
+          // this.customer.members.forEach(member => {
+          //   this.loading=true;
+          //   this.orderService.getMemberOrders(member.id).subscribe(orders=>{
+          //     this.load_orders--;
+          //     this.loading=false;
+          //   if(orders && !orders['message'])
+          //     member.orders=[orders.reverse()[0]];
+          //   });
+          // });
         });
     });
   }

@@ -4,9 +4,11 @@
   </div>
   <ng-container *ngIf="!agent_id">
     <div class="col-lg-12" style="margin-top:20px;">
-        <mat-select placeholder="{{'agent'|translate}}" [(ngModel)]="agent_id" tabindex="1" (change)="init()">
+      <mat-form-field>
+        <mat-select placeholder="{{'agent'|translate}}" [(ngModel)]="agent_id" tabindex="1" (selectionChange)="init()">
             <mat-option *ngFor="let ag of agents" [value]="ag.id">{{ag.firstname}} {{ag.lastname}}</mat-option>
           </mat-select>
+        </mat-form-field>
     </div>
   </ng-container>
   <ng-container *ngIf="agent_id && products">
@@ -15,25 +17,25 @@
         <h3>{{'before_order'|translate}}</h3>
         <strong>{{'purchase_price'|translate}}:&nbsp;</strong>
         {{selectedProduct.product_price| number : '1.2-2'}}-{{(0.01*selectedProduct.discount*selectedProduct.product_price)| number : '1.2-2'}}=
-        {{(selectedProduct.product_price-(0.01*selectedProduct.discount*selectedProduct.product_price))| number : '1.2-2'|currency:'ILS':'code' }}
+        {{(selectedProduct.product_price-(0.01*selectedProduct.discount*selectedProduct.product_price))| number : '1.2-2'|currency:'ILS' }}
         <br/>
         <strong>{{'selling_price'|translate}}:&nbsp;</strong>{{selectedProduct.product_price| number : '1.2-2'}}+{{(selectedProduct.profit)| number : '1.2-2' }}=
-        {{selectedProduct.product_price+(selectedProduct.profit)| number : '1.2-2'|currency:'ILS':'code'}}
+        {{selectedProduct.product_price+(selectedProduct.profit)| number : '1.2-2'|currency:'ILS'}}
         <br/>
-        <strong>{{'obligation'|translate}}:</strong>{{obligation.obligation|currency:'ILS':'code'}}
+        <strong>{{'obligation'|translate}}:</strong>{{obligation.obligation|currency:'ILS'}}
         <br/>
         <span [ngClass]="{'green':obligation.credit>0,'red':obligation.credit<=0}">
-        <strong>{{'credit'|translate}}:</strong>{{obligation.credit|currency:'ILS':'code'}}</span>
+        <strong>{{'credit'|translate}}:</strong>{{obligation.credit|currency:'ILS'}}</span>
         <br/>
-        <strong>{{'all_payments'|translate}}:</strong>{{obligation.total_payments|currency:'ILS':'code'}}
+        <strong>{{'all_payments'|translate}}:</strong>{{obligation.total_payments|currency:'ILS'}}
         <br/>
-        <strong>{{'all_orders'|translate}}:</strong>{{obligation.total_orders|currency:'ILS':'code'}}
+        <strong>{{'all_orders'|translate}}:</strong>{{obligation.total_orders|currency:'ILS'}}
         <hr/>
         <h3>{{'after_order'|translate}}</h3><br/>
         <span [ngClass]="{'green':((obligation.credit)-(selectedProduct.product_price-(0.01*selectedProduct.discount*selectedProduct.product_price)))>0,'red':((obligation.credit)-(selectedProduct.product_price-(0.01*selectedProduct.discount*selectedProduct.product_price)))<=0}">
-        <strong>{{'credit'|translate}}:</strong>{{((obligation.credit)-(selectedProduct.product_price-(0.01*selectedProduct.discount*selectedProduct.product_price)))|currency:'ILS':'code'}}</span>
+        <strong>{{'credit'|translate}}:</strong>{{((obligation.credit)-(selectedProduct.product_price-(0.01*selectedProduct.discount*selectedProduct.product_price)))|currency:'ILS'}}</span>
         <br/>
-        <strong>{{'all_orders'|translate}}:</strong>{{(obligation.total_orders+(selectedProduct.product_price-(0.01*selectedProduct.discount*selectedProduct.product_price)))|currency:'ILS':'code'}}
+        <strong>{{'all_orders'|translate}}:</strong>{{(obligation.total_orders+(selectedProduct.product_price-(0.01*selectedProduct.discount*selectedProduct.product_price)))|currency:'ILS'}}
         <hr/>
     </ng-container>
   </div>
@@ -65,7 +67,7 @@
             </mat-chip> 
             <mat-chip>
               <span style="color:green;">
-                  {{(selectedProduct.product_price+(1*selectedProduct.profit))| currency:'ILS':'code' }}
+                  {{(selectedProduct.product_price+(1*selectedProduct.profit))| currency:'ILS' }}
               </span>
             </mat-chip>
         </mat-chip-list>
@@ -128,7 +130,7 @@
     <div class="col-lg-12" style="margin: 15px 5px;">
         <mat-chip-list style="display: table;width: auto;margin: auto;">
           
-            <mat-chip style="margin-bottom:10px;" style="color:red;" [selected]="true">{{'credit'|translate}}&nbsp;:&nbsp;{{0|currency:'ILS':'code'}}</mat-chip>
+            <mat-chip style="margin-bottom:10px;" style="color:red;" [selected]="true">{{'credit'|translate}}&nbsp;:&nbsp;{{0|currency:'ILS'}}</mat-chip>
             </mat-chip-list>
     </div>
   </ng-container>
@@ -136,9 +138,15 @@
       <div class="col-lg-12" style="margin: 15px 5px;">
           <h4>{{'select_product'|translate}}</h4> 
       </div>
-      <ng-container  *ngFor="let p of products" >
-      <div class="col-lg-4 col-mat-6 col-sm-6 col-xs-12" style="margin:10px 0 10px 0;cursor:pointer;" (click)="setProduct(p)"  *ngIf="p.active=='1' && inProducts(p)">
-          <mat-card>
+    
+          <!-- class="col-lg-4 col-mat-6 col-sm-6 col-xs-12" -->
+    <div fxLayout="row wrap"  fxLayoutGap="3px">
+    <!-- <div fxFlex fxFlex.xs>  -->
+        <!-- <div  fxLayout.xs="column" > -->
+    <ng-container  *ngFor="let p of products" >
+    
+      <div style="margin-top: 3px;" fxFlex.xs> 
+        <mat-card   style="cursor:pointer;" (click)="setProduct(p)"  *ngIf="p.active=='1' && inProducts(p)">
               <mat-card-header>
                   <mat-card-title>
                       <h4>{{getProductCompany(p)}}</h4>
@@ -152,7 +160,7 @@
                   </mat-card-subtitle>
                   <mat-card-subtitle>
                     <h2  class="accent">
-                        {{(p.product_price+(1*p.profit))| number : '1.2-2'|currency:'ILS':'code' }}
+                        {{(p.product_price+(1*p.profit))| number : '1.2-2'|currency:'ILS' }}
                     </h2>
                   </mat-card-subtitle>
                 </mat-card-header>
@@ -168,8 +176,12 @@
                 </span>
             </mat-card-content>
           </mat-card>
-      </div>
-    </ng-container>
+        </div>
+    
+      </ng-container>
+    <!-- </div> -->
+  </div>
+    
   </ng-container>
 </ng-container>
 </div>

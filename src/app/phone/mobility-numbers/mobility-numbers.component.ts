@@ -51,19 +51,10 @@ export class MobilityNumbersComponent implements OnInit {
       localStorage.setItem('currentComponent','app-mobility-numbers');
     }
     loadExcel(){
-      let excel:any=[];
-      this.dataSource.getFSData().forEach(el=>{
-        let a:any={
-          'id':el.id,
-          'טלפון':el.phone,
-          'מספר ניוד':el.moved_to_phone,
-          'חברה':el.company_name,
-          'ניוד בתאריך' :el.accepted_moved_to_phone==='1'?el.accepted_moved_date:'--'
-  
-        }
-        excel.push(a);
+      this.phoneService.getExcel('?trans=1').subscribe(res=>{
+        window.open(res['url']);
+        this.loading=false;
       });
-      // this.excelService.exportAsExcelFile(excel, 'ניוד מספרים');
     }
   phones:Phone[];
   loading:Boolean=false;

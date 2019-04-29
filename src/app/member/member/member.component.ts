@@ -105,43 +105,54 @@ export class MemberComponent implements OnInit {
   getPhone(el){
     if(el.moved_to_phone && el.moved_to_phone!=0) return el.moved_to_phone; return el.phone;
    }
-  loadExcel(){
-    let excel:any=[];
-    this.dataSource.getFSData().forEach(el=>{
-      let a:any={
-        'id':el.id,
-        'סוכן':el.agent_name,
-        'פעיל':el.active===1?'כן':'לא',
-        'חברה':el.company_name,
-        'טלפון':  this.getPhone(el),
-        'מניוד ל':el.moved_to_phone==='0'?'':el.moved_to_phone, 
-        'סים':el.sim
+   url:String;
+   generateURL():String{
+        
+    let active=this.sort.active?this.sort.active:'order_id';
+    let direction=this.sort.direction?this.sort.direction:'desc';
+    // this.pageIndex=this.pageIndex+1
+    let search=this.filter.nativeElement.value;
+    // this.loading = true;
+    return this.memberService.getUrl(active, direction, this.paginator.pageIndex +1,search,this.agent_id,this.status)
 
-      }
-      excel.push(a);
-    });
-    // this.excelService.exportAsExcelFile(excel, 'מנויים');
+   }
+   loadExcel(value:any){
+    let url = this.generateURL();
+    console.log(url);
+    if(value==true){
+      console.log(this.url);
+      this.memberService.getExcel(url+'&limit=30').subscribe(res=>{
+        window.open(res['url']);
+        this.isLoadingResults=false;
+      });
+    }else{
+      // this.url = '';
+      this.memberService.getExcel(url).subscribe(res=>{
+        window.open(res['url']);
+        this.isLoadingResults=false;
+      });
+    }
   }
-  loadExcel2(){
-    this.loading=true;
-   this.memberService.getExcel(this.filter.nativeElement.value,this.agent_id,this.status).subscribe(res=>{
-      this.loading=false;
-      let excel:any=[];
-      res.items.forEach(el=>{
-      let a:any={
-        'id':el.id,
-        'סוכן':el.agent_name,
-        'פעיל':el.active===1?'כן':'לא',
-        'חברה':el.company_name,
-        'טלפון':  this.getPhone(el),
-        'מניוד ל':el.moved_to_phone==='0'?'':el.moved_to_phone, 
-        'סים':el.sim
-      }
-      excel.push(a);
-    });
-    // this.excelService.exportAsExcelFile(excel, 'מנויים');
-   })
-  }
+  // loadExcel2(){
+  //   this.loading=true;
+  //  this.memberService.getExcel(this.filter.nativeElement.value,this.agent_id,this.status).subscribe(res=>{
+  //     this.loading=false;
+  //     let excel:any=[];
+  //     res.items.forEach(el=>{
+  //     let a:any={
+  //       'id':el.id,
+  //       'סוכן':el.agent_name,
+  //       'פעיל':el.active===1?'כן':'לא',
+  //       'חברה':el.company_name,
+  //       'טלפון':  this.getPhone(el),
+  //       'מניוד ל':el.moved_to_phone==='0'?'':el.moved_to_phone, 
+  //       'סים':el.sim
+  //     }
+  //     excel.push(a);
+  //   });
+  //   // this.excelService.exportAsExcelFile(excel, 'מנויים');
+  //  })
+  // }
   formOnInit(member:Member){
     let agent_id=null;
     if(this.authService.isAgent()){

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AgentService } from '../agent.service';
 import { UsersService } from 'src/app/users/users.service';
@@ -25,6 +25,8 @@ export class AgentComponent implements OnInit {
   public agent:any;
   loading:boolean=false;
   lan:any;
+  @ViewChild('tabGroup') tabGroup;
+  // @ViewChild() 
   constructor(
     private route: ActivatedRoute,
     private router:Router,
@@ -118,32 +120,34 @@ export class AgentComponent implements OnInit {
   check_member_orders:number=null;
   loadAgentData(){
     this.loading=true;
+    console.log("tabGroup"+this.tabGroup);
     this.userService.getUser(this.id).subscribe(agent=>{
       this.agent=agent;
-      console.log(agent);
-      this.memberService.getAgentMembers(this.id).subscribe(members=>{
-        this.loading=true;
-        this.agent.members=members;
-        if(this.authService.isAgent()){
-          this.agent.members=this.agent.members.filter(el=>(el.agent_id==0||el.agent_id==this.authService.getCurrentUserId()));
-        }
-        else{
-          this.agent.members=this.agent.members.filter(el=>(el.agent_id==this.id));
-        }
-        if(this.agent.members.length==0){
-          this.loading=false;
-        }
-        this.agent.members.forEach(member=>{
-          this.loading=true;
-          this.check_member_orders=this.agent.members.length;
-          this.orderService.getMemberOrders(member.id).subscribe(orders=>{
-            this.check_member_orders--;
-            this.loading=false;
-           if(orders && !orders['message'])
-            member.orders=[orders.reverse()[0]];
-          });
-        });
-      });
+      // console.log(agent);
+
+      // this.memberService.getAgentMembers(this.id).subscribe(members=>{
+      //   this.loading=true;
+      //   this.agent.members=members;
+      //   if(this.authService.isAgent()){
+      //     this.agent.members=this.agent.members.filter(el=>(el.agent_id==0||el.agent_id==this.authService.getCurrentUserId()));
+      //   }
+      //   else{
+      //     this.agent.members=this.agent.members.filter(el=>(el.agent_id==this.id));
+      //   }
+      //   if(this.agent.members.length==0){
+      //     this.loading=false;
+      //   }
+      //   this.agent.members.forEach(member=>{
+      //     this.loading=true;
+      //     this.check_member_orders=this.agent.members.length;
+      //     this.orderService.getMemberOrders(member.id).subscribe(orders=>{
+      //       this.check_member_orders--;
+      //       this.loading=false;
+      //      if(orders && !orders['message'])
+      //       member.orders=[orders.reverse()[0]];
+      //     });
+      //   });
+      // });
       this.obligationService.getObligation(this.id).subscribe(obligation=>{
         this.loading=false;
         this.agent.obligation=obligation;
@@ -159,36 +163,59 @@ export class AgentComponent implements OnInit {
     });
   }
   openMore(){}
+  url:string|null;
   loadMembers(){
-    this.loading=true;
+    // this.loading=true;
+    console.log(this.tabGroup);
+    let orders_array = new Array(); 
     this.memberService.getAgentMembers(this.id).subscribe(members=>{
-     // this.loading=false;
+    
       this.agent.members=members;
+      // console.log(this.agent.members);
       if(this.authService.isAgent()){
         this.agent.members=this.agent.members.filter(el=>(el.agent_id==0||el.agent_id==this.authService.getCurrentUserId()));
       }
       else{
         this.agent.members=this.agent.members.filter(el=>(el.agent_id==this.id));
       }
-      if(this.agent.members.length==0){
-       // this.loading=false;
+      if(this.agent.members.length>0){
+        this.tabGroup.selectedIndex = 0;
       }
-      this.check_member_orders=this.agent.members.length;
+      // this.check_member_orders=this.agent.members.length;
       if(this.agent.members.length==0)
           this.loading=false;
+          
       this.agent.members.forEach(member=>{
+        
+      member.orders.map(v => orders_array.push(v));
+
+        // console.log(orders_array.length);
+        
+        // console.log(this.agent);
         //this.loading=true;
         
-        this.orderService.getMemberOrders(member.id).subscribe(orders=>{
-          this.check_member_orders--;
-          if(this.check_member_orders==0 || this.agent.members.length==0)
-          this.loading=false;
-         if(orders && !orders['message'])
-          member.orders=[orders.reverse()[0]];
-        });
+        // this.orderService.getMemberOrders(member.id).subscribe(orders=>{
+        //   this.check_member_orders--;
+        //   if(this.check_member_orders==0 || this.agent.members.length==0)
+        //    this.loading=false;
+        //  if(orders && !orders['message'])
+        //   member.orders=[orders.reverse()[0]];
+        // });
       });
+      
+      // console.log(orders_array.length);
+      // console.log(this.agent.members);
+      // console.log(this.check_member_orders);
+      // console.log(this.check_member_orders);
+      if(orders_array.length){
+        this.check_member_orders--;
+        this.agent.orders = orders_array;
+        
+      }
       //if(this.check_member_orders==0)
           //this.loading=false;
+
+          this.loading=false;
     });
   }
 }

@@ -9,11 +9,11 @@
         <div class="example-container mat-elevation-z8">
                 <div class="example-header">
                     <mat-form-field floatPlaceholder="never">
-                        <input mdInput placeholder="{{'search'|translate}}" #filter>
-                        <mat-icon mdSuffix>search</mat-icon>
+                        <input matInput placeholder="{{'search'|translate}}" #filter>
+                        <mat-icon matSuffix>search</mat-icon>
                     </mat-form-field>
                 </div>
-                <mat-table #table [dataSource]="ds" dir="RTL" mdSort>
+                <mat-table #table [dataSource]="ds" dir="RTL" matSort>
                     <ng-container matColumnDef="id">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
                         <mat-cell *matCellDef="let row" >

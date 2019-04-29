@@ -42,6 +42,7 @@ import { OrderInfoComponent } from './order/order-info/order-info.component';
 const routes: Routes = [
   { path: AppConst.Routes.home.path,component: HomeComponent , canActivate: [AuthGuard]},
   { path: AppConst.Routes.consumers.path,component: ConsumerComponent , canActivate: [AuthGuard]},
+  { path: AppConst.Routes.new_order.path,component: NewChargeComponent , canActivate: [AuthGuard]},
   { path: AppConst.Routes.addConsumer.path,component: AddConsumerComponent , canActivate: [AuthGuard]},
   { path: AppConst.Routes.editConsumer.path,component: EditConsumerComponent , canActivate: [AuthGuard]},
   { path: AppConst.Routes.viewConsumer.path,component: ProfileComponent , canActivate: [AuthGuard]},

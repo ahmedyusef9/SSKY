@@ -63,9 +63,47 @@
    
           <br/><br/>
             
-       
-        <table class="table table-bordered">
-          <thead>
+          <div class="example-table-container">
+        <table mat-table #table [dataSource]="number_list" dir="RTL" >
+            <ng-container matColumnDef="index">
+                <th mat-header-cell *matHeaderCellDef  >-</th> 
+                <td mat-cell *matCellDef="let row; let i = index;" > 
+                    <!-- <button mat-button [routerLink]="['/סוכן', row.agent_id]" routerLinkActive="active" color="primary">{{row.agent_name}} </button> -->
+                    {{i+1}}
+                  </td>
+            </ng-container>
+            <ng-container matColumnDef="phone">
+                <th mat-header-cell *matHeaderCellDef  >{{'phone'|translate}} </th> <!--[ngClass]="{'dn':authService.isAgent()}"-->
+                <td mat-cell *matCellDef="let row" [ngClass]="{'table-danger':!row.phone_in,'table-success':row.phone_in}"> <!--[ngClass]="{'dn':authService.isAgent()}"-->
+                    <!-- <button mat-button [routerLink]="['/סוכן', row.agent_id]" routerLinkActive="active" color="primary">{{row.agent_name}} </button> -->
+                    
+                    {{row.phone}}
+                  </td>
+            </ng-container> 
+            <ng-container matColumnDef="sim">
+                <th mat-header-cell *matHeaderCellDef  >{{'sim'|translate}} </th> <!--[ngClass]="{'dn':authService.isAgent()}"-->
+                <td mat-cell *matCellDef="let row" [ngClass]="{'table-danger':!row.sim_in,'table-success':row.sim_in}"> <!--[ngClass]="{'dn':authService.isAgent()}"-->
+                    <!-- <button mat-button [routerLink]="['/סוכן', row.agent_id]" routerLinkActive="active" color="primary">{{row.agent_name}} </button> -->
+                    {{row.sim}}
+                  </td>
+            </ng-container> 
+            <ng-container matColumnDef="days_to_disconnect">
+                <th mat-header-cell *matHeaderCellDef  >{{'days_to_disconnect'|translate}}</th> <!--[ngClass]="{'dn':authService.isAgent()}"-->
+                <td mat-cell *matCellDef="let row" > <!--[ngClass]="{'dn':authService.isAgent()}"-->
+                    <!-- <button mat-button [routerLink]="['/סוכן', row.agent_id]" routerLinkActive="active" color="primary">{{row.agent_name}} </button> -->
+                    {{row?.day_count}}
+                  </td>
+            </ng-container> 
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef  >#</th> <!--[ngClass]="{'dn':authService.isAgent()}"-->
+                <td mat-cell *matCellDef="let row" > <!--[ngClass]="{'dn':authService.isAgent()}"-->
+                    <!-- <button mat-button [routerLink]="['/סוכן', row.agent_id]" routerLinkActive="active" color="primary">{{row.agent_name}} </button> -->
+                    <mat-icon (click)="resetNumber(i)" style="cursor:pointer;">close</mat-icon>
+                  </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns ; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>     
+          <!-- <thead>
             <tr>
               <th>#</th>
               <th>{{'phone'|translate}}</th>
@@ -83,8 +121,11 @@
               <td><mat-icon (click)="resetNumber(i)" style="cursor:pointer;">close</mat-icon></td>
             </tr>
             
-          </tbody>
+          </tbody> -->
         </table>
+      </div>
+        <!-- <mat-paginator  [length]="number_list.length" [pageIndex]="0" [pageSize]="30"  >
+          </mat-paginator> -->
       </ng-container>
   </div>
   

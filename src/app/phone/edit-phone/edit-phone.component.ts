@@ -80,7 +80,7 @@ export class EditPhoneComponent{
         this.phoneService.update(this.item).subscribe(res => {
         this.snackBar.openFromComponent(MsgComponent,{
           duration: 3000,
-          horizontalPosition:'right',
+          horizontalPosition:'left',
           data:{title:'נשמר בהצלחה',detail:this.item.phone +' נשמר ',art:'edit',place:'phone'}
         });
         this.data.phone.loadPhones();

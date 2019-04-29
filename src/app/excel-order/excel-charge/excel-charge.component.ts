@@ -30,7 +30,8 @@ export class ExcelChargeComponent implements OnInit {
   agent:number=null;
   loading:Boolean=false;
   api:Boolean=true;
-  searchAgents:any[]
+  searchAgents:any[];
+  displayedColumns = [ 'index','phone','action'];
   @ViewChild('fileInput') fileInput;
   constructor( private agentService:AgentService,
     private usersService:UsersService,

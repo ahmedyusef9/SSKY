@@ -36,6 +36,7 @@ export class PhoneComponent implements OnInit {
   total_pages=0;
   current_total=0;
   pageIndex=0;
+  url:string;
   init_data(data){
     this.loading = false;
     this.isRateLimitReached = false;
@@ -95,26 +96,34 @@ export class PhoneComponent implements OnInit {
        getPhone(el){
         if(el.moved_to_phone && el.moved_to_phone!=0) return el.moved_to_phone; return el.phone;
        }
-      loadExcel(){
-        let excel:any=[];
-        this.dataSource.getFSData().forEach(el=>{
-          let a:any={
-            'id':el.id,
-            'טלפון':this.getPhone(el),
-            'תאריך יצירה':el.created_at,
-            'מנויד ל' :el.moved_to_phone==='0'?'':el.moved_to_phone,
-            'ניוד פעיל':el.moved_to_phone==='0'?'':el.accepted_moved_to_phone==='1'?'כן':'לא',
-            'בשימוש':  el.used==='1'?'כן':'לא',     
-            'סוכן':el.agent_name,
-            'חברה':el.company_name,
-            'חבילה':el.product_name,
-            'אינטרנט':el.internet==0?'':el.internet,
-            'עדכון אינטרנט':el.internet==0?'':el.internet_update,
+       generateURL(){
+        
+        let active=this.sort.active?this.sort.active:'id';
+        let direction=this.sort.direction?this.sort.direction:'asc';
+        let search=this.filter.nativeElement.value;
+        let page = this.paginator.pageIndex +1;
+        this.url = '?order='+active+'&direction='+direction+'&page='+page;
+        if(search && search.length>0){
+          this.url+='&search='+search;
+        }
+        return this.url;
 
-          }
-          excel.push(a);
-        });
-        // this.excelService.exportAsExcelFile(excel, 'מספרי טלפון');
+       }
+      loadExcel(value:any){
+        this.generateURL();
+        if(value==true){
+          console.log(this.url);
+          this.phoneService.getExcel(this.url).subscribe(res=>{
+            window.open(res['url']);
+            this.isLoadingResults=false;
+          });
+        }else{
+          this.url += 'all=1';
+          this.phoneService.getExcel(this.url).subscribe(res=>{
+            window.open(res['url']);
+            this.isLoadingResults=false;
+          });
+        }
       }
       loadExcel2(){
         this.loading=true;
@@ -200,6 +209,13 @@ export class PhoneComponent implements OnInit {
     }
     return this.companies.filter(
       company => company.id === id)[0].name;
+  }
+  loadParms(){
+        // this.isLoadingResults = true;
+        let active=this.sort.active?this.sort.active:'id';
+        let direction=this.sort.direction?this.sort.direction:'asc';
+        let search=this.filter.nativeElement.value;
+        
   }
   ngOnInit() {
     // this.loading = true;

@@ -3,8 +3,8 @@
       <button mat-button color="primary" (click)="loadMembers()">{{'load_members'|translate}}</button>
     </div>
   </div>
-  <mat-tab-group  *ngIf="agent">
-      <mat-tab label="{{'members'|translate}}" *ngIf="agent.members && check_member_orders!=null && check_member_orders==0">
+  <mat-tab-group #tabGroup *ngIf="agent">
+      <mat-tab label="{{'members'|translate}}" *ngIf="agent.members && check_member_orders!=null ">
           <div class="demo-tab-content">
             <app-agent-members [agent]="agent"></app-agent-members>
           </div>

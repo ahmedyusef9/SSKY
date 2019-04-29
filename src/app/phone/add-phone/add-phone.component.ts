@@ -69,7 +69,7 @@ export class AddPhoneComponent {
           this.phoneService.add([this.item]).subscribe(res => {
          this.snackBar.openFromComponent(MsgComponent,{
           duration: 3000,
-          horizontalPosition:'right',
+          horizontalPosition:'left',
           data:{title:'נשמר בהצלחה',detail:this.item.phone +' נשמר ',art:'add',place:'phone'}
         });
           this.data.phone.loadPhones();
@@ -94,7 +94,7 @@ export class AddPhoneComponent {
             });
             this.snackBar.openFromComponent(MsgComponent,{
               duration: 3000,
-              horizontalPosition:'right',
+              horizontalPosition:'left',
               data:{title:'נשמר בהצלחה',detail:' נשמר ',art:'add',place:'phone'}
             });
             this.data.phone.loadPhones();

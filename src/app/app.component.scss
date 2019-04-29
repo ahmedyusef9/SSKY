@@ -36,6 +36,13 @@ button {
 .sidenav {
     padding: 0px;
   }
+  .mat-card.home-card {
+    text-align: center;
+    cursor: pointer;
+    width: 150;
+    width: 180px;
+    margin-bottom: 10px;
+}
 
 // @import 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css';
 // @import '//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css';

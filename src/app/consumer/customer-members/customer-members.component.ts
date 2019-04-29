@@ -7,16 +7,18 @@ import { MatSort, MatPaginator } from '@angular/material';
 import { DS } from '../../datasource/ds';
 import { DB } from '../../database/db';
 import { Observable } from 'rxjs/Observable';
-
+// /Users/hostgate/Desktop/Ccs/ssky/ssky/node_modules/excellentexport/excellentexport.js
+// import { excellentexport } from './../../../../node_modules/excellentexport/dist/excellentexport.js'
 @Component({
   selector: 'app-customer-members',
   templateUrl: './customer-members.component.html',
-  styleUrls: ['./customer-members.component.css']
+  styleUrls: ['./customer-members.component.scss']
 })
 export class CustomerMembersComponent implements OnInit {
 
   constructor(private trans:TranslateService,
     private lsService:LocalStorageService,
+    // private ExcellentExport:excel,
     // private excelService:ExcelService,
     public authService:AuthenticationService) {
      this.lan=this.lsService.getStorage('lan');
@@ -134,6 +136,8 @@ export class CustomerMembersComponent implements OnInit {
   }
   consumer_name:'';
   loadExcel(){
+    // this.ExcellentExport.convert({ anchor: this, filename: 'data_123.array', format: 'xlsx'},[{name: 'Sheet Name Here 1', from: {table: 'datatable'}}])
+    // console.log(excellentexport);
     let excel:any=[];
     this.ds.getFSData().forEach(el=>{
       let a:any={

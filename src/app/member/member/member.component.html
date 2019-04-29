@@ -4,7 +4,13 @@
     float: left;margin-bottom:5px;margin-right:10px"><mat-icon color="primary">add_circle</mat-icon></button>
     <!-- <button mat-button style="position: relative;
     float: left;margin-bottom:5px;margin-right:10px;" (click)="loadExcel()">{{'excel'|translate}}&nbsp;<mat-icon color="primary">file_download</mat-icon></button> -->
-    
+    <button mat-button [matMenuTriggerFor]="menu" color="primary">הורדת אקסל
+        <mat-icon color="primary">cloud_download</mat-icon>
+      </button>
+    <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="loadExcel(true)">דף זה</button>
+    <button mat-menu-item  (click)="loadExcel()">כל התוצאות</button>
+    </mat-menu>
 </mat-toolbar>
 <div class="example-container mat-elevation-z8">
         <div class="example-header" *ngIf="authService.canUpdate() && agents && agents.length>0">

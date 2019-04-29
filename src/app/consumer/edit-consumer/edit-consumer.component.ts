@@ -14,7 +14,7 @@ import { AuthenticationService } from '../../login/authentication.service';
 @Component({
   selector: 'app-edit-consumer',
   templateUrl: './edit-consumer.component.html',
-  styleUrls: ['./edit-consumer.component.css'],
+  styleUrls: ['./edit-consumer.component.scss'],
   providers: [/*ServerDateTimeService,*/ValidationService]
 })
 export class EditConsumerComponent implements OnInit {

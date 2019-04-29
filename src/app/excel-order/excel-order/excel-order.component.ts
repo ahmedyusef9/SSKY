@@ -35,6 +35,7 @@ export class ExcelOrderComponent implements OnInit {
   searchAgents:any[];
   sent_msg:Boolean=true;
   start_date:any=new Date();
+  displayedColumns = [ 'index','phone','sim','days_to_disconnect','action'];
   @ViewChild('fileInput') fileInput;
   constructor( private agentService:AgentService,
     private usersService:UsersService,

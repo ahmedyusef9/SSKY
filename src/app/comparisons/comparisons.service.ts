@@ -21,7 +21,7 @@ export class ComparisonsService {
     formData.append("files", data);
     return this.tokenService.request({
       method: 'post',
-      url: this.apiRoot+'phone/upload_excel.php',
+      url: this.apiRoot+'phone/upload_excel1.php',
       body: formData,
       headers: options.headers
     });    	    

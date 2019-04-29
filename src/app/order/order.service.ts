@@ -89,6 +89,7 @@ export class OrderService {
     let ls = localStorage.getItem('currentUser');
     let jls=JSON.parse(ls);
     let authToken=jls.token;
+    // console.log(jls);
     headers.append('Authorization',`Bearer ${authToken}`)
     this.options = new RequestOptions({headers: headers});
     this.tokenService.init();
@@ -179,6 +180,13 @@ export class OrderService {
     this.tokenService.init();
     return this.http.get(this.apiRoot+'order/orders_report.php?all='+all+'&page='+page+'&limit='+limit, this.options).map(x=>x.json());
   }
+  getUrl(order:string,direction:string,page:number,search:string){
+    let url='?order='+order+'&direction='+direction+'&page='+page;
+    if(search && search.length>0){
+      url+='&search='+search;
+    }
+    return url;
+  }
   get(order:string,direction:string,page:number,search:string){
     let headers = new Headers({'Content-Type': 'application/json'});  
     let ls = localStorage.getItem('currentUser');
@@ -193,7 +201,7 @@ export class OrderService {
     }
     return this.http.get(url, this.options).map(x=>x.json());
   }
-  getExcel(search:string){
+  getExcel(search:String){
     let headers = new Headers({'Content-Type': 'application/json'});  
     let ls = localStorage.getItem('currentUser');
     let jls=JSON.parse(ls);
@@ -201,11 +209,9 @@ export class OrderService {
     headers.append('Authorization',`Bearer ${authToken}`)
     this.options = new RequestOptions({headers: headers});
     this.tokenService.init();
-    let url=this.apiRoot+'order/get_excel.php';
-    if(search && search.length>0){
-      url+='?search='+search;
-    }
-    return this.http.get(url, this.options).map(x=>x.json());
+    let url=this.apiRoot+'order/get_excel1.php';
+ 
+    return this.http.get(url+search, this.options).map(x=>x.json());
   }
   getMemberOrders(member_id) :Observable<Array<Order>>{
     let headers = new Headers({'Content-Type': 'application/json'});  

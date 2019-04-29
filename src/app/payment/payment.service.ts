@@ -65,6 +65,16 @@ export class PaymentService {
     this.tokenService.init();
     return this.http.get(this.apiRoot+'payment/get.php?agent_id='+agent_id, this.options).map(x=>x.json());
   }
+  getExcel(){
+    let headers = new Headers({'Content-Type': 'application/json'});  
+    let ls = localStorage.getItem('currentUser');
+    let jls=JSON.parse(ls);
+    let authToken=jls.token;
+    headers.append('Authorization',`Bearer ${authToken}`)
+    this.options = new RequestOptions({headers: headers});
+    this.tokenService.init();
+    return this.http.get(this.apiRoot+'payment/get_excel.php', this.options).map(x=>x.json());
+  }
   getPayment(id:number) :Observable<Array<Payment>>{
     let headers = new Headers({'Content-Type': 'application/json'});  
     let ls = localStorage.getItem('currentUser');

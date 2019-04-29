@@ -5,6 +5,7 @@ import { Angular2TokenService } from 'angular2-token';
 import { Observable } from 'rxjs';
 import { Phone } from '../model/phone';
 import { distinctUntilChanged, debounceTime, filter } from 'rxjs/operators';
+import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 @Injectable({
   providedIn: 'root'
 })
@@ -16,6 +17,7 @@ http: Http;
   constructor(private _http:Http,private tokenService: Angular2TokenService) { 
     this.http = _http;
   }
+  
   getPhones() :Observable<Array<Phone>>{
     return this.http.get(this.apiRoot+'phone/get.php',this.getOptions()).map(x=>x.json());
   }
@@ -33,7 +35,7 @@ http: Http;
     }
     return this.http.get(url, this.options).map(x=>x.json());
   }
-  getExcel(search:string){
+  getExcel(search:String){
     let headers = new Headers({'Content-Type': 'application/json'});  
     let ls = localStorage.getItem('currentUser');
     let jls=JSON.parse(ls);
@@ -41,10 +43,8 @@ http: Http;
     headers.append('Authorization',`Bearer ${authToken}`)
     this.options = new RequestOptions({headers: headers});
     this.tokenService.init();
-    let url=this.apiRoot+'phone/get_excel.php';
-    if(search && search.length>0){
-      url+='?search='+search;
-    }
+    let url=this.apiRoot+'phone/get_excel1.php'+search;
+    console.log(search);
     return this.http.get(url, this.options).map(x=>x.json());
   }
   getTrans() :Observable<Array<Phone>>{

@@ -36,7 +36,7 @@ export class CompanyComponent implements OnInit {
     this.companyService.update(company).subscribe(res => { 
       this.snackBar.openFromComponent(MsgComponent,{
         duration: 3000,
-        horizontalPosition:'right',
+        horizontalPosition:'left',
         data:{title:'נשמר בהצלחה',detail:company.name +' נשמר ',art:'add',place:'company'}
       });
     });
@@ -123,7 +123,7 @@ export class CompanyComponent implements OnInit {
       this.companyService.add(company).subscribe(res => {
         this.snackBar.openFromComponent(MsgComponent,{
           duration: 3000,
-          horizontalPosition:'right',
+          horizontalPosition:'left',
           data:{title:'נשמר בהצלחה',detail:this.companyForm.value.name +' נשמר ' ,art:'add',place:'company'}
         });
         this.companyForm.value.name='';
@@ -141,7 +141,7 @@ export class CompanyComponent implements OnInit {
       this.companyService.update(this.item).subscribe(res => {
         this.snackBar.openFromComponent(MsgComponent,{
           duration: 3000,
-          horizontalPosition:'right',
+          horizontalPosition:'left',
           data:{title:'נשמר בהצלחה',detail:this.companyForm.value.name +' נשמר ' ,art:'add',place:'company'}
         });
         this.companyForm.value.name='';

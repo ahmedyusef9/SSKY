@@ -1,5 +1,5 @@
 import { Declaration } from '@angular/language-service';
-import { Component, OnInit, ViewContainerRef, Output, Input } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, Output, Input, ViewChild, EventEmitter } from '@angular/core';
 import { User } from "../../model/user";
 import { Level } from "../../model/level";
 import { UsersService } from "../users.service";
@@ -11,8 +11,12 @@ import { Router } from '@angular/router';
 import { TranslateService, LangChangeEvent } from 'ng2-translate';
 import { LocalStorageService } from '../../local-storage.service';
 import { AuthenticationService } from '../../login/authentication.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatAutocompleteSelectedEvent } from '@angular/material';
 import { MsgComponent } from '../../msg/msg.component';
+import { Observable } from 'rxjs';
+import { startWith, map, switchMap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import {GlobalDiscountService } from './../../global-discount/global-discount.service';
+
 @Component({
   selector: 'app-add-user',
   templateUrl: './add-user.component.html',
@@ -20,8 +24,15 @@ import { MsgComponent } from '../../msg/msg.component';
   providers: [/*ServerDateTimeService*/ValidationService]
 })
 export class AddUserComponent implements OnInit {
- 
-
+  discount:any;
+  toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
+  searchAgent = new FormControl();
+  discounts = new FormControl();
+  selected_discounts:any;
+  users : any;
+  filteredOptions: Observable<any[]>;
+  @ViewChild('copyAgent') copyAgent ;
+  show:boolean|false;
   startDate = new Date(1980, 0, 1);
   public dt: ServerDateTime[];
   item: User;
@@ -31,34 +42,11 @@ export class AddUserComponent implements OnInit {
   editRowId:number=0;
   userLevels: Level[]=[];
    agents: User[]=[];
-  toggleEdit(id){
-    this.editRowId = id;
-  }
-  loadLevels() {
-    this.userService.getUserLevels().subscribe(res => {
-       
-        this.userLevels = res.reverse().filter(el=>this.authService.isAdmin()?true:el.id==3);
-      
-      });
-    this.userService.getAgents().subscribe(res => {
-       
-        this.agents = res.reverse();
-      
-      });
-  }
-  timeout() { 
-    setTimeout(() => {
-      this.timeout();
-    }, 1000);
-  }
-   timeoutMSG() { 
-    setTimeout(() => {
-      this.clear();
-    }, 7000);
-  } 
+ 
   lan:any;
   constructor(
     private formBuilder: FormBuilder,
+    private GlobalDiscountService:GlobalDiscountService,
     private userService:UsersService,
     private validationService:ValidationService,
     private router:Router,private trans:TranslateService,
@@ -72,6 +60,38 @@ export class AddUserComponent implements OnInit {
       this.timeout(); 
       this.timeoutMSG(); 
     }
+    toggleEdit(id){
+      this.editRowId = id;
+    }
+    ShowAgentChoose(){
+      this.show = !this.show;
+      console.log(this.show);
+    }
+    selectAgentEmitter(option:any){
+      console.log(option);
+    }
+    loadLevels() {
+      this.userService.getUserLevels().subscribe(res => {
+         
+          this.userLevels = res.reverse().filter(el=>this.authService.isAdmin()?true:el.id==3);
+        
+        });
+      this.userService.getAgents().subscribe(res => {
+         
+          this.agents = res.reverse();
+        
+        });
+    }
+    timeout() { 
+      setTimeout(() => {
+        this.timeout();
+      }, 1000);
+    }
+     timeoutMSG() { 
+      setTimeout(() => {
+        this.clear();
+      }, 7000);
+    } 
 
   onChangeEvent({target}){
     this.name = target.value;
@@ -90,7 +110,7 @@ export class AddUserComponent implements OnInit {
     horizontalPosition:'left',
     data:{title:'נשמר בהצלחה',detail:this.item.username +' נשמר ',art:'add',place:'user'}
   });
-   this.router.navigate(['/משתמשים']);
+  //  this.router.navigate(['/משתמשים']);
   }
  
   private setForm() {
@@ -106,7 +126,8 @@ export class AddUserComponent implements OnInit {
       address:[this.item.address],
       mobile:[this.item.mobile,this.validationService.phoneValidation],
       birthday:[this.item.birthday],
-      level_id:[this.item.level_id,this.validationService.levelValidation]
+      level_id:[this.item.level_id,this.validationService.levelValidation],
+      searchAgent:[null]
     });
   }
   
@@ -134,10 +155,45 @@ export class AddUserComponent implements OnInit {
         level_id: this.authService.getCurrentUserLevel()==2?3:0,
         lang:'he',
         block_my_members:'0',
-        change_price:'0'
+        change_price:'0',
       };
      this.setForm();
+
+
+
+     this.userService.getUsers().subscribe(res => {
+      // this.loading=false;
+       if(!res['message']) {
+       this.users = res.reverse();
+       console.log(this.users);
+       this.intilizeFilterAutoComplet();
+
+      //  this.initUserDatabase();
+       }
+      });
+    //  console.log(this.filteredStates);
     
+    //  console.log(this.users);
+  }
+  displayFn(user?:any): string | undefined {
+    console.log(user);
+    return user ? this.returnName(this.filteredOptions.filter(value => value['id']==user)): undefined;
+  }
+  returnName(user:any){
+    return user.firstname+" "+user.lastname;
+  }
+
+intilizeFilterAutoComplet(){
+    this.filteredOptions = this.searchAgent.valueChanges
+    .pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );
+  }
+  private _filter(value: string): string[] {
+    const filterValue = value;
+    // console.log(value);
+    return this.users.filter(option => (option.firstname.indexOf(filterValue)>=0 || option.lastname.indexOf(filterValue)>=0));
   }
   
   clear() {

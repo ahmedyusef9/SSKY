@@ -11,10 +11,23 @@ import { Angular2TokenService } from 'angular2-token';
   providedIn: 'root'
 })
 export class UsersService {
+
+
+ 
  http: Http;
   headers: Headers;
   options: RequestOptions;
   apiRoot:String=AppConst.API_ENDPOINT;
+
+  getUserSettings(id: any):Observable<any>{
+    let headers = new Headers({'Content-Type': 'application/json'});  
+    let ls = localStorage.getItem('currentUser');
+    let jls=JSON.parse(ls);
+    let authToken=jls.token;
+    headers.append('Authorization',`Bearer ${authToken}`)
+    this.options = new RequestOptions({headers: headers});
+    return this.http.get(this.apiRoot+'user/get.php&settings='+id,this.options).map(x=>x.json());
+  }
   getUsers() :Observable<Array<User>>{
     let headers = new Headers({'Content-Type': 'application/json'});  
     let ls = localStorage.getItem('currentUser');

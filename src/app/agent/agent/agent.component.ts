@@ -169,14 +169,14 @@ export class AgentComponent implements OnInit {
     console.log(this.tabGroup);
     let orders_array = new Array(); 
     this.memberService.getAgentMembers(this.id).subscribe(members=>{
-    
+      
       this.agent.members=members;
       // console.log(this.agent.members);
       if(this.authService.isAgent()){
         this.agent.members=this.agent.members.filter(el=>(el.agent_id==0||el.agent_id==this.authService.getCurrentUserId()));
       }
       else{
-        this.agent.members=this.agent.members.filter(el=>(el.agent_id==this.id));
+        // this.agent.members=this.agent.members.filter(el=>(el.agent_id==this.id));
       }
       if(this.agent.members.length>0){
         this.tabGroup.selectedIndex = 0;
@@ -214,7 +214,7 @@ export class AgentComponent implements OnInit {
       }
       //if(this.check_member_orders==0)
           //this.loading=false;
-
+          this.agent.loadedPages = 1;
           this.loading=false;
     });
   }

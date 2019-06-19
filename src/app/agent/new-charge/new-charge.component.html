@@ -140,13 +140,13 @@
       </div>
     
           <!-- class="col-lg-4 col-mat-6 col-sm-6 col-xs-12" -->
-    <div fxLayout="row wrap"  fxLayoutGap="3px">
+    <div fxLayout="row wrap" fxLayoutGap="25px" fxLayoutAlign="flex-start">
     <!-- <div fxFlex fxFlex.xs>  -->
         <!-- <div  fxLayout.xs="column" > -->
     <ng-container  *ngFor="let p of products" >
     
-      <div style="margin-top: 3px;" fxFlex.xs> 
-        <mat-card   style="cursor:pointer;" (click)="setProduct(p)"  *ngIf="p.active=='1' && inProducts(p)">
+      <!-- <div style="margin-top: 3px;" fxFlex.xs>  -->
+        <mat-card   fxFlex="0 1 calc(33.3% - 32px)" style="cursor:pointer;" (click)="setProduct(p)"  *ngIf="p.active=='1' && inProducts(p)" style="margin-bottom: 10px;">
               <mat-card-header>
                   <mat-card-title>
                       <h4>{{getProductCompany(p)}}</h4>
@@ -176,7 +176,7 @@
                 </span>
             </mat-card-content>
           </mat-card>
-        </div>
+        <!-- </div> -->
     
       </ng-container>
     <!-- </div> -->

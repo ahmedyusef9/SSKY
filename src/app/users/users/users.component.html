@@ -55,7 +55,7 @@
         <tr mat-header-row  *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-    <mat-paginator #paginator [length]="usersDatabase.data.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+    <mat-paginator #paginator [length]="usersDatabase.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
     </mat-paginator>
 </div>
 <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>

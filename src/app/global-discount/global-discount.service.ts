@@ -18,6 +18,19 @@ export class GlobalDiscountService {
     private authenticationService: AuthenticationService) { 
     this.http = _http;
   }
+  getDiscountsByAgentId(id:number=0):Observable<Array<AgentDiscount>>{
+    let headers = new Headers({'Content-Type': 'application/json'});  
+    let ls = localStorage.getItem('currentUser');
+    let jls=JSON.parse(ls);
+    let authToken=jls.token;
+    headers.append('Authorization',`Bearer ${authToken}`)
+    this.options = new RequestOptions({headers: headers});
+    let url:string='discount/get_by_agent.php';
+    if(id>0){
+      url+='?agent_id='+id;
+    }
+    return this.http.get(this.apiRoot+url,this.options).map(x=>x.json());
+  }
   getDiscounts(id:number=0):Observable<Array<AgentDiscount>>{
     let headers = new Headers({'Content-Type': 'application/json'});  
     let ls = localStorage.getItem('currentUser');

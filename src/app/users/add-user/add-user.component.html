@@ -57,7 +57,39 @@
             <input matInput formControlName="phone" placeholder="{{'phone'|translate}}"/>
             <valid-err [control]="userForm.controls['phone']"></valid-err>
         </mat-form-field>
-        <button mat-raised-button [disabled]="!userForm.valid" type="submit" >{{'add'|translate}}</button>
+        <mat-form-field style="width:30%">
+                <input matInput formControlName="searchAgent" [matAutocomplete]="auto" placeholder="{{'agent'|translate}}"/>
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                        <!-- [value]="option.firstname +' '+option.lastname" -->
+                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option.id" > 
+                                {{option.firstname +" "+option.lastname }}
+                        </mat-option>
+
+                </mat-autocomplete>
+        </mat-form-field>
+        <!-- <mat-form-field style="width:30%">
+            <mat-label>הנחות</mat-label>
+            <mat-select [formControl]="discounts" [(ngModel)]="discount" multiple>
+                <mat-option *ngFor="let item of discount" [value]="item" selected>{{item.name}}</mat-option>
+            </mat-select>
+        </mat-form-field> -->
+        <!-- <mat-form-field style="width:30%">
+            <mat-label>חסמות</mat-label>
+            <mat-select [formControl]="discounts" [(ngModel)]="selected_discounts" multiple>
+                <mat-option *ngFor="let item of discount" [value]="item" selected>{{item.name}}</mat-option>
+            </mat-select>
+        </mat-form-field> -->
+        <!-- <mat-form-field style="width:60%">
+                <input matInput [formControl]="searchAgent" [matAutocomplete]="auto" placeholder="{{'agent'|translate}}"/>
+                <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let option of filteredOptions | async" (onSelect)="selectAgent(option.id)"  [value]="option.firstname +' '+option.lastname">
+                                    {{option.firstname +" "+option.lastname }}
+                        </mat-option>
+    
+                    </mat-autocomplete>
+        </mat-form-field> -->
+        <button mat-raised-button  type="submit" >{{'add'|translate}}</button>
+        <!-- [disabled]="!userForm.valid" -->
     </form>
 </div>
 

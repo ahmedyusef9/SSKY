@@ -16,6 +16,9 @@ import { MemberService } from 'src/app/member/member.service';
 export class AgentMembersComponent implements OnInit {
   @Input() agent:any;
   lan:any;
+  url:String|null;
+  dataBaseLength:any;
+  loadedPages:any;
   public members:any[]=[];
   ordersCount:Observable<any> ;
   @ViewChild('filter1') filter1:ElementRef;
@@ -37,11 +40,13 @@ export class AgentMembersComponent implements OnInit {
         return;}
       this.ds.filter=this.filter1.nativeElement.value;
     });
+    this.dataBaseLength = this.ds['_Database']['data'].length;
   }
   constructor(private trans:TranslateService,
     private lsService:LocalStorageService,
     public authService:AuthenticationService,
     private memberService:MemberService,
+    
     // private excelService:ExcelService
     ){
       this.lan=this.lsService.getStorage('lan');
@@ -50,14 +55,82 @@ export class AgentMembersComponent implements OnInit {
     });
     localStorage.setItem('currentComponent','app-agent-members');
   }
+  optimizeDataset(Data:any){
+    this.agent.members.push(Data);
+    this.agent.members.forEach(el=>{
+        
+      if(el.has_orders){
+        el.orders.forEach(ord => {
+          // console.log(el);
+        let member:any={
+          'id':ord.member_id,
+          'consumer_name':ord.agent_name,
+          'accepted_moved_to_phone':el.accepted_moved_to_phone,
+          'phone_id':el.phone_id,
+          'company_id':el.company_id,
+          'product_id':'',
+          'phone':el.phone,
+          'moved_to_phone':el.moved_to_phone,
+          'has_orders':(el.orders && el.orders.length>0)?true:false,
+          'company_name':'',
+          'product_name':'',
+          'product_name_ar':'',
+          'status':'',
+          'completed_date_sec':'',
+          'completed_date':'',
+          'order_id':'',
+        };
+        
+            member.company_name=ord.company_name;
+            member.company_id=ord.company_id;
+            member.company_name_ar=ord.company_name_ar;
+            member.product_id=ord.product_id;
+            member.company_name_en=ord.company_name_en;
+            member.product_name=ord.product_name;
+            member.product_name_ar=ord.product_name_ar;
+            member.product_name_en=ord.product_name_en;
+            member.status=ord.status;
+            member.completed_date_sec=ord.completed_date_sec;
+            member.completed_date=ord.completed_date;
+            member.order_id=ord.id;
+
+            this.members.push(member);
+          });
+          
+        }
+       
+      });
+      // console.log(this.members);
+      this.initMembersDatabase();
+
+  }
+  loadnextPage(){
+    this.loadedPages++;
+    this.memberService.getAgentMembersloader(this.agent.id,this.loadedPages).subscribe(members=>{
+      // console.log(members);
+      this.optimizeDataset(members);
+    })
+
+  }
+  nextPageLabel(){
+    console.log("test123");
+  }
   ngOnInit(){
     merge(this.sort1.sortChange, this.paginator1.page,Observable.fromEvent(this.filter1.nativeElement,'keyup')).pipe(
       
     ).subscribe(v =>{
-      console.log(v);
+      // console.log(this.paginator1.pageIndex);
+      // console.log(this.sort1);
+      let page = Math.floor(this.dataBaseLength / v['pageSize']);
+      console.log(page);
+        if(this.paginator1.pageIndex>page){
+          this.loadnextPage();
+        }
+        
     })
     if(this.agent && this.agent.members && this.agent.members.length>0){
       console.log(this.agent);
+      this.loadedPages = this.agent.loadedPages;
       this.agent.members.forEach(el=>{
         
       if(el.has_orders){

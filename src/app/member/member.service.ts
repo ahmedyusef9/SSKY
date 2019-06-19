@@ -82,6 +82,16 @@ export class MemberService {
     this.tokenService.init();
     return this.http.delete(this.apiRoot+'member/delete.php?id='+id, this.options ); 
   }
+  getAgentMembersloader(agent:number,page:number) :Observable<Array<Member>>{
+    let headers = new Headers({'Content-Type': 'application/json'});  
+    let ls = localStorage.getItem('currentUser');
+    let jls=JSON.parse(ls);
+    let authToken=jls.token;
+    headers.append('Authorization',`Bearer ${authToken}`)
+    this.options = new RequestOptions({headers: headers});
+    this.tokenService.init();
+    return this.http.get(this.apiRoot+'member/get1.php?agent_id='+agent+'&page='+page, this.options).map(x=>x.json());
+  }
   getAgentMembers(agent:number) :Observable<Array<Member>>{
     let headers = new Headers({'Content-Type': 'application/json'});  
     let ls = localStorage.getItem('currentUser');

@@ -25,7 +25,7 @@ export class ValidationService {
   }
   levelValidation(control: FormControl): ValidationErrors {
     let level_id=control.value;
-    if(!level_id || ![1,2,3].includes(parseInt(level_id))){
+    if(!level_id || ![1,2,3,4].includes(parseInt(level_id))){
        return {errorLevel:true};
     }
     return null;

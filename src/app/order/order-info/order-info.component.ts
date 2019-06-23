@@ -89,32 +89,32 @@ timeout() {
   setTimeout( ()=> {
    
     //if(this.order!=null){
-      this.settingsService.getTime().subscribe(t=>{
-        let tt:any=t; 
-        this.currentTime=tt._body;
-        this.restTimeToCancel=(this.timeToActiveCancel-tt._body).toFixed(0);
-        this.restTimeToCancelM = Math.floor(this.restTimeToCancel / 60);
-        this.restTimeToCancelS = this.restTimeToCancel - this.restTimeToCancelM  * 60;
-        this.restTimeToCancelH = Math.floor(this.restTimeToCancel / 3600);
-        this.restTimeToCancelM= this.restTimeToCancelM%60;
-        if(localStorage.getItem('currentComponent')&&localStorage.getItem('currentComponent')=='app-order-info'){
-          if(this.timeToActiveCancel==null||(this.timeToActiveCancel!=null && (this.timeToActiveCancel-tt._body)>=0)){
-            if((this.order!=null && this.order.status=='completed')){
-               this.timeout();
-            }
-          }
-        }
-      });
+      // this.settingsService.getTime().subscribe(t=>{
+      //   let tt:any=t; 
+      //   this.currentTime=tt._body;
+      //   this.restTimeToCancel=(this.timeToActiveCancel-tt._body).toFixed(0);
+      //   this.restTimeToCancelM = Math.floor(this.restTimeToCancel / 60);
+      //   this.restTimeToCancelS = this.restTimeToCancel - this.restTimeToCancelM  * 60;
+      //   this.restTimeToCancelH = Math.floor(this.restTimeToCancel / 3600);
+      //   this.restTimeToCancelM= this.restTimeToCancelM%60;
+      //   if(localStorage.getItem('currentComponent')&&localStorage.getItem('currentComponent')=='app-order-info'){
+      //     if(this.timeToActiveCancel==null||(this.timeToActiveCancel!=null && (this.timeToActiveCancel-tt._body)>=0)){
+      //       if((this.order!=null && this.order.status=='completed')){
+      //          this.timeout();
+      //       }
+      //     }
+      //   }
+      // });
   }, 1000);
 }
   loadData(){
     this.orderService.getOrder(this.id).subscribe(orderRes=>{
       if(orderRes && !orderRes['message']){
         this.order=orderRes;
-       // if(this.order.status=='completed'){
+       if(this.order.status=='completed'){
         this.getTimeToCancel();
           this.timeout();
-       // }
+       }
        // }
         this.memberService.getMember(this.order.member_id).subscribe(
           memberRes=>{
@@ -261,6 +261,7 @@ timeout() {
     return c;
   }
   doLoading(){
+    console.log("test");
     this.loading=false;
     if(this.order==null||
       this.agent==null||

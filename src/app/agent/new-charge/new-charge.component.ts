@@ -344,6 +344,7 @@ export class NewChargeComponent implements OnInit {
           free:this.block_others?'0':'1',
           note:this.note
         }
+        console.log("test");
         this.loading2=true;
         this.loading=true;
         this.agentService.addMemberAndOrder(order).subscribe(res=>{

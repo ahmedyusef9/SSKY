@@ -9,10 +9,13 @@ import { MAT_SNACK_BAR_DATA, MatSnackBarRef } from '@angular/material';
 export class MsgComponent implements OnInit {
 
   constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any,
-              private snackBarRef: MatSnackBarRef<MsgComponent>) { }
+              private snackBarRef: MatSnackBarRef<MsgComponent>) { 
+                // this.snackBarRef._dismissAfter(5000);
+              }
 
   ngOnInit() {
-    this.snackBarRef.dismissWithAction();
+    console.log(this.data);
+    // this.snackBarRef.dismissWithAction();
   }
 
 }

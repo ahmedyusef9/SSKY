@@ -58,10 +58,10 @@
             <valid-err [control]="userForm.controls['phone']"></valid-err>
         </mat-form-field>
         <mat-form-field style="width:30%">
-                <input matInput formControlName="searchAgent" [matAutocomplete]="auto" placeholder="{{'agent'|translate}}"/>
+                <input matInput [formControl]="searchAgent" [matAutocomplete]="auto" placeholder="{{'agent'|translate}}"/>
                 <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
                         <!-- [value]="option.firstname +' '+option.lastname" -->
-                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option.id" > 
+                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option" > 
                                 {{option.firstname +" "+option.lastname }}
                         </mat-option>
 
@@ -88,7 +88,7 @@
     
                     </mat-autocomplete>
         </mat-form-field> -->
-        <button mat-raised-button  type="submit" >{{'add'|translate}}</button>
+        <button mat-raised-button   [disabled]="!userForm.valid" type="submit" >{{'add'|translate}}</button>
         <!-- [disabled]="!userForm.valid" -->
     </form>
 </div>

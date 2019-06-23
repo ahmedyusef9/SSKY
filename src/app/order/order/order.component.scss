@@ -68,3 +68,16 @@ th.mat-column-position, td.mat-column-position {
   z-index: 101;
   height: 100%;
 }
+
+.completed{
+  color: green;
+}
+
+.declined{
+  color: red;
+  font-weight: bold;
+}
+.cancel{
+  color: red;
+  font-weight: bold;
+}

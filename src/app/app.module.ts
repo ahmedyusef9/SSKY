@@ -47,9 +47,10 @@ import { ComparisonsModule } from './comparisons/comparisons.module';
 import { ExcelOrderModule } from './excel-order/excel-order.module';
 import { AgentsCreditsModule } from './agents-credits/agents-credits.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
 // import { ExcellentExport } from 'excellentexport';
 export function createTranslateLoader(http: Http) {
-  return new TranslateStaticLoader(http, 'https://www.skypanel.net/api/lan', '.php');
+  return new TranslateStaticLoader(http, 'https://www.skypanel.net/api-test/lan', '.php');
 }
 @NgModule({
   declarations: [
@@ -120,6 +121,8 @@ export function createTranslateLoader(http: Http) {
     ServerDateTimeService,
     Angular2TokenService,
     JwtHelper,
+    // {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}}
+    // ,
     { provide: 'Window',  useValue: window },
     { 
       provide: ServerDateTimeService, 

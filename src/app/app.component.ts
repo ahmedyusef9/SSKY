@@ -11,7 +11,7 @@ import { SettingsService } from './settings/settings.service';
 import { MsgComponent } from './msg/msg.component';
 import * as AppConst from './app.const'; 
 import { MaterialModule } from './material/material.module';
-import { from } from 'rxjs';
+import { from, Observer, Observable } from 'rxjs';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -87,6 +87,17 @@ export class AppComponent implements OnInit {
       this.sno=false;
     }
   }
+
+  new_orders_test:Observable<Array<any>>;
+  count_new_orders_test:Number | 0;
+
+  cancel_orders_test:Observable<Array<any>>;
+  count_cancel_orders_test:Number | 0;
+
+  trans_phones_test:Observable<Array<any>>;
+  count_trans_phones_test:Number | 0;
+  
+
   ngOnInit() {
      this.timeoutNew();
     this.timeoutNew2();
@@ -149,7 +160,7 @@ export class AppComponent implements OnInit {
     }
   }
   timeoutNew() { 
-    setTimeout( ()=> {
+    setInterval( ()=> {
       if(this.lsService.getStorage('count_new_orders') && this.lsService.getStorage('count_new_orders')!=null){
         this.count_new_orders=JSON.parse(this.lsService.getStorage('count_new_orders'));
       }
@@ -166,11 +177,11 @@ export class AppComponent implements OnInit {
         this.new_orders=[];
         this.loadNewOrders();
       }
-      this.timeoutNew();
+      // this.timeoutNew();
     }, this.notification_time);
   }
   timeoutCancel() {
-    setTimeout( ()=> {
+    setInterval( ()=> {
       if(this.lsService.getStorage('count_cancel_orders') && this.lsService.getStorage('count_cancel_orders')!=null){
         this.count_cancel_orders=JSON.parse(this.lsService.getStorage('count_cancel_orders'));
       }
@@ -187,11 +198,11 @@ export class AppComponent implements OnInit {
         this.cancel_orders=[];
         this.loadCancelOrders();
       }
-      this.timeoutCancel();
+      // this.timeoutCancel();
     }, this.notification_time);
   }
   timeoutTrans() {
-    setTimeout( ()=> {
+    setInterval( ()=> {
       if(this.lsService.getStorage('count_trans_phones') && this.lsService.getStorage('count_trans_phones')!=null){
         this.count_trans_phones=JSON.parse(this.lsService.getStorage('count_trans_phones'));
       }
@@ -208,28 +219,28 @@ export class AppComponent implements OnInit {
         this.trans_phones=[];
         this.loadTransPhones();
       }
-      this.timeoutTrans();
+      // this.timeoutTrans();
     }, this.notification_time);
   }
   timeoutNew2(){
-    setTimeout( ()=> {
+    setInterval( ()=> {
       this.loadNotificationNewCounts();
       this.loadNewOrders();
-      this.timeoutNew2();
+      // this.timeoutNew2();
     }, this.notification_time);
   }
   timeoutCancel2(){
-    setTimeout( ()=> {
+    setInterval( ()=> {
       this.loadNotificationCancelCounts();
       this.loadCancelOrders();
-      this.timeoutCancel2();
+      // this.timeoutCancel2();
     }, this.notification_time);
   }
   timeoutTrans2(){
-    setTimeout( ()=> {
+    setInterval( ()=> {
       this.loadNotificationTransCounts();
       this.loadTransPhones();
-      this.timeoutTrans2();
+      // this.timeoutTrans2();
     }, this.notification_time);
   }
   loadNewOrders(){
@@ -288,6 +299,8 @@ export class AppComponent implements OnInit {
   }
   snackBarNewOrder(n,o){
     let nn:any[]=[];
+    console.log(n);
+    console.log(o);
     if(o==null || o===null){
       nn=n;
     }
@@ -300,6 +313,7 @@ export class AppComponent implements OnInit {
        });
     }
     if(nn.length>0){
+      // console.log("test1");
       this.snackBar.openFromComponent(MsgComponent, {
         duration: 7000,
         horizontalPosition:'left',
@@ -321,11 +335,13 @@ export class AppComponent implements OnInit {
        });
     }
     if(nn.length>0){
+      // console.log("test2");
       this.snackBar.openFromComponent(MsgComponent,{
         duration: 7000,
         horizontalPosition:'left',
         data:{data:nn,art:'cancel',place:'notification'}
       });
+
     }
   }
   snackBarTransPhones(n,o){
@@ -342,6 +358,7 @@ export class AppComponent implements OnInit {
        });
     }
     if(nn.length>0){
+      // console.log("test3");
       this.snackBar.openFromComponent(MsgComponent,{
         duration: 7000,
         horizontalPosition:'left',

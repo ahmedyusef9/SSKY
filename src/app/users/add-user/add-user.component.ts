@@ -16,6 +16,7 @@ import { MsgComponent } from '../../msg/msg.component';
 import { Observable } from 'rxjs';
 import { startWith, map, switchMap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import {GlobalDiscountService } from './../../global-discount/global-discount.service';
+import { customerLevel } from 'src/app/model/customerLevel';
 
 @Component({
   selector: 'app-add-user',
@@ -25,7 +26,6 @@ import {GlobalDiscountService } from './../../global-discount/global-discount.se
 })
 export class AddUserComponent implements OnInit {
   discount:any;
-  toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
   searchAgent = new FormControl();
   discounts = new FormControl();
   selected_discounts:any;
@@ -72,9 +72,11 @@ export class AddUserComponent implements OnInit {
     }
     loadLevels() {
       this.userService.getUserLevels().subscribe(res => {
-         
-          this.userLevels = res.reverse().filter(el=>this.authService.isAdmin()?true:el.id==3);
-        
+        let customer_lvl = new customerLevel();
+        this.userLevels = res.reverse().filter(el=>this.authService.isAdmin()?true:el.id==3);
+        this.userLevels.push(customer_lvl);
+
+        console.log(this.userLevels);
         });
       this.userService.getAgents().subscribe(res => {
          
@@ -99,6 +101,7 @@ export class AddUserComponent implements OnInit {
   
   save() {
     let id = this.item.id;
+    this.userForm.get("copyfrom").setValue(this.searchAgent.value.id);
     this.item = this.userForm.value;
     this.userService.add(this.item).subscribe(res => { });
     
@@ -115,7 +118,7 @@ export class AddUserComponent implements OnInit {
  
   private setForm() {
     this.userForm = this.formBuilder.group({
-      username: [this.item.username, Validators.required],
+      username: [this.item.username],
       password: [null, Validators.required],
       re_password:[null,this.validationService.checkPassword],
       email: [this.item.email, this.validationService.emailValidation],
@@ -127,7 +130,7 @@ export class AddUserComponent implements OnInit {
       mobile:[this.item.mobile,this.validationService.phoneValidation],
       birthday:[this.item.birthday],
       level_id:[this.item.level_id,this.validationService.levelValidation],
-      searchAgent:[null]
+      copyfrom:[]
     });
   }
   
@@ -175,13 +178,10 @@ export class AddUserComponent implements OnInit {
     
     //  console.log(this.users);
   }
-  displayFn(user?:any): string | undefined {
-    console.log(user);
-    return user ? this.returnName(this.filteredOptions.filter(value => value['id']==user)): undefined;
+  displayFn(option?:any): string | undefined {
+    return option ? option.firstname+" "+option.lastname: undefined;
   }
-  returnName(user:any){
-    return user.firstname+" "+user.lastname;
-  }
+
 
 intilizeFilterAutoComplet(){
     this.filteredOptions = this.searchAgent.valueChanges

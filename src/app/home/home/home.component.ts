@@ -41,13 +41,6 @@ export class HomeComponent implements OnInit {
   orders:any[];//set in member-search
   ngOnInit() {
    
-    this.notifi.getNewOrders().subscribe(data =>{
-      this.snackBar.openFromComponent(MsgComponent, {
-       
-        data:{data:data,art:'new',place:'notification'}
-      });
-      
-    });
    
     
   }

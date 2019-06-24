@@ -37,6 +37,7 @@ export class ExcelOrderComponent implements OnInit {
   start_date:any=new Date();
   displayedColumns = [ 'index','phone','sim','days_to_disconnect','action'];
   @ViewChild('fileInput') fileInput;
+  disableButton: boolean = false;
   constructor( private agentService:AgentService,
     private usersService:UsersService,
     private agentOrderService:AgentOrderService,
@@ -102,6 +103,7 @@ export class ExcelOrderComponent implements OnInit {
     this.number_list=[];
     this.loading=true;
     const fileBrowser = this.fileInput.nativeElement;
+    // console.log(fileBrowser);
     if (fileBrowser.files && fileBrowser.files[0]) {
       this.phoneService.addPhonesAndSimsExcel(fileBrowser.files[0]).subscribe(
         res=>{
@@ -140,9 +142,12 @@ export class ExcelOrderComponent implements OnInit {
       sent_msg:this.sent_msg?'1':'0',
       start_date:this.start_date
     };
+    console.log("test createOrders");
     this.loading=true;
+    this.disableButton=true;
     this.orderService.createOrders(orders).subscribe(res=>{
       this.loading=false;
+      this.disableButton=false;
       this.router.navigate(['/הזמנות']);
     });
   }

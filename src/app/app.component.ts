@@ -99,12 +99,12 @@ export class AppComponent implements OnInit {
   
 
   ngOnInit() {
-     this.timeoutNew();
-    this.timeoutNew2();
-    this.timeoutCancel();
-    this.timeoutCancel2();
-    this.timeoutTrans();
-    this.timeoutTrans2();
+    //  this.timeoutNew();
+    // this.timeoutNew2();
+    // this.timeoutCancel();
+    // this.timeoutCancel2();
+    // this.timeoutTrans();
+    // this.timeoutTrans2();
   }
   getPath(name,params=[]){ 
     let path= '/'+AppConst.Routes[name].path;

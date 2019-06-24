@@ -59,7 +59,7 @@
   <div class="col-lg-12"  style="margin:10px 0 10px 0;padding:30px;">
         <ng-container *ngIf="number_list && number_list.length>0">
           <br/><br/>
-          <button mat-raised-button color="primary" (click)="createOrders()" style="position: relative;margin-bottom:5px;float:left">ביצוע הזמנות</button>
+          <button mat-raised-button [disabled]="disableButton" color="primary" (click)="createOrders()" style="position: relative;margin-bottom:5px;float:left">ביצוע הזמנות</button>
    
           <br/><br/>
             

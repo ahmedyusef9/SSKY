@@ -14,7 +14,7 @@ export class MsgComponent implements OnInit {
               }
 
   ngOnInit() {
-    console.log(this.data);
+    // console.log(this.data);
     // this.snackBarRef.dismissWithAction();
   }
 

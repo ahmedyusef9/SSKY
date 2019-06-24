@@ -14,6 +14,8 @@ import { LocalStorageService } from '../../local-storage.service';
 import { UsersService } from '../../users/users.service';
 import { elementAt } from 'rxjs/operator/elementAt';
 import { FormControl } from '@angular/forms';
+import { MsgComponent } from 'src/app/msg/msg.component';
+import { MatSnackBar } from '@angular/material';
 @Component({
   selector: 'app-excel-charge',
   templateUrl: './excel-charge.component.html',
@@ -33,6 +35,7 @@ export class ExcelChargeComponent implements OnInit {
   searchAgents:any[];
   displayedColumns = [ 'index','phone','action'];
   @ViewChild('fileInput') fileInput;
+  disableButton: boolean = false;
   constructor( private agentService:AgentService,
     private usersService:UsersService,
     private agentOrderService:AgentOrderService,
@@ -46,6 +49,7 @@ export class ExcelChargeComponent implements OnInit {
     private trans:TranslateService, 
     private lsService:LocalStorageService,
     public authService:AuthenticationService,
+    public snackBar: MatSnackBar,
     private route: ActivatedRoute) {
     
    }
@@ -139,9 +143,22 @@ export class ExcelChargeComponent implements OnInit {
       api:this.api?'1':'0'
     };
     this.loading=true;
+    this.disableButton=true;
     this.orderService.createOrders2(orders).subscribe(res=>{
       this.loading=false;
-      this.router.navigate(['/הזמנות']);
+      this.disableButton=false;
+      let message = res.json().message;
+      if( Array.isArray(message)){
+        this.snackBar.openFromComponent(MsgComponent,{
+          duration: 7000,
+          horizontalPosition:'left',
+          data:{data:message,art:'txtMsg',place:'excel-charge'}
+        });
+      }else{
+        
+        this.router.navigate(['/הזמנות']);
+      }
+     
     });
   }
  

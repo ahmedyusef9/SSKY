@@ -113,7 +113,7 @@ export class AddUserComponent implements OnInit {
     horizontalPosition:'left',
     data:{title:'נשמר בהצלחה',detail:this.item.username +' נשמר ',art:'add',place:'user'}
   });
-  //  this.router.navigate(['/משתמשים']);
+   this.router.navigate(['/משתמשים']);
   }
  
   private setForm() {

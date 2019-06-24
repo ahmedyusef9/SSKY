@@ -150,7 +150,7 @@ export class AgentMembersComponent implements OnInit {
       }else{
         this.filter1.nativeElement.value = "";
       }
-      console.log("test123");
+      // console.log("test123");
       if(Math.floor(this.ordersCount / this.paginator1.pageIndex)>=0){
         this.sortingParams["page"] =  this.paginator1.pageIndex;
       }else{
@@ -238,7 +238,7 @@ export class AgentMembersComponent implements OnInit {
     }else{
       this.filter1.nativeElement.value = "";
     }
-    console.log("test123");
+    // console.log("test123");
     if(Math.floor(this.ordersCount / this.paginator1.pageIndex)>=0){
       this.sortingParams["page"] =  this.paginator1.pageIndex;
     }else{

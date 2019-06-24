@@ -4,11 +4,12 @@
     </div>
   </div>
   <mat-tab-group #tabGroup *ngIf="agent">
-      <mat-tab label="{{'members'|translate}}" *ngIf="agent.members && check_member_orders!=null ">
+      <!-- *ngIf="agent.members && check_member_orders!=null " -->
+      <mat-tab label="{{'members'|translate}}" *ngIf="agent.has_members">
           <div class="demo-tab-content">
             <app-agent-members [agent]="agent"></app-agent-members>
           </div>
-        </mat-tab>
+      </mat-tab>
    <mat-tab label="{{'agent'|translate}}">
       <div class="demo-tab-content">
         <app-agent-info [agent]="agent" [load]="loadAgentData.bind(this)"></app-agent-info>

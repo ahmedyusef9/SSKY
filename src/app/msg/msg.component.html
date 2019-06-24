@@ -32,5 +32,30 @@
         <p>{{data.detail}}</p>
       </div>
   </ng-container>
+  <ng-container *ngIf="data.place=='hasMembers'">
+      <div dir="RTL" *ngIf="data.data && data.data.length>0">
+          <h4 *ngIf="data.art=='txtMsg' && data.data.length>1" style="color:#ffd740;">
+              {{data.data}}
+           </h4>
+       
+      </div>
+
+  </ng-container>
+  <ng-container *ngIf="data.place=='excel-charge' && data.data && data.data.length>0 && data.art=='txtMsg' ">
+      <div dir="RTL" *ngFor="let msg of data.data" >
+          <h4  style="color:#ffd740;">
+              {{msg.member_id}}
+           </h4>
+           <ng-container >
+              <p>
+                  <span> {{msg.txt}}
+                  </span> 
+             
+              </p>
+            </ng-container>
+       
+      </div>
+
+  </ng-container>
 </ng-container>
 

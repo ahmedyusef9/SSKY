@@ -10,7 +10,7 @@
       </button>
     <mat-menu #menu="matMenu">
     <button mat-menu-item (click)="loadExcel(true)">דף זה</button>
-    <button mat-menu-item  (click)="loadExcel()">כל התוצאות</button>
+    <button mat-menu-item  (click)="loadExcel(false)">כל התוצאות</button>
     </mat-menu>
 
 </mat-toolbar>
@@ -89,7 +89,7 @@
             <ng-container matColumnDef="automatic_update">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'automatic_update'|translate}} </th>
                 <td mat-cell *matCellDef="let row">
-                    <ng-container *ngIf="(row.days_or_months=='months' && row.days_or_months_numbers==1 && row.status=='completed')">
+                    <ng-container *ngIf="(row.days_or_months=='months' && row.days_or_months_numbers>=1 && row.status=='completed')">
                             <mat-slide-toggle [checked]="row.automatic_update=='1'" (change)="setAutomaticUpdate(row,$event);" color="primary"></mat-slide-toggle>
                             <ng-container *ngIf="row.automatic_update=='1'">
                                 <mat-select [(ngModel)]="row.months" placeholder="{{'months'|translate}}" (change)="setAutomaticUpdate1(row,$event)">

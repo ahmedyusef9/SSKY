@@ -85,7 +85,7 @@ import { CellcomStatusService } from '../cellcom-status/cellcom-status.service';
     {
       provide:SettingsService ,
       useClass:SettingsService 
-    },
+    }
     // {
     //   provide:ExcelService ,
     //   useClass:ExcelService 

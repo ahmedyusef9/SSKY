@@ -3,6 +3,7 @@
 import { HttpHeaders } from '@angular/common/http';
 
 export const API_ENDPOINT='https://www.skypanel.net/api-test/';
+// export const API_ENDPOINT='api-test/';
 export const EXPIRES=3600; 
 import  *  as excel  from './../../node_modules/excellentexport';
 export const httpOptions = {

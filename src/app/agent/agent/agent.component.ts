@@ -12,8 +12,9 @@ import { ExcelService } from 'src/app/excel.service';
 import { AuthenticationService } from 'src/app/login/authentication.service';
 import { ObligationUpdateComponent } from '../obligation-update/obligation-update.component';
 import { AddPaymentComponent } from '../add-payment/add-payment.component';
-import { MatDialog, MatPaginatorIntl } from '@angular/material';
+import { MatDialog, MatPaginatorIntl, MatSnackBar } from '@angular/material';
 import { PaymentService } from 'src/app/payment/payment.service';
+import { MsgComponent } from 'src/app/msg/msg.component';
 
 @Component({
   selector: 'app-agent',
@@ -41,6 +42,7 @@ export class AgentComponent implements OnInit {
     private mdPaginatorIntl:MatPaginatorIntl,
     private trans:TranslateService,
     private lsService:LocalStorageService,
+    public snackBar: MatSnackBar,
     // private excelService:ExcelService,
     public  authService:AuthenticationService){
       this.lan=this.lsService.getStorage('lan');
@@ -168,54 +170,66 @@ export class AgentComponent implements OnInit {
     // this.loading=true;
     console.log(this.tabGroup);
     let orders_array = new Array(); 
-    this.memberService.getAgentMembers(this.id).subscribe(members=>{
-      
-      this.agent.members=members;
-      // console.log(this.agent.members);
-      if(this.authService.isAgent()){
-        this.agent.members=this.agent.members.filter(el=>(el.agent_id==0||el.agent_id==this.authService.getCurrentUserId()));
+    this.memberService.getAgentHasMembers(this.id).subscribe(res=>{
+      if(res){
+        this.agent.has_members = res;
+      }else{
+        this.agent.has_members = res;
+        this.snackBar.openFromComponent(MsgComponent,{
+          duration: 7000,
+          horizontalPosition:'left',
+          data:{data:"agent_has_no_members",art:'txtMsg',place:'hasMembers'}
+        });
       }
-      else{
-        // this.agent.members=this.agent.members.filter(el=>(el.agent_id==this.id));
-      }
-      if(this.agent.members.length>0){
-        this.tabGroup.selectedIndex = 0;
-      }
-      // this.check_member_orders=this.agent.members.length;
-      if(this.agent.members.length==0)
-          this.loading=false;
-          
-      this.agent.members.forEach(member=>{
-        
-      member.orders.map(v => orders_array.push(v));
+    
 
-        // console.log(orders_array.length);
+      console.log(res);
+      // this.agent.members=members;
+      // // console.log(this.agent.members);
+      // if(this.authService.isAgent()){
+      //   this.agent.members=this.agent.members.filter(el=>(el.agent_id==0||el.agent_id==this.authService.getCurrentUserId()));
+      // }
+      // else{
+      //   // this.agent.members=this.agent.members.filter(el=>(el.agent_id==this.id));
+      // }
+      // // if(this.agent.members.length>0){
+      //   this.tabGroup.selectedIndex = 0;
+      // // }
+      // // this.check_member_orders=this.agent.members.length;
+      // if(this.agent.members.length==0)
+      //     this.loading=false;
+          
+      // // this.agent.members.forEach(member=>{
         
-        // console.log(this.agent);
-        //this.loading=true;
+      // // member.orders.map(v => orders_array.push(v));
+
+      // //   // console.log(orders_array.length);
         
-        // this.orderService.getMemberOrders(member.id).subscribe(orders=>{
-        //   this.check_member_orders--;
-        //   if(this.check_member_orders==0 || this.agent.members.length==0)
-        //    this.loading=false;
-        //  if(orders && !orders['message'])
-        //   member.orders=[orders.reverse()[0]];
-        // });
-      });
+      // //   // console.log(this.agent);
+      // //   //this.loading=true;
+        
+      // //   // this.orderService.getMemberOrders(member.id).subscribe(orders=>{
+      // //   //   this.check_member_orders--;
+      // //   //   if(this.check_member_orders==0 || this.agent.members.length==0)
+      // //   //    this.loading=false;
+      // //   //  if(orders && !orders['message'])
+      // //   //   member.orders=[orders.reverse()[0]];
+      // //   // });
+      // // });
       
-      // console.log(orders_array.length);
-      // console.log(this.agent.members);
-      // console.log(this.check_member_orders);
-      // console.log(this.check_member_orders);
-      if(orders_array.length){
-        this.check_member_orders--;
-        this.agent.orders = orders_array;
+      // // console.log(orders_array.length);
+      // // console.log(this.agent.members);
+      // // console.log(this.check_member_orders);
+      // // console.log(this.check_member_orders);
+      // if(orders_array.length){
+      //   this.check_member_orders--;
+      //   this.agent.orders = orders_array;
         
-      }
-      //if(this.check_member_orders==0)
-          //this.loading=false;
-          this.agent.loadedPages = 1;
-          this.loading=false;
+      // }
+      // //if(this.check_member_orders==0)
+      //     //this.loading=false;
+      //     this.agent.loadedPages = 1;
+      //     this.loading=false;
     });
   }
 }

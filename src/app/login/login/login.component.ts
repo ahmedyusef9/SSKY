@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
         this.loading = true;
         this.authenticationService.login(this.model.username, this.model.password)
             .subscribe(result => {
-                console.log(result);
+                // console.log(result);
                 if (result === true) {
                     this.router.navigate(['/']);
                 } else {
@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
             });
     }
     checkPass(e){
-        console.log(this.model);
+        // console.log(this.model);
         if(this.model.password.length>4 && this.model.username!=''){
             this.authenticationService.login(this.model.username, this.model.password)
             .subscribe(result => {

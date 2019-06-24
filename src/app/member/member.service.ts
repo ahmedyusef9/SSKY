@@ -92,7 +92,7 @@ export class MemberService {
     this.tokenService.init();
     console.log(params);
     let str = Object.entries(params).map(([key, val]) => `${key}=${val}`).join('&');
-    return this.http.get(this.apiRoot+'member/getMembersOrdersView.php?agent_id='+agent+"&"+str, this.options).map(x=>x.json());
+    return this.http.get(this.apiRoot+'member/get_Members_Orders_View.php?agent_id='+agent+"&"+str, this.options).map(x=>x.json());
   }
   getAgentMembersloader(agent:number,page:number) :Observable<Array<Member>>{
     let headers = new Headers({'Content-Type': 'application/json'});  
@@ -103,6 +103,16 @@ export class MemberService {
     this.options = new RequestOptions({headers: headers});
     this.tokenService.init();
     return this.http.get(this.apiRoot+'member/get1.php?agent_id='+agent+'&page='+page, this.options).map(x=>x.json());
+  }
+  getAgentHasMembers(agent:number) :Observable<boolean>{
+    let headers = new Headers({'Content-Type': 'application/json'});  
+    let ls = localStorage.getItem('currentUser');
+    let jls=JSON.parse(ls);
+    let authToken=jls.token;
+    headers.append('Authorization',`Bearer ${authToken}`)
+    this.options = new RequestOptions({headers: headers});
+    this.tokenService.init();
+    return this.http.get(this.apiRoot+'member/get_Members_Orders_View.php?agent_id='+agent+"&check_agent_has_members=true", this.options).map(x=>x.json());
   }
   getAgentMembers(agent:number) :Observable<Array<Member>>{
     let headers = new Headers({'Content-Type': 'application/json'});  

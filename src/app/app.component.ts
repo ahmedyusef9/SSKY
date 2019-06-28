@@ -62,15 +62,18 @@ export class AppComponent implements OnInit {
         this.hideMenu=true;
       }
   });
-    let lan=this.lsService.getStorage('lan');
+
+    let lan = this.lsService.getStorage('lan');
     if(lan && lan!=null){
-      translate.setDefaultLang(lan);
-      translate.use(lan);
+      this.translate.setDefaultLang(lan);
+      this.translate.use(lan);
     }
     else{
-      translate.setDefaultLang('he');
-      translate.use('he');
+      this.translate.setDefaultLang('he');
+      this.translate.use('he');
+      this.lsService.setStorage('lan','he',86400);
     }
+    
     // this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     //   // do something
     //   this.translate.set('test', 'בדיקה', 'he');
@@ -99,6 +102,7 @@ export class AppComponent implements OnInit {
   
 
   ngOnInit() {
+    console.log("test123321");
     //  this.timeoutNew();
     // this.timeoutNew2();
     // this.timeoutCancel();
@@ -299,8 +303,8 @@ export class AppComponent implements OnInit {
   }
   snackBarNewOrder(n,o){
     let nn:any[]=[];
-    console.log(n);
-    console.log(o);
+    // console.log(n);
+    // console.log(o);
     if(o==null || o===null){
       nn=n;
     }

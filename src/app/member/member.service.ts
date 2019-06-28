@@ -90,9 +90,21 @@ export class MemberService {
     headers.append('Authorization',`Bearer ${authToken}`)
     this.options = new RequestOptions({headers: headers});
     this.tokenService.init();
-    console.log(params);
+    // console.log(params);
     let str = Object.entries(params).map(([key, val]) => `${key}=${val}`).join('&');
     return this.http.get(this.apiRoot+'member/get_Members_Orders_View.php?agent_id='+agent+"&"+str, this.options).map(x=>x.json());
+  }
+  exportAsExcelFile(agent:number,params:any): Observable<Array<Member>>{
+    let headers = new Headers({'Content-Type': 'application/json'});  
+    let ls = localStorage.getItem('currentUser');
+    let jls=JSON.parse(ls);
+    let authToken=jls.token;
+    headers.append('Authorization',`Bearer ${authToken}`)
+    this.options = new RequestOptions({headers: headers});
+    this.tokenService.init();
+    console.log(params);
+    let str = Object.entries(params).map(([key, val]) => `${key}=${val}`).join('&');
+    return this.http.get(this.apiRoot+'member/get_Members_Orders_View.php?excel=true&agent_id='+agent+"&"+str, this.options).map(x=>x.json());
   }
   getAgentMembersloader(agent:number,page:number) :Observable<Array<Member>>{
     let headers = new Headers({'Content-Type': 'application/json'});  

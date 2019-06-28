@@ -284,7 +284,11 @@ export class OrderComponent implements OnInit {
     this.orderService.set_automatic_update(row.id,row.months).subscribe();
   }
   setAutomaticUpdate1(row,e){
+    // console.log("automatic update");
+    
     let mes='הזמנה זו תתחדש חודשי!! למשך '+row.months+' חודשים..';
+    if(parseInt(row.months) > 11)
+      mes='הזמנה זו תחדש חודשי ללא הגבלה!!';
     this.snackBar.open(mes, row.phone , {
       duration: 5000,
     });

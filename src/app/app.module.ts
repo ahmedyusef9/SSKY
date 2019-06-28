@@ -48,6 +48,7 @@ import { ExcelOrderModule } from './excel-order/excel-order.module';
 import { AgentsCreditsModule } from './agents-credits/agents-credits.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
+import { APP_BASE_HREF } from '@angular/common';
 // import { ExcellentExport } from 'excellentexport';
 export function createTranslateLoader(http: Http) {
   return new TranslateStaticLoader(http, 'https://www.skypanel.net/api-test/lan', '.php');
@@ -136,6 +137,8 @@ export function createTranslateLoader(http: Http) {
       provide: SettingsService, 
       useClass: SettingsService  
     },
+    {provide: APP_BASE_HREF, useValue: 'alpha-crm/'}
+    
   ],
   bootstrap: [AppComponent],
   entryComponents: [MsgComponent],

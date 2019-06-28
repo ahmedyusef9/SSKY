@@ -32,7 +32,7 @@
         </mat-card-header>
         <mat-card-content>
           <ng-container *ngIf="authService.canUpdate();else e3e">
-              <h5 style="font-weight:bold;">
+              <h5 style="font-weight:bold;font-size: larger;">
                   {{phone.phone}} 
                   <span *ngIf="phone.moved_to_phone!='0'">
                     <span *ngIf="phone.accepted_moved_to_phone=='1'" style="color:green;"> &nbsp; >>&nbsp;{{phone.moved_to_phone}}</span>

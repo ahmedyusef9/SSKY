@@ -124,7 +124,7 @@ export class OrderService {
     this.options = new RequestOptions({headers: headers});
     this.tokenService.init();
     let data:any={id:order_id};
-    if(months && months!=null && parseInt(months)>0 && parseInt(months)<12){
+    if(months && months!=null && parseInt(months)>0 ){
       data.months=parseInt(months);
     }
     

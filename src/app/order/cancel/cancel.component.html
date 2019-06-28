@@ -9,7 +9,7 @@
   <p><label>{{'sim'|translate}}: </label> {{data.order.sim}}</p>
 </div>
 <div mat-dialog-actions  dir="RTL" >
-    <mat-form-field  [ngClass]="{'dn':authService.isAgent()}">
+    <mat-form-field  style="width: -webkit-fill-available;" [ngClass]="{'dn':authService.isAgent()}">
         <input matInput #cancelrest placeholder="{{'cancel_rest'|translate}}" value="{{data.order.price_agent}}"/>
     </mat-form-field> 
   <button mat-button [mat-dialog-close]="data" tabindex="2" color="warn" (click)="cancel(data.id,tocancel.value,cancelrest.value)">{{'yes'|translate}}</button>

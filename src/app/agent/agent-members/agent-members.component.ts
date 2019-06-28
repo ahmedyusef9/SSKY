@@ -9,12 +9,14 @@ import { MatSort, MatPaginator } from '@angular/material';
 import { AgentService } from '../agent.service';
 import { MemberService } from 'src/app/member/member.service';
 import { map } from 'rxjs-compat/operator/map';
+import {sortBy} from './../../model/sort-object'
 @Component({
   selector: 'app-agent-members',
   templateUrl: './agent-members.component.html',
   styleUrls: ['./agent-members.component.scss']
 })
 export class AgentMembersComponent implements OnInit {
+  label : String = "AgentMembersComponent";
   dataSource:any;
   page:number;
   @Input() agent:any;
@@ -28,7 +30,7 @@ export class AgentMembersComponent implements OnInit {
   @ViewChild('filter1') filter1:ElementRef;
   @ViewChild(MatSort) sort1:MatSort;
   @ViewChild('paginator1') paginator1:MatPaginator;
-  displayedColumns=[ 'id','consumer_name','phone','has_orders','status','order_id'];
+  displayedColumns=[ 'id','agent_name','phone','has_orders','status','order_id'];
   db=new DB([]);
   ds:DS|null;
   initMembersDatabase(){
@@ -128,24 +130,33 @@ export class AgentMembersComponent implements OnInit {
 
   }
   nextPageLabel(){
-    console.log("test123");
+    // console.log("test123");
   }
   ngOnInit(){
     // this.sort1.sortables.entries
    
     this.sortingParams = new Object();
+    let headerSorting = new Object();
     // console.log(this.paginator1);
     merge(this.sort1.sortChange, this.paginator1.page,Observable.fromEvent(this.filter1.nativeElement,'keyup')).pipe(
       
     ).subscribe(v =>{
-      // console.log(this.paginator1.pageIndex);
-      
-      this.sort1.sortables.forEach((e,k,m) => {
-        this.sortingParams[k] = e['_arrowDirection'];
-        // console.log(e['_arrowDirection']);
-        // console.log(k);
-      });
-      if(this.filter1.nativeElement.value.length != 0){
+
+      if((v.hasOwnProperty("active") && v.hasOwnProperty("direction"))
+        || !this.lsService.getStorage(this.label+"-sorting")){
+          this.sortingParams["changed"] = v['active'];
+          headerSorting["changed"] = v['active'];
+        this.sort1.sortables.forEach((e,k,m) => {
+          this.sortingParams[k] = e['_arrowDirection'];
+          headerSorting[k] = e['_arrowDirection'];
+
+        });
+        //swp the changes to 0
+        
+        this.lsService.setStorage(this.label+"-sorting",JSON.stringify(headerSorting),10800000);
+      }
+      this.sortingParams = JSON.parse(this.lsService.getStorage(this.label+"-sorting"));
+     if(this.filter1.nativeElement.value.length != 0){
         this.sortingParams["search"] = this.filter1.nativeElement.value;
       }else{
         this.filter1.nativeElement.value = "";
@@ -233,6 +244,8 @@ export class AgentMembersComponent implements OnInit {
       // console.log(e['_arrowDirection']);
       // console.log(k);
     });
+    console.log("test");
+    this.lsService.setStorage(this.label+"-sorting",JSON.stringify(this.sortingParams),10800000);
     if(this.filter1.nativeElement.value.length != 0){
       this.sortingParams["search"] = this.filter1.nativeElement.value;
     }else{
@@ -307,7 +320,12 @@ export class AgentMembersComponent implements OnInit {
     //   }
     //   excel.push(a);
     // });
-    // this.excelService.exportAsExcelFile(excel, 'מנויים -'+ this.agent.username);
+    // console.log(this.sortingParams);
+    // delete this.sortingParams.page;
+    this.memberService.exportAsExcelFile(this.agent.id,this.sortingParams).subscribe(res =>{
+    //  console.log(res);
+      window.open(res['excel']['url']);
+    });
 
   }
 }

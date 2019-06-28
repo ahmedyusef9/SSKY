@@ -5,7 +5,7 @@
   "projects": {
     "ssky": {
       "root": "",
-      "sourceRoot": "src",
+      "sourceRoot": "src/",
       "projectType": "application",
       "prefix": "app",
       "schematics": {

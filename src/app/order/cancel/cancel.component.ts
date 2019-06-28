@@ -26,8 +26,10 @@ export class CancelComponent implements OnInit {
     private lsService:LocalStorageService,
     public authService:AuthenticationService) {
      this.lan=this.lsService.getStorage('lan');
+    //  this.lan=this.trans.getDefaultLang();
       this.trans.onLangChange.subscribe((event: LangChangeEvent) => {
         this.lan=event.lang;
+        
       });
     }
   onNoClick(): void {
@@ -60,6 +62,8 @@ export class CancelComponent implements OnInit {
   }
 
   ngOnInit() {
+    // console.log(this.data);
+    // console.log(this.lan);
   }
 
 }

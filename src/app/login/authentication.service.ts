@@ -11,6 +11,8 @@ import * as AppConst from './../app.const';
 export class AuthenticationService {
  public token: string;
     apiRoot:String = AppConst.API_ENDPOINT;
+    //should delete in RELEASE
+    // apiRoot_login:String = AppConst.API_ENDPOINT_LOGIN;
     expires:number=3600;
     rent='0';
     change_price='0';
@@ -30,6 +32,7 @@ export class AuthenticationService {
         let headers = new Headers({'Content-Type': 'application/json'});  
         headers.append('Authorization','Bearer ')
         let options = new RequestOptions({headers: headers});
+        //should delete in RELEASE => apiRoot_login =>apiRoot
         return this.http.post(
             this.apiRoot+'authenticate.php', 
             JSON.stringify({ username: username, password: password ,login:'login'}),

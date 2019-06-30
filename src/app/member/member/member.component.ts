@@ -118,9 +118,9 @@ export class MemberComponent implements OnInit {
    }
    loadExcel(value:any){
     let url = this.generateURL();
-    console.log(url);
+    // console.log(url);
     if(value==true){
-      console.log(this.url);
+      // console.log(this.url);
       this.memberService.getExcel(url+'&limit=30').subscribe(res=>{
         window.open(res['url']);
         this.isLoadingResults=false;
@@ -443,7 +443,7 @@ export class MemberComponent implements OnInit {
    
   }
   init_data(data){
-    console.log(data);
+    // console.log(data);
     this.loading = false;
     this.isRateLimitReached = false;
     this.resultsLength = data.total_count;
@@ -452,7 +452,7 @@ export class MemberComponent implements OnInit {
     this.membersDatabase = new DB(data.items);
     this.paginator.pageIndex=0;
     this.dataSource = new DS(this.membersDatabase, this.sort, this.paginator);
-    console.log(this.membersDatabase);
+    // console.log(this.membersDatabase);
   }
 }
 @Component({

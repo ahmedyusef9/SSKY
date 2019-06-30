@@ -44,7 +44,7 @@ http: Http;
     this.options = new RequestOptions({headers: headers});
     this.tokenService.init();
     let url=this.apiRoot+'phone/get_excel1.php'+search;
-    console.log(search);
+    // console.log(search);
     return this.http.get(url, this.options).map(x=>x.json());
   }
   getTrans() :Observable<Array<Phone>>{

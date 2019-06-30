@@ -183,7 +183,7 @@ export class ComparisonsComponent implements OnInit {
             this.phones_statuses = (url['all'])?url['all']:null;
             this.active_phones = (url['in'])?url['in']:null;
             this.unActive_phones = (url['notIn'])?url['notIn']:null;
-            console.log(r);
+            // console.log(r);
           }
       });
     }

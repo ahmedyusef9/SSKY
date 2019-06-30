@@ -229,7 +229,7 @@ export class GlobalDiscountComponent implements OnInit {
   }
   selectedCompany:number=null;
   changeCompany(e){
-    console.log(e);
+    // console.log(e);
     this.empty();
     this.products=[];
     this.filteredOptions=null;
@@ -238,7 +238,7 @@ export class GlobalDiscountComponent implements OnInit {
     this.selectedCompany=e.value;
     this.productService.getCompanyProducts(this.selectedCompany).subscribe(res => {
       this.loading=false;
-      console.log(res);
+      // console.log(res);
        if(!res['message']) {
        this.products = res.reverse();
        this.filteredOptions = this.myControl.valueChanges

@@ -142,7 +142,7 @@ export class ExcelOrderComponent implements OnInit {
       sent_msg:this.sent_msg?'1':'0',
       start_date:this.start_date
     };
-    console.log("test createOrders");
+    // console.log("test createOrders");
     this.loading=true;
     this.disableButton=true;
     this.orderService.createOrders(orders).subscribe(res=>{

@@ -144,7 +144,7 @@ export class OrderComponent implements OnInit {
    }
    loadExcel(value:boolean){
     let url = this.generateURL();
-    console.log(url);
+    // console.log(url);
     this.loading = true;
     if(value==true){
       this.orderService.getExcel(url+'&limit=30').subscribe(res=>{

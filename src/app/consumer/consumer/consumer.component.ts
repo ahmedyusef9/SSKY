@@ -78,7 +78,7 @@ export class ConsumerComponent implements OnInit {
   loadExcel(){
     this.loading=true;
     this.consumerService.getExcel().subscribe(res=>{
-      console.log(res);
+      // console.log(res);
       window.open(res['url']);
            this.loading=false;
     });
@@ -159,8 +159,8 @@ export class ConsumerComponent implements OnInit {
     .debounceTime(150)
     .distinctUntilChanged()
     .subscribe(() => {
-      console.log(this.dataSource);
-      console.log(this.filter.nativeElement.value);
+      // console.log(this.dataSource);
+      // console.log(this.filter.nativeElement.value);
       if (!this.dataSource) { return; }
       this.dataSource.filter = this.filter.nativeElement.value;
     });

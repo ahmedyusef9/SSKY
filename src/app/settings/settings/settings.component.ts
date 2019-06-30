@@ -33,7 +33,7 @@ export class SettingsComponent implements OnInit {
     this.settingsService.getSettings(0).subscribe(res=>{
       if(!res['message']) {
         this.settings = res.reverse();
-        console.log(this.settings);
+        // console.log(this.settings);
         }
     });
   }
@@ -47,7 +47,7 @@ export class SettingsComponent implements OnInit {
     });
   }
   checkActive(value:any){
-    console.log(value);
+    // console.log(value);
     if(value == '1')
       this._active = 'yes';
     else

@@ -128,7 +128,7 @@ export class EditUserComponent implements OnInit {
   }
   iam=false;
   private setForm(user:User) {
-      console.log(user);
+      // console.log(user);
       this.userForm = this.formBuilder.group({
       id: [this.user.id],
       username: [user.username, Validators.required],

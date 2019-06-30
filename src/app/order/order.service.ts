@@ -89,7 +89,7 @@ export class OrderService {
     let ls = localStorage.getItem('currentUser');
     let jls=JSON.parse(ls);
     let authToken=jls.token;
-    console.log(jls);
+    // console.log(jls);
     headers.append('Authorization',`Bearer ${authToken}`)
     this.options = new RequestOptions({headers: headers});
     this.tokenService.init();

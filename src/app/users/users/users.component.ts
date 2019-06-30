@@ -83,7 +83,7 @@ export class UsersComponent implements OnInit {
       
     this.loading=true;
     this.userService.getExcel().subscribe(res=>{
-      console.log(res);
+      // console.log(res);
       window.open(res['url']);
            this.loading=false;
     });

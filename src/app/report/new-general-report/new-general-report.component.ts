@@ -69,13 +69,13 @@ export class NewGeneralReportComponent implements OnInit {
       this.filterData.sort_direction=this.sort.direction?this.sort.direction:'desc';
       this.loading = true;
       this.loadParams();
-      console.log(this.url);
+      // console.log(this.url);
     this.reportService.getPrices(this.url).pipe(
 
 
 
     ).subscribe(data=>{
-      console.log(data);
+      // console.log(data);
     });
   }
   filterData:any={
@@ -132,7 +132,7 @@ export class NewGeneralReportComponent implements OnInit {
       this.filterData.sort_direction=this.sort.direction?this.sort.direction:'desc';
       this.loading = true;
       this.loadParams();
-      console.log(this.url);
+      // console.log(this.url);
       return this.reportService!.get(this.url);
     })
     ,map(data => {
@@ -146,7 +146,7 @@ export class NewGeneralReportComponent implements OnInit {
       // this.initData(data);
     })
     ).subscribe(data =>{
-      console.log(data);
+      // console.log(data);
       this.dataSource = data;
     });
   }
@@ -256,7 +256,7 @@ export class NewGeneralReportComponent implements OnInit {
     this.loadParams();
     this.loading=true;
 
-    console.log(value);
+    // console.log(value);
     if(value == true){
       
       this.reportService.getExcel(this.url+'&excelPage=1').subscribe(res=>{
@@ -269,7 +269,7 @@ export class NewGeneralReportComponent implements OnInit {
     }else{
       
       this.reportService.getExcel(this.url).subscribe(res=>{
-        console.log(res);
+        // console.log(res);
         res['url'].forEach(element => {
           window.open(element);
         });

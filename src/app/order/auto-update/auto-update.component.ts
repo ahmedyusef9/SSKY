@@ -36,7 +36,7 @@ export class AutoUpdateComponent implements OnInit {
               this.excelPhonesAndMonths.push([this.excelPhones[i],this.months[i]]);
               i++;
             });
-            console.log(this.excelPhonesAndMonths);
+            // console.log(this.excelPhonesAndMonths);
            // this.excelPhones=r.data.map(el=>(el && el[0] && el[1])?[el[0],el[1]]:el[0]).filter((x, i, a) => x && ((a && a[0] && a[1])?a[0]:a).indexOf(x) === i);
             this.loading=false;
          //   this.formOnInit({});

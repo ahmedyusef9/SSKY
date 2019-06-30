@@ -49,7 +49,7 @@ export class PhoneComponent implements OnInit {
   }
   prev(){
     if(this.pageIndex>1){
-      console.log("ahmed");
+      // console.log("ahmed");
       
       this.pageIndex=this.pageIndex-1;
       let active=this.sort.active?this.sort.active:'id';
@@ -112,7 +112,7 @@ export class PhoneComponent implements OnInit {
       loadExcel(value:any){
         this.generateURL();
         if(value==true){
-          console.log(this.url);
+          // console.log(this.url);
           this.phoneService.getExcel(this.url).subscribe(res=>{
             window.open(res['url']);
             this.isLoadingResults=false;
@@ -253,7 +253,7 @@ export class PhoneComponent implements OnInit {
       //   data[i].company_name_ar=this.getCompanyNameAr(data[i].company_id);
       //   data[i].company_name_en=this.getCompanyNameEn(data[i].company_id);
       // }
-      console.log(data);
+      // console.log(data);
       this.dataSource = data;
     });
     

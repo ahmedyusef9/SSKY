@@ -65,10 +65,10 @@ export class AddUserComponent implements OnInit {
     }
     ShowAgentChoose(){
       this.show = !this.show;
-      console.log(this.show);
+      // console.log(this.show);
     }
     selectAgentEmitter(option:any){
-      console.log(option);
+      // console.log(option);
     }
     loadLevels() {
       this.userService.getUserLevels().subscribe(res => {
@@ -76,7 +76,7 @@ export class AddUserComponent implements OnInit {
         this.userLevels = res.reverse().filter(el=>this.authService.isAdmin()?true:el.id==3);
         this.userLevels.push(customer_lvl);
 
-        console.log(this.userLevels);
+        // console.log(this.userLevels);
         });
       this.userService.getAgents().subscribe(res => {
          
@@ -168,7 +168,7 @@ export class AddUserComponent implements OnInit {
       // this.loading=false;
        if(!res['message']) {
        this.users = res.reverse();
-       console.log(this.users);
+      //  console.log(this.users);
        this.intilizeFilterAutoComplet();
 
       //  this.initUserDatabase();

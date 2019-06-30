@@ -122,7 +122,7 @@ export class AgentComponent implements OnInit {
   check_member_orders:number=null;
   loadAgentData(){
     this.loading=true;
-    console.log("tabGroup"+this.tabGroup);
+    // console.log("tabGroup"+this.tabGroup);
     this.userService.getUser(this.id).subscribe(agent=>{
       this.agent=agent;
       // console.log(agent);
@@ -168,7 +168,7 @@ export class AgentComponent implements OnInit {
   url:string|null;
   loadMembers(){
     // this.loading=true;
-    console.log(this.tabGroup);
+    // console.log(this.tabGroup);
     let orders_array = new Array(); 
     this.memberService.getAgentHasMembers(this.id).subscribe(res=>{
       if(res){
@@ -183,7 +183,7 @@ export class AgentComponent implements OnInit {
       }
     
 
-      console.log(res);
+      // console.log(res);
       // this.agent.members=members;
       // // console.log(this.agent.members);
       // if(this.authService.isAgent()){

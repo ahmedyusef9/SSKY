@@ -61,7 +61,7 @@ export class DeleteComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.data);
+    // console.log(this.data);
   }
 
 }

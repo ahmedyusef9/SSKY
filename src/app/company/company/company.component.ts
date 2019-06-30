@@ -76,7 +76,7 @@ export class CompanyComponent implements OnInit {
   loadExcel(){
     this.loading=true;
     this.companyService.getExcel().subscribe(res=>{
-      console.log(res);
+      // console.log(res);
       // window.open(res['url']);
            this.loading=false;
     });

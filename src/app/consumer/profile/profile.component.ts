@@ -108,7 +108,7 @@ export class ProfileComponent implements OnInit {
           // this.customer.members=members;
           this.customer.members = members;
           this.load_orders=this.customer.members.length;
-          console.log(this.customer.members);
+          // console.log(this.customer.members);
           // if(this.authService.isAgent()){
           //   this.customer.members=this.customer.members.map(el=>(el.agent_id==0||el.agent_id==this.authService.getCurrentUserId()));
           // }
@@ -130,8 +130,8 @@ export class ProfileComponent implements OnInit {
               
          
           
-          console.log(orders_array.length);
-          console.log(this.customer.members);
+          // console.log(orders_array.length);
+          // console.log(this.customer.members);
           if(orders_array.length){
             this.load_orders--;
             this.customer.orders = orders_array;

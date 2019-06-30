@@ -262,7 +262,7 @@ timeout() {
     return c;
   }
   doLoading(){
-    console.log("test");
+    // console.log("test");
     this.loading=false;
     if(this.order==null||
       this.agent==null||

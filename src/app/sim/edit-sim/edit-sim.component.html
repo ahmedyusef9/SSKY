@@ -1,3 +1,50 @@
-<p>
-  edit-sim works!
-</p>
+<div mat-dialog-content dir="RTL">
+  <p>{{'edit_sim'|translate}}?</p>
+<form novalidate [formGroup]="data.simForm"  class="form-inline" *ngIf="data.simForm">
+      <mat-form-field>
+      <input matInput tabindex="1" formControlName="sim" placeholder="{{'sim'|translate}}" />
+      <valid-err [control]="data.simForm.controls['sim']"></valid-err>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput tabindex="1" formControlName="note" placeholder="{{'note'|translate}}" />
+      <valid-err [control]="data.simForm.controls['note']"></valid-err>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-chip-list matPrefix #chipList >
+        <mat-chip  [selectable]="selectable" [removable]="removable" (remove)="initSelectedAgent()" *ngIf="selectedAgent._username!=''">
+          {{selectedAgent._username|translate}}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+      <input 
+        matInput 
+        placeholder="{{'related_to_agent'|translate}}"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="addOnBlur"
+        formControlName="agent_id" 
+        aria-label="Number"  
+        [matAutocomplete]="auto" 
+        tabindex="1"
+        (keyup)="searchAgent($event)" 
+        (focusout)="chooseAgent($event)"
+      />
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        <mat-option [value]="{username:'free'|translate,id:0}">{{'free'|translate}}</mat-option>
+        <mat-option *ngFor="let option of filteredOptions|async" [value]="option" style="text-align:right;">
+          {{ option._username }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <mat-select placeholder="{{'company'|translate}}" formControlName="company_id" tabindex="1" [compareWith]="compareWith">
+      <mat-option *ngFor="let company of data.sim.companies" [value]="company.id">
+      {{ company.name }}
+      </mat-option>
+    </mat-select>
+    
+</form>
+</div>
+<div mat-dialog-actions dir="RTL">
+  <button mat-button color="primary" (click)="save(data.item.id)" tabindex="2" [disabled]="!data.simForm.valid || selectedAgent._username==''">{{'save'|translate}}</button>
+  <button mat-button color="warn" (click)="onNoClick()" tabindex="-1">{{'no_thanks'|translate}}</button>
+</div>

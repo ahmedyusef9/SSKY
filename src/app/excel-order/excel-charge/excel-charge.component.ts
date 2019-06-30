@@ -154,7 +154,7 @@ export class ExcelChargeComponent implements OnInit {
           horizontalPosition:'left',
           data:{data:message,art:'txtMsg',place:'excel-charge'}
         });
-      }else{
+      // }else{
         
         this.router.navigate(['/הזמנות']);
       }

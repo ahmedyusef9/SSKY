@@ -148,7 +148,7 @@ export class ExcelOrderComponent implements OnInit {
     this.orderService.createOrders(orders).subscribe(res=>{
       this.loading=false;
       this.disableButton=false;
-      this.router.navigate(['/הזמנות']);
+      // this.router.navigate(['/הזמנות']);
     });
   }
 }
